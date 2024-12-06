@@ -48,7 +48,7 @@
                 Create new user
             </button>
         </form>
-        <div class="col-sm-12 col-md-12 col-lg-8">
+        <div class="col-sm-12 col-md-12 col-lg-12">
             <table class="table table-hover align-middle text-center">
                 <thead>
                 <tr>
@@ -67,7 +67,7 @@
                         <td>
                             <a href="users?action=view&id=${user.getId()}"
                                class="link-dark link-offset-2 link-underline-opacity-0 link-underline-opacity-100-hover">
-                                    ${user.getName()}
+                                    ${user.getFullName()}
                             </a>
                         </td>
                         <td>
@@ -81,27 +81,6 @@
                 </tbody>
             </table>
         </div>
-        <div class="col-sm-12 col-md-12 col-lg-4">
-            <table class="table table-hover align-middle text-center">
-                <thead>
-                <tr>
-                    <th>Class Id</th>
-                    <th>Class Name</th>
-                </tr>
-                </thead>
-                <tbody>
-                <h2>Classes List</h2>
-                <c:forEach var="clazz" items="${classes}">
-                    <tr>
-                        <td>${clazz.getId()}</td>
-                        <td>${clazz.getName()}</td>
-                    </tr>
-                </c:forEach>
-                </tbody>
-            </table>
-        </div>
-    </div>
-
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>

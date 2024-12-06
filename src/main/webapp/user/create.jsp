@@ -47,7 +47,10 @@
                         </tr>
                         <tr>
                             <td><label for="password">Password <span style="color: red">*</span>: </label></td>
-                            <td><input type="password" name="password" id="password" class="form-control" required></td>
+                            <td>
+                                <input type="password" name="password" id="password" minlength="6" maxlength="20"
+                                       class="form-control" required>
+                            </td>
                         </tr>
                         <tr>
                             <td><label for="re_password">Re-enter Password <span style="color: red">*</span>: </label></td>
@@ -102,7 +105,7 @@
 
                 </fieldset>
             </form>
-            <a href="${pageContext.request.contextPath}/students" class="btn btn-secondary">Back</a>
+            <a href="${pageContext.request.contextPath}/users" class="btn btn-secondary">Back</a>
         </div>
     </div>
 </div>

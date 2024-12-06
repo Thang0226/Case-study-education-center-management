@@ -17,7 +17,7 @@ import java.util.List;
 public class UserServlet extends HttpServlet {
     IAdminService adminService = new AdminService();
     IClazzService clazzService = new ClazzService();
-    IExamResultService examResultService = new ExamResultService();
+//    IExamResultService examResultService = new ExamResultService();
     IExamSessionService examSessionService = new ExamSessionService();
     IOfficerService officerService = new OfficerService();
     IRoleService roleService = new RoleService();
@@ -113,8 +113,10 @@ public class UserServlet extends HttpServlet {
     private void showCreateForm(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         RequestDispatcher dispatcher = req.getRequestDispatcher("user/create.jsp");
         List<User> users = userService.findAll();
+        List<Role> roles = roleService.findAll();
         try{
             req.setAttribute("users", users);
+            req.setAttribute("roles", roles);
             dispatcher.forward(req, resp);
         } catch (ServletException | IOException e) {
             //noinspection CallToPrintStackTrace
