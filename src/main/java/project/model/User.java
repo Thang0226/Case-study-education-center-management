@@ -12,8 +12,22 @@ public class User {
 	private String identity;
 	private int roleID;
 
+	public User() {}
+
+	public User(String email, String password, String phone, String fullName, String dateOfBirth, String address, String identity, int roleID) {
+		this.email = email;
+		this.password = password;
+		this.re_pass = password;
+		this.phone = phone;
+		this.fullName = fullName;
+		this.dateOfBirth = dateOfBirth;
+		this.address = address;
+		this.identity = identity;
+		this.roleID = roleID;
+	}
+
 	public User(int id, String email, String password, String phone, String fullName,
-	            String dateOfBirth, String address, String identity, int roleID) {
+				String dateOfBirth, String address, String identity, int roleID) {
 		this.id = id;
 		this.email = email;
 		this.password = password;
