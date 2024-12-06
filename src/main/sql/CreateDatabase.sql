@@ -104,6 +104,7 @@ CREATE TABLE Tutor (
                        User_ID INT NOT NULL UNIQUE,
                        FOREIGN KEY (User_ID) REFERENCES User(ID)
 );
+
 insert into tutor (user_id)
 select id from user
 where role_id = 1;
