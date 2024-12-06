@@ -27,13 +27,13 @@ public class TuitionStatusDAO implements ITuitionStatusDAO {
 		List<TuitionStatus> statusList = new ArrayList<>();
 		try (
 				Connection conn = getConnection();
-				CallableStatement cstmt = conn.prepareCall("{call list_student_status()}")
+				CallableStatement cstmt = conn.prepareCall("{call list_tuition_status()}")
 		) {
 			ResultSet rs = cstmt.executeQuery();
 			while (rs.next()) {
 				int id = rs.getInt("id");
 				String name = rs.getString("name");
-				StudentStatus status = new StudentStatus(id, name);
+				TuitionStatus status = new TuitionStatus(id, name);
 				statusList.add(status);
 			}
 		} catch (SQLException e) {
@@ -43,11 +43,11 @@ public class TuitionStatusDAO implements ITuitionStatusDAO {
 	}
 
 	@Override
-	public boolean add(StudentStatus status) {
+	public boolean add(TuitionStatus status) {
 		boolean success = false;
 		try (
 				Connection conn = getConnection();
-				CallableStatement cstmt = conn.prepareCall("{call add_student_status(?,?)}")
+				CallableStatement cstmt = conn.prepareCall("{call add_tuition_status(?,?)}")
 		) {
 			cstmt.setInt(1, status.getId());
 			cstmt.setString(2, status.getName());
@@ -63,17 +63,17 @@ public class TuitionStatusDAO implements ITuitionStatusDAO {
 	}
 
 	@Override
-	public StudentStatus findById(int id) {
-		StudentStatus status = null;
+	public TuitionStatus findById(int id) {
+		TuitionStatus status = null;
 		try (
 				Connection conn = getConnection();
-				CallableStatement cstmt = conn.prepareCall("{call find_student_status(?)}")
+				CallableStatement cstmt = conn.prepareCall("{call find_tuition_status(?)}")
 		) {
 			cstmt.setInt(1, id);
 			ResultSet rs = cstmt.executeQuery();
 			if (rs.next()) {
 				String statusName = rs.getString("name");
-				status = new StudentStatus(id, statusName);
+				status = new TuitionStatus(id, statusName);
 			}
 		} catch (SQLException e) {
 			printSQLException(e);
@@ -82,10 +82,10 @@ public class TuitionStatusDAO implements ITuitionStatusDAO {
 	}
 
 	@Override
-	public boolean update(StudentStatus status) {
+	public boolean update(TuitionStatus status) {
 		try (
 				Connection conn = getConnection();
-				CallableStatement cstmt = conn.prepareCall("{call update_student_status(?,?)}")
+				CallableStatement cstmt = conn.prepareCall("{call update_tuition_status(?,?)}")
 		) {
 			cstmt.setInt(1, status.getId());
 			cstmt.setString(2, status.getName());
@@ -103,12 +103,12 @@ public class TuitionStatusDAO implements ITuitionStatusDAO {
 	public boolean remove(int id) {
 		try (
 				Connection conn = getConnection();
-				CallableStatement cstmt = conn.prepareCall("{call delete_student_status(?)}")
+				CallableStatement cstmt = conn.prepareCall("{call delete_tuition_status(?)}")
 		) {
 			cstmt.setInt(1, id);
 			int rowAffected = cstmt.executeUpdate();
 			if (rowAffected == 0) {
-				throw new SQLException("Student Status with id " + id + " not found");
+				throw new SQLException("Tuition Status with id " + id + " not found");
 			}
 		} catch (SQLException e) {
 			printSQLException(e);
