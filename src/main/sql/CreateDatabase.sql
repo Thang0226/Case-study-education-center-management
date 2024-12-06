@@ -8,6 +8,7 @@ CREATE TABLE Role (
                       Name VARCHAR(50) NOT NULL UNIQUE
 );
 
+
 -- User Table (Base Entity)
 CREATE TABLE User (
                       ID INT PRIMARY KEY AUTO_INCREMENT,
