@@ -1,12 +1,12 @@
 package project.DAO;
 
-import project.model.Admin;
+import project.model.Role;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AdminDAO implements IAdminDAO {
+public class RoleDAO implements IRoleDAO {
     @SuppressWarnings("FieldCanBeLocal")
     private final String jdbcURL = "jdbc:mysql://localhost:3306/center_management";
     @SuppressWarnings("FieldCanBeLocal")
@@ -14,12 +14,12 @@ public class AdminDAO implements IAdminDAO {
     @SuppressWarnings("FieldCanBeLocal")
     private final String jdbcPassword = "123456";
 
-    private static final String SELECT_ALL_ADMINS = "SELECT * FROM admin";
-    private static final String SELECT_ADMIN_BY_ID = "SELECT * FROM admin WHERE id = ?";
-    private static final String SELECT_ADMIN_BY_NAME = "SELECT * FROM admin WHERE name = ?";
-    private static final String INSERT_ADMIN ="INSERT INTO admin (User_ID) VALUES(?)";
-    private static final String UPDATE_ADMIN ="UPDATE admin SET User_ID = ? WHERE ID = ?";
-    private static final String DELETE_ADMIN = "DELETE FROM admin WHERE id = ?";
+    private static final String SELECT_ALL_ROLES = "SELECT * FROM role";
+    private static final String SELECT_ROLE_BY_ID = "SELECT * FROM role WHERE id = ?";
+    private static final String SELECT_ROLE_BY_NAME = "SELECT * FROM role WHERE name = ?";
+    private static final String INSERT_ROLE ="INSERT INTO role (name) VALUES(?)";
+    private static final String UPDATE_ROLE ="UPDATE role SET name = ? WHERE ID = ?";
+    private static final String DELETE_ROLE = "DELETE FROM role WHERE id = ?";
 
     @Override
     public Connection getConnection() throws SQLException {
@@ -37,69 +37,69 @@ public class AdminDAO implements IAdminDAO {
     }
 
     @Override
-    public List<Admin> findAll() {
-        List<Admin> admins = new ArrayList<>();
+    public List<Role> findAll() {
+        List<Role> roles = new ArrayList<>();
         try(Connection connection = getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_ADMINS);
+            PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_ROLES);
             ResultSet resultSet = preparedStatement.executeQuery()) {
             System.out.println(preparedStatement);
             while (resultSet.next()) {
-                Admin admin = new Admin();
-                admin.setId(resultSet.getInt("id"));
-                admin.setUserID(resultSet.getInt("User_ID"));
-                admins.add(admin);
+                Role role = new Role();
+                role.setId(resultSet.getInt("id"));
+                role.setName(resultSet.getString("name"));
+                roles.add(role);
             }
         } catch (SQLException e) {
             //noinspection CallToPrintStackTrace
             e.printStackTrace();
         }
-        return admins;
+        return roles;
     }
 
     @Override
-    public boolean add(Admin admin) {
+    public boolean add(Role role) {
         boolean rowUpdated = false;
-            try (Connection connection = getConnection();
-                 PreparedStatement preparedStatement = connection.prepareStatement(INSERT_ADMIN)) {
-                int userID = admin.getUserID();
-                preparedStatement.setInt(1, userID);
-                System.out.println(preparedStatement);
-                rowUpdated = preparedStatement.executeUpdate() > 0;
-            } catch (SQLException e) {
-                //noinspection CallToPrintStackTrace
-                e.printStackTrace();
-            }
+        try (Connection connection = getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(INSERT_ROLE)) {
+            String name = role.getName();
+            preparedStatement.setString(1, name);
+            System.out.println(preparedStatement);
+            rowUpdated = preparedStatement.executeUpdate() > 0;
+        } catch (SQLException e) {
+            //noinspection CallToPrintStackTrace
+            e.printStackTrace();
+        }
         return rowUpdated;
     }
 
     @Override
-    public Admin findById(int id) {
-        Admin admin = null;
+    public Role findById(int id) {
+        Role role = null;
         ResultSet resultSet = null;
         try (Connection connection = getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ADMIN_BY_ID)) {
+             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ROLE_BY_ID)) {
             preparedStatement.setInt(1, id);
             resultSet = preparedStatement.executeQuery();
             System.out.println(preparedStatement);
             while (resultSet.next()) {
-                admin = new Admin();
-                admin.setId(resultSet.getInt("id"));
-                admin.setUserID(resultSet.getInt("User_ID"));
+                role = new Role();
+                role.setId(resultSet.getInt("id"));
+                role.setName(resultSet.getString("name"));
             }
         } catch (SQLException e) {
             //noinspection CallToPrintStackTrace
             e.printStackTrace();
         }
-        return admin;
+        return role;
     }
 
     @Override
-    public boolean update(Admin admin) {
+    public boolean update(Role role) {
         boolean rowUpdated = false;
         try (Connection connection = getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_ADMIN)) {
-            preparedStatement.setInt(1, admin.getUserID());
-            preparedStatement.setInt(2, admin.getId());
+             PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_ROLE)) {
+            preparedStatement.setString(1, role.getName());
+            preparedStatement.setInt(2, role.getId());
             System.out.println(preparedStatement);
             rowUpdated = preparedStatement.executeUpdate() > 0;
         } catch (SQLException e) {
@@ -113,7 +113,7 @@ public class AdminDAO implements IAdminDAO {
     public boolean remove(int id) {
         boolean rowUpdated = false;
         try (Connection connection = getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(DELETE_ADMIN)) {
+             PreparedStatement preparedStatement = connection.prepareStatement(DELETE_ROLE)) {
             preparedStatement.setInt(1, id);
             System.out.println(preparedStatement);
             rowUpdated = preparedStatement.executeUpdate() > 0;

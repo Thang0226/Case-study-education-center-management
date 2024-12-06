@@ -4,6 +4,9 @@ public class Officer {
 	private int id;
 	private int userID;
 
+	public Officer() {
+	}
+
 	public Officer(int id, int userID) {
 		this.id = id;
 		this.userID = userID;
