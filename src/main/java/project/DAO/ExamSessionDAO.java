@@ -1,10 +1,11 @@
 package project.DAO;
 
 import project.model.ExamSession;
+import project.model.TuitionStatus;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.sql.*;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ExamSessionDAO implements IExamSessionDAO {
@@ -24,26 +25,102 @@ public class ExamSessionDAO implements IExamSessionDAO {
 
 	@Override
 	public List<ExamSession> findAll() {
-		return List.of();
+		List<ExamSession> sessions = new ArrayList<>();
+		try (
+				Connection conn = getConnection();
+				CallableStatement cstmt = conn.prepareCall("{call list_exam_sessions()}")
+		) {
+			ResultSet rs = cstmt.executeQuery();
+			while (rs.next()) {
+				int id = rs.getInt("id");
+				String name = rs.getString("name");
+				LocalDate examDate = rs.getDate("exam_date").toLocalDate();
+				ExamSession session = new ExamSession(id, name, examDate);
+				sessions.add(session);
+			}
+		} catch (SQLException e) {
+			printSQLException(e);
+		}
+		return sessions;
 	}
 
 	@Override
-	public boolean add(ExamSession object) {
-		return false;
+	public boolean add(ExamSession session) {
+		boolean success = false;
+		try (
+				Connection conn = getConnection();
+				CallableStatement cstmt = conn.prepareCall("{call add_exam_session(?,?)}")
+		) {
+			cstmt.setString(1, session.getName());
+			cstmt.setDate(2, Date.valueOf(session.getExamDate()));
+			int rowAffected = cstmt.executeUpdate();
+			if (rowAffected == 0) {
+				throw new SQLException("Insert failed!");
+			}
+			success = true;
+		} catch (SQLException e) {
+			printSQLException(e);
+		}
+		return success;
 	}
 
 	@Override
 	public ExamSession findById(int id) {
-		return null;
+		ExamSession session = null;
+		try (
+				Connection conn = getConnection();
+				CallableStatement cstmt = conn.prepareCall("{call find_exam_session(?)}")
+		) {
+			cstmt.setInt(1, id);
+			ResultSet rs = cstmt.executeQuery();
+			if (rs.next()) {
+				String name = rs.getString("name");
+				LocalDate examDate = rs.getDate("exam_date").toLocalDate();
+				session = new ExamSession(id, name, examDate);
+			}
+		} catch (SQLException e) {
+			printSQLException(e);
+		}
+		return session;
 	}
 
 	@Override
-	public boolean update(ExamSession object) {
-		return false;
+	public boolean update(ExamSession session) {
+		try (
+				Connection conn = getConnection();
+				CallableStatement cstmt = conn.prepareCall("{call update_exam_session(?,?,?)}")
+		) {
+			cstmt.setInt(1, session.getId());
+			cstmt.setString(2, session.getName());
+			cstmt.setDate(3, Date.valueOf(session.getExamDate()));
+			int rowAffected = cstmt.executeUpdate();
+			if (rowAffected == 0) {
+				throw new SQLException("Update failed!");
+			}
+		} catch (SQLException e) {
+			printSQLException(e);
+		}
+		return true;
 	}
 
 	@Override
 	public boolean remove(int id) {
-		return false;
+		try (
+				Connection conn = getConnection();
+				CallableStatement cstmt = conn.prepareCall("{call delete_exam_session(?)}")
+		) {
+			cstmt.setInt(1, id);
+			int rowAffected = cstmt.executeUpdate();
+			if (rowAffected == 0) {
+				throw new SQLException("Exam session with id " + id + " not found");
+			}
+		} catch (SQLException e) {
+			printSQLException(e);
+		}
+		return true;
+	}
+
+	private void printSQLException(SQLException ex) {
+		PrintSQLException.printSQLException(ex);
 	}
 }

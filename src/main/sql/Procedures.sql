@@ -164,6 +164,126 @@ begin
 end $
 delimiter ;
 
+
+
+delimiter $
+create procedure list_exam_sessions()
+begin
+	select * from exam_session;
+end $
+delimiter ;
+
+delimiter $
+create procedure add_exam_session(
+    in in_name varchar(50),
+    in in_exam_date date
+)
+begin
+	insert into exam_session values
+    (null, in_name, in_exam_date);
+end $
+delimiter ;
+
+delimiter $
+create procedure find_exam_session (
+    in in_id int
+)
+begin
+	select * from exam_session
+    where id = in_id;
+end $
+delimiter ;
+
+delimiter $
+create procedure update_exam_session(
+	in in_id int,
+    in in_name varchar(50),
+    in in_exam_date date
+)
+begin
+	update exam_session
+    set
+		name = in_name,
+        exam_date = in_exam_date
+    where id = in_id;
+end $
+delimiter ;
+
+delimiter $
+create procedure delete_exam_session(
+    in in_id int
+)
+begin
+	delete from exam_session
+    where id = in_id;
+end $
+delimiter ;
+
+
+
+delimiter $
+create procedure list_exam_results()
+begin
+	select * from exam_result;
+end $
+delimiter ;
+
+delimiter $
+create procedure add_exam_result(
+    in in_name varchar(50),
+    in in_exam_date date
+)
+begin
+	insert into exam_session values
+    (null, in_name, in_exam_date);
+end $
+delimiter ;
+
+delimiter $
+create procedure find_exam_result (
+    in in_id int
+)
+begin
+	select * from exam_session
+    where id = in_id;
+end $
+delimiter ;
+
+delimiter $
+create procedure update_exam_result(
+	in in_id int,
+    in in_name varchar(50),
+    in in_exam_date date
+)
+begin
+	update exam_session
+    set
+		name = in_name,
+        exam_date = in_exam_date
+    where id = in_id;
+end $
+delimiter ;
+
+delimiter $
+create procedure delete_exam_result(
+    in in_id int
+)
+begin
+	delete from exam_session
+    where id = in_id;
+end $
+delimiter ;
+
+
+
+
+
+
+
+
+
+
+
 DELIMITER $$
 CREATE PROCEDURE Insert_User(
     IN p_Email VARCHAR(100),
