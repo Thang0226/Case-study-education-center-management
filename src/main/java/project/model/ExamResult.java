@@ -1,20 +1,20 @@
 package project.model;
 
+import java.math.BigDecimal;
+
 public class ExamResult {
     private int examSessionId;
     private int studentId;
-    private float theoryScore;
-    private float practicalScore;
-    private float averageScore;
+    private BigDecimal theoryScore;
+    private BigDecimal practicalScore;
 
     public ExamResult() {}
 
-    public ExamResult(int examSessionId, int studentId, float theoryScore, float practicalScore, float averageScore) {
+    public ExamResult(int examSessionId, int studentId, BigDecimal theoryScore, BigDecimal practicalScore) {
         this.examSessionId = examSessionId;
         this.studentId = studentId;
         this.theoryScore = theoryScore;
         this.practicalScore = practicalScore;
-        this.averageScore = averageScore;
     }
 
     public int getExamSessionId() {
@@ -33,27 +33,20 @@ public class ExamResult {
         this.studentId = studentId;
     }
 
-    public float getTheoryScore() {
+    public BigDecimal getTheoryScore() {
         return theoryScore;
     }
 
-    public void setTheoryScore(float theoryScore) {
+    public void setTheoryScore(BigDecimal theoryScore) {
         this.theoryScore = theoryScore;
     }
 
-    public float getPracticalScore() {
+    public BigDecimal getPracticalScore() {
         return practicalScore;
     }
 
-    public void setPracticalScore(float practicalScore) {
+    public void setPracticalScore(BigDecimal practicalScore) {
         this.practicalScore = practicalScore;
     }
 
-    public float getAverageScore() {
-        return averageScore;
-    }
-
-    public void setAverageScore(float averageScore) {
-        this.averageScore = averageScore;
-    }
 }

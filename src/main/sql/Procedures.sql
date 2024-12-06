@@ -230,47 +230,52 @@ delimiter ;
 
 delimiter $
 create procedure add_exam_result(
-    in in_name varchar(50),
-    in in_exam_date date
+    in in_session_id int,
+    in in_student_id int,
+    in in_theory_score decimal(5,2),
+    in in_practical_score decimal(5,2)
 )
 begin
-	insert into exam_session values
-    (null, in_name, in_exam_date);
+	insert into exam_result values
+    (in_session_id, in_student_id, in_theory_score, in_practical_score);
 end $
 delimiter ;
 
 delimiter $
 create procedure find_exam_result (
-    in in_id int
+    in in_session_id int,
+    in in_student_id int
 )
 begin
 	select * from exam_session
-    where id = in_id;
+    where exam_session_id = in_session_id and student_id = in_student_id;
 end $
 delimiter ;
 
 delimiter $
 create procedure update_exam_result(
-	in in_id int,
-    in in_name varchar(50),
-    in in_exam_date date
+	in in_exam_session_id int,
+	in in_student_id int,
+    in in_theory_score decimal(5,2),
+    in in_practical_score decimal(5,2)
 )
 begin
-	update exam_session
+	update exam_result
     set
-		name = in_name,
-        exam_date = in_exam_date
-    where id = in_id;
+		theory_score = in_theory_score,
+        practical_score = in_practical_score
+    where exam_session_id = in_exam_session_id and student_id = in_student_id;
 end $
 delimiter ;
 
 delimiter $
 create procedure delete_exam_result(
-    in in_id int
+    in in_exam_session_id int,
+	in in_student_id int
 )
 begin
-	delete from exam_session
-    where id = in_id;
+	delete from exam_result
+    where exam_session_id = in_exam_session_id and student_id = in_student_id;
 end $
 delimiter ;
 

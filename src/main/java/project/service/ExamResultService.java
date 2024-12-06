@@ -33,4 +33,14 @@ public class ExamResultService implements IExamResultService {
     public boolean remove(int id) {
         return examResultDAO.remove(id);
     }
+
+    @Override
+    public ExamResult findExamResult(int sessionID, int studentID) {
+        return examResultDAO.findExamResult(sessionID, studentID);
+    }
+
+    @Override
+    public boolean removeExamResult(int sessionID, int studentID) {
+        return examResultDAO.removeExamResult(sessionID, studentID);
+    }
 }
