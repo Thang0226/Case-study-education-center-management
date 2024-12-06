@@ -3,6 +3,8 @@ package project.DAO;
 import project.model.User;
 
 import java.sql.*;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -79,11 +81,18 @@ public class UserDAO implements IUserDAO {
             String identity = user.getIdentity();
             int roleID = user.getRoleID();
 
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            LocalDate localDate = LocalDate.parse(dateOfBirth, formatter);
+
+            // Convert to java.sql.Date
+            Date sqlDate = Date.valueOf(localDate);
+
+
             preparedStatement.setString(1, email);
             preparedStatement.setString(2, password);
             preparedStatement.setString(3, phoneNumber);
             preparedStatement.setString(4, fullName);
-            preparedStatement.setString(5, dateOfBirth);
+            preparedStatement.setDate(5, sqlDate);
             preparedStatement.setString(6, address);
             preparedStatement.setString(7, identity);
             preparedStatement.setInt(8, roleID);

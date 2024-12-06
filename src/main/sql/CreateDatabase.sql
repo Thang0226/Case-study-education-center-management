@@ -66,7 +66,7 @@ VALUES
 --                        User_ID INT NOT NULL UNIQUE,
 --                        FOREIGN KEY (User_ID) REFERENCES User(ID)
 -- );
-drop table admin;
+# drop table admin;
 
 -- Student Status Table
 CREATE TABLE Student_Status (
@@ -115,7 +115,7 @@ where role_id = 1;
 --                          User_ID INT NOT NULL UNIQUE,
 --                          FOREIGN KEY (User_ID) REFERENCES User(ID)
 -- );
-drop table officer;
+# drop table officer;
 
 
 -- Class Table
