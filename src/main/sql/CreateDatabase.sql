@@ -8,6 +8,7 @@ CREATE TABLE Role (
                       Name VARCHAR(50) NOT NULL UNIQUE
 );
 
+
 -- User Table (Base Entity)
 CREATE TABLE User (
                       ID INT PRIMARY KEY AUTO_INCREMENT,
@@ -53,6 +54,9 @@ CREATE TABLE Tutor (
                        User_ID INT NOT NULL UNIQUE,
                        FOREIGN KEY (User_ID) REFERENCES User(ID)
 );
+ALTER TABLE Tutor
+    DROP COLUMN Class_Count,
+    DROP COLUMN Student_Count;
 
 -- Officer Table
 CREATE TABLE Officer (
