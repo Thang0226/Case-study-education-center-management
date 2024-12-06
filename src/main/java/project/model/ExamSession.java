@@ -3,23 +3,23 @@ package project.model;
 import java.time.LocalDate;
 
 public class ExamSession {
-    private String id;
+    private int id;
     private String name;
     private LocalDate examDate;
 
     public ExamSession() {}
 
-    public ExamSession(String id, String name, LocalDate examDate) {
+    public ExamSession(int id, String name, LocalDate examDate) {
         this.id = id;
         this.name = name;
         this.examDate = examDate;
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 
