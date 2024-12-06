@@ -7,12 +7,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ClazzDAO implements IClazzDAO{
-// TODO: change clazzes to clazz????
-    private static final String SELECT_ALL_CLAZZES = "SELECT * FROM clazz";
-    private static final String INSERT_CLAZZ = "INSERT INTO clazz (name, tutorID, subjectID) VALUES (?, ?, ?)";
-    private static final String SELECT_CLAZZ_BY_ID = "SELECT * FROM clazz WHERE id = ?";
-    private static final String UPDATE_CLAZZ = "UPDATE clazz SET name = ?, tutorID = ?, subjectID = ? WHERE id = ?";
-    private static final String DELETE_CLAZZ = "DELETE FROM clazz WHERE id = ?";
+    private static final String SELECT_ALL_CLASSES = "SELECT * FROM clazz";
+    private static final String INSERT_CLASS = "INSERT INTO clazz (name, tutor_id, subject_id) VALUES (?, ?, ?)";
+    private static final String SELECT_CLASS_BY_ID = "SELECT * FROM clazz WHERE id = ?";
+    private static final String UPDATE_CLASS = "UPDATE clazz SET name = ?, tutor_id = ?, subject_id = ? WHERE id = ?";
+    private static final String DELETE_CLASS = "DELETE FROM clazz WHERE id = ?";
+//    Optional SQL (cuon xuong duoi cung xem method lien quan):
+//    private static final String SELECT_CLASSES_BY_TUTOR = "SELECT * FROM clazz WHERE tutor_id = ?";
+//    private static final String SELECT_CLASSES_BY_SUBJECT = "SELECT * FROM clazz WHERE subject_id = ?";
 
     @Override
     public Connection getConnection() throws SQLException {
@@ -30,38 +32,49 @@ public class ClazzDAO implements IClazzDAO{
 
     @Override
     public List<Clazz> findAll() {
-        List<Clazz> clazzes = new ArrayList<>();
+        List<Clazz> classes = new ArrayList<>();
 
         try (Connection connection = getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_CLAZZES);
+             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_ALL_CLASSES);
              ResultSet rs = preparedStatement.executeQuery()) {
 
             while (rs.next()) {
-                int id = rs.getInt("id");
-                String name = rs.getString("name");
-                int tutorID = rs.getInt("tutorID");
-                int subjectID = rs.getInt("subjectID");
-
-                Clazz clazz = new Clazz(id, name, tutorID, subjectID);
-                clazzes.add(clazz);
+                Clazz clazz = new Clazz(
+                        rs.getInt("id"),
+                        rs.getString("name"),
+                        rs.getInt("tutor_id"),
+                        rs.getInt("subject_id")
+                );
+                classes.add(clazz);
             }
         } catch (SQLException e) {
             printSQLException(e);
         }
 
-        return clazzes;
+        return classes;
     }
 
     @Override
     public boolean add(Clazz clazz) {
         try (Connection connection = getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(INSERT_CLAZZ)) {
+             PreparedStatement preparedStatement = connection.prepareStatement(INSERT_CLASS)) {
 
             preparedStatement.setString(1, clazz.getName());
             preparedStatement.setInt(2, clazz.getTutorID());
             preparedStatement.setInt(3, clazz.getSubjectID());
 
-            return preparedStatement.executeUpdate() > 0;
+            int rowAffected = preparedStatement.executeUpdate();
+            if (rowAffected == 0) {
+                throw new SQLException("Failed to add class");
+            }
+
+            try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    clazz.setId(generatedKeys.getInt(1));
+                }
+            }
+
+            return true;
         } catch (SQLException e) {
             printSQLException(e);
             return false;
@@ -73,17 +86,17 @@ public class ClazzDAO implements IClazzDAO{
         Clazz clazz = null;
 
         try (Connection connection = getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_CLAZZ_BY_ID)) {
+             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_CLASS_BY_ID)) {
 
             preparedStatement.setInt(1, id);
 
             try (ResultSet rs = preparedStatement.executeQuery()) {
                 if (rs.next()) {
                     String name = rs.getString("name");
-                    int tutorID = rs.getInt("tutorID");
-                    int subjectID = rs.getInt("subjectID");
+                    int tutorId = rs.getInt("tutor_id");
+                    int subjectId = rs.getInt("subject_id");
 
-                    clazz = new Clazz(id, name, tutorID, subjectID);
+                    clazz = new Clazz(id, name, tutorId, subjectId);
                 }
             }
         } catch (SQLException e) {
@@ -96,14 +109,18 @@ public class ClazzDAO implements IClazzDAO{
     @Override
     public boolean update(Clazz clazz) {
         try (Connection connection = getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_CLAZZ)) {
+             PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_CLASS)) {
 
             preparedStatement.setString(1, clazz.getName());
             preparedStatement.setInt(2, clazz.getTutorID());
             preparedStatement.setInt(3, clazz.getSubjectID());
-            preparedStatement.setInt(4, id);
+            preparedStatement.setInt(4, clazz.getId());
 
-            return preparedStatement.executeUpdate() > 0;
+            int rowAffected = preparedStatement.executeUpdate();
+            if (rowAffected == 0) {
+                throw new SQLException("Failed to update class");
+            }
+            return true;
         } catch (SQLException e) {
             printSQLException(e);
             return false;
@@ -112,6 +129,86 @@ public class ClazzDAO implements IClazzDAO{
 
     @Override
     public boolean remove(int id) {
-        return false;
+        try (Connection connection = getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(DELETE_CLASS)) {
+
+            preparedStatement.setInt(1, id);
+            int rowAffected = preparedStatement.executeUpdate();
+            if (rowAffected == 0) {
+                throw new SQLException("Class with id " + id + " was not found");
+            }
+            return true;
+        } catch (SQLException e) {
+            printSQLException(e);
+            return false;
+        }
     }
+
+    private void printSQLException(SQLException ex) {
+        for (Throwable e : ex) {
+            if (e instanceof SQLException) {
+                e.printStackTrace(System.err);
+                System.err.println("SQLState: " + ((SQLException) e).getSQLState());
+                System.err.println("Error Code: " + ((SQLException) e).getErrorCode());
+                System.err.println("Message: " + e.getMessage());
+            }
+        }
+    }
+
+//    Optional methods
+/*Find by Tutor Id*/
+//    public List<Clazz> findByTutorId(int tutorId) {
+//        List<Clazz> classes = new ArrayList<>();
+//
+//        try (Connection connection = getConnection();
+//             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_CLASSES_BY_TUTOR)) {
+//
+//            preparedStatement.setInt(1, tutorId);
+//
+//            try (ResultSet rs = preparedStatement.executeQuery()) {
+//                while (rs.next()) {
+//                    Clazz clazz = new Clazz(
+//                            rs.getInt("id"),
+//                            rs.getString("name"),
+//                            rs.getInt("tutor_id"),
+//                            rs.getInt("subject_id")
+//                    );
+//                    classes.add(clazz);
+//                }
+//            }
+//        } catch (SQLException e) {
+//            printSQLException(e);
+//        }
+//
+//        return classes;
+//    }
+
+/*Find by Subject Id*/
+//    public List<Clazz> findBySubjectId(int subjectId) {
+//        List<Clazz> classes = new ArrayList<>();
+//
+//        try (Connection connection = getConnection();
+//             PreparedStatement preparedStatement = connection.prepareStatement(SELECT_CLASSES_BY_SUBJECT)) {
+//
+//            preparedStatement.setInt(1, subjectId);
+//
+//            try (ResultSet rs = preparedStatement.executeQuery()) {
+//                while (rs.next()) {
+//                    Clazz clazz = new Clazz(
+//                            rs.getInt("id"),
+//                            rs.getString("name"),
+//                            rs.getInt("tutor_id"),
+//                            rs.getInt("subject_id")
+//                    );classes.add(clazz);
+//                }
+//            }
+//        } catch (SQLException e) {
+//            printSQLException(e);
+//        }
+//
+//        return classes;
+//    }
+
+
+
 }

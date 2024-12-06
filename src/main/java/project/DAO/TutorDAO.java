@@ -101,13 +101,13 @@ public class TutorDAO implements ITutorDAO{
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_TUTOR)) {
 
-            preparedStatement.setInt(1, tutor.getId());
-            preparedStatement.setInt(2, tutor.getUserID());
-            preparedStatement.setInt(3, tutor.getClassCount());
-            preparedStatement.setInt(4, tutor.getStudentCount());
+            preparedStatement.setInt(1, tutor.getUserID());
+            preparedStatement.setInt(2, tutor.getClassCount());
+            preparedStatement.setInt(3, tutor.getStudentCount());
+            preparedStatement.setInt(4, tutor.getId());
             int rowAffected = preparedStatement.executeUpdate();
             if (rowAffected == 0) {
-                throw new SQLException("Failed to add tutor");
+                throw new SQLException("Failed to update tutor");
             }
             return true;
         } catch (SQLException e) {
