@@ -6,11 +6,10 @@ public class Tutor {
 	private int classCount;
 	private int studentCount;
 
-	public Tutor(int id, int userID, int classCount, int studentCount) {
+
+	public Tutor(int id, int userID) {
 		this.id = id;
 		this.userID = userID;
-		this.classCount = classCount;
-		this.studentCount = studentCount;
 	}
 
 	public int getId() {
@@ -29,19 +28,4 @@ public class Tutor {
 		this.userID = userID;
 	}
 
-	public int getClassCount() {
-		return classCount;
-	}
-
-	public void setClassCount(int classCount) {
-		this.classCount = classCount;
-	}
-
-	public int getStudentCount() {
-		return studentCount;
-	}
-
-	public void setStudentCount(int studentCount) {
-		this.studentCount = studentCount;
-	}
 }
