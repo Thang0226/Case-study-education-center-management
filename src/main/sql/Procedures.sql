@@ -62,9 +62,107 @@ delimiter ;
 
 
 
+delimiter $
+create procedure list_student_status()
+begin
+	select * from student_status;
+end $
+delimiter ;
+
+delimiter $
+create procedure add_student_status(
+    in in_name varchar(50)
+)
+begin
+	insert into student_status values
+    (null, in_name);
+end $
+delimiter ;
+
+delimiter $
+create procedure find_student_status(
+    in in_id int
+)
+begin
+	select * from student_status
+    where id = in_id;
+end $
+delimiter ;
+
+delimiter $
+create procedure update_student_status(
+	in in_id int,
+    in in_name varchar(50)
+)
+begin
+	update student_status
+    set
+		name = in_name
+    where id = in_id;
+end $
+delimiter ;
+
+delimiter $
+create procedure delete_student_status(
+    in in_id int
+)
+begin
+	delete from student_status
+    where id = in_id;
+end $
+delimiter ;
 
 
 
+delimiter $
+create procedure list_tuition_status()
+begin
+	select * from student_status;
+end $
+delimiter ;
+
+delimiter $
+create procedure add_tuition_status(
+    in in_name varchar(50)
+)
+begin
+	insert into student_status values
+    (null, in_name);
+end $
+delimiter ;
+
+delimiter $
+create procedure find_tuition_status(
+    in in_id int
+)
+begin
+	select * from student_status
+    where id = in_id;
+end $
+delimiter ;
+
+delimiter $
+create procedure update_tuition_status(
+	in in_id int,
+    in in_name varchar(50)
+)
+begin
+	update student_status
+    set
+		name = in_name
+    where id = in_id;
+end $
+delimiter ;
+
+delimiter $
+create procedure delete_tuition_status(
+    in in_id int
+)
+begin
+	delete from student_status
+    where id = in_id;
+end $
+delimiter ;
 
 
 

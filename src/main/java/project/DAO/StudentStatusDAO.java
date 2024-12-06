@@ -1,10 +1,10 @@
 package project.DAO;
 
+import project.model.Student;
 import project.model.StudentStatus;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class StudentStatusDAO implements IStudentStatusDAO {
@@ -24,26 +24,98 @@ public class StudentStatusDAO implements IStudentStatusDAO {
 
 	@Override
 	public List<StudentStatus> findAll() {
-		return List.of();
+		List<StudentStatus> statusList = new ArrayList<>();
+		try (
+				Connection conn = getConnection();
+				CallableStatement cstmt = conn.prepareCall("{call list_student_status()}")
+		) {
+			ResultSet rs = cstmt.executeQuery();
+			while (rs.next()) {
+				int id = rs.getInt("id");
+				String name = rs.getString("name");
+				StudentStatus status = new StudentStatus(id, name);
+				statusList.add(status);
+			}
+		} catch (SQLException e) {
+			printSQLException(e);
+		}
+		return statusList;
 	}
 
 	@Override
-	public boolean add(StudentStatus object) {
-		return false;
+	public boolean add(StudentStatus status) {
+		boolean success = false;
+		try (
+				Connection conn = getConnection();
+				CallableStatement cstmt = conn.prepareCall("{call add_student_status(?)}")
+		) {
+			cstmt.setString(1, status.getName());
+			int rowAffected = cstmt.executeUpdate();
+			if (rowAffected == 0) {
+				throw new SQLException("Insert failed!");
+			}
+			success = true;
+		} catch (SQLException e) {
+			printSQLException(e);
+		}
+		return success;
 	}
 
 	@Override
 	public StudentStatus findById(int id) {
-		return null;
+		StudentStatus status = null;
+		try (
+				Connection conn = getConnection();
+				CallableStatement cstmt = conn.prepareCall("{call find_student_status(?)}")
+		) {
+			cstmt.setInt(1, id);
+			ResultSet rs = cstmt.executeQuery();
+			if (rs.next()) {
+				String statusName = rs.getString("name");
+				status = new StudentStatus(id, statusName);
+			}
+		} catch (SQLException e) {
+			printSQLException(e);
+		}
+		return status;
 	}
 
 	@Override
-	public boolean update(StudentStatus object) {
-		return false;
+	public boolean update(StudentStatus status) {
+		try (
+				Connection conn = getConnection();
+				CallableStatement cstmt = conn.prepareCall("{call update_student_status(?,?)}")
+		) {
+			cstmt.setInt(1, status.getId());
+			cstmt.setString(2, status.getName());
+			int rowAffected = cstmt.executeUpdate();
+			if (rowAffected == 0) {
+				throw new SQLException("Update failed!");
+			}
+		} catch (SQLException e) {
+			printSQLException(e);
+		}
+		return true;
 	}
 
 	@Override
 	public boolean remove(int id) {
-		return false;
+		try (
+				Connection conn = getConnection();
+				CallableStatement cstmt = conn.prepareCall("{call delete_student_status(?)}")
+		) {
+			cstmt.setInt(1, id);
+			int rowAffected = cstmt.executeUpdate();
+			if (rowAffected == 0) {
+				throw new SQLException("Student Status with id " + id + " not found");
+			}
+		} catch (SQLException e) {
+			printSQLException(e);
+		}
+		return true;
+	}
+
+	private void printSQLException(SQLException ex) {
+		PrintSQLException.printSQLException(ex);
 	}
 }
