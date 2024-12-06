@@ -9,9 +9,9 @@ import java.util.List;
 public class TutorDAO implements ITutorDAO{
 
     private static final String SELECT_ALL_TUTORS = "SELECT * FROM tutor";
-    private static final String INSERT_TUTOR = "INSERT INTO tutor (user_id, class_count, student_count) VALUES (?, ?, ?)";
+    private static final String INSERT_TUTOR = "INSERT INTO tutor (user_id) VALUES (?)";
     private static final String SELECT_TUTOR_BY_ID = "SELECT * FROM tutor WHERE id = ?";
-    private static final String UPDATE_TUTOR = "UPDATE tutor SET user_id = ?, class_count = ?, student_count = ? WHERE id = ?";
+    private static final String UPDATE_TUTOR = "UPDATE tutor SET user_id = ? WHERE id = ?";
     private static final String DELETE_TUTOR = "DELETE FROM tutor WHERE id = ?";
 
     @Override
@@ -39,10 +39,7 @@ public class TutorDAO implements ITutorDAO{
             while (rs.next()) {
                 int id = rs.getInt("id");
                 int userID = rs.getInt("user_id");
-                int classCount = rs.getInt("class_count");
-                int studentCount = rs.getInt("student_count");
-
-                Tutor tutor = new Tutor(id, userID, classCount, studentCount);
+                Tutor tutor = new Tutor(id, userID);
                 tutors.add(tutor);
             }
         } catch (SQLException e) {
@@ -58,8 +55,6 @@ public class TutorDAO implements ITutorDAO{
              PreparedStatement preparedStatement = connection.prepareStatement(INSERT_TUTOR)) {
 
             preparedStatement.setInt(1, tutor.getUserID());
-            preparedStatement.setInt(2, tutor.getClassCount());
-            preparedStatement.setInt(3, tutor.getStudentCount());
             int rowAffected = preparedStatement.executeUpdate();
             if (rowAffected == 0) {
                 throw new SQLException("Failed to add tutor");
@@ -83,10 +78,8 @@ public class TutorDAO implements ITutorDAO{
             try (ResultSet rs = preparedStatement.executeQuery()) {
                 if (rs.next()) {
                     int userID = rs.getInt("user_id");
-                    int classCount = rs.getInt("class_count");
-                    int studentCount = rs.getInt("student_count");
 
-                    tutor = new Tutor(id, userID, classCount, studentCount);
+                    tutor = new Tutor(id, userID);
                 }
             }
         } catch (SQLException e) {
@@ -102,13 +95,13 @@ public class TutorDAO implements ITutorDAO{
              PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_TUTOR)) {
 
             preparedStatement.setInt(1, tutor.getUserID());
-            preparedStatement.setInt(2, tutor.getClassCount());
-            preparedStatement.setInt(3, tutor.getStudentCount());
-            preparedStatement.setInt(4, tutor.getId());
+            preparedStatement.setInt(2, tutor.getId());
+
             int rowAffected = preparedStatement.executeUpdate();
             if (rowAffected == 0) {
                 throw new SQLException("Failed to update tutor");
             }
+
             return true;
         } catch (SQLException e) {
             printSQLException(e);
