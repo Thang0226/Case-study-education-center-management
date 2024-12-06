@@ -53,6 +53,9 @@ CREATE TABLE Tutor (
                        User_ID INT NOT NULL UNIQUE,
                        FOREIGN KEY (User_ID) REFERENCES User(ID)
 );
+ALTER TABLE Tutor
+    ADD COLUMN Class_Count INT DEFAULT 0,
+    ADD COLUMN Student_Count INT DEFAULT 0;
 
 -- Officer Table
 CREATE TABLE Officer (

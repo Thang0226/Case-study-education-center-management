@@ -6,12 +6,12 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TutorDAO implements IDAO<Tutor>{
+public class TutorDAO implements ITutorDAO{
 
     private static final String SELECT_ALL_TUTORS = "SELECT * FROM tutor";
-    private static final String INSERT_TUTOR = "INSERT INTO tutor (name, email, phone, subject_expertise) VALUES (?, ?, ?, ?)";
+    private static final String INSERT_TUTOR = "INSERT INTO tutor (user_id, class_count, student_count) VALUES (?, ?, ?)";
     private static final String SELECT_TUTOR_BY_ID = "SELECT * FROM tutor WHERE id = ?";
-    private static final String UPDATE_TUTOR = "UPDATE tutor SET name = ?, email = ?, phone = ?, subject_expertise = ? WHERE id = ?";
+    private static final String UPDATE_TUTOR = "UPDATE tutor SET user_id = ?, class_count = ?, student_count = ? WHERE id = ?";
     private static final String DELETE_TUTOR = "DELETE FROM tutor WHERE id = ?";
 
     @Override
@@ -38,9 +38,9 @@ public class TutorDAO implements IDAO<Tutor>{
 
             while (rs.next()) {
                 int id = rs.getInt("id");
-                int userID = rs.getInt("userID");
-                int classCount = rs.getInt("classCount");
-                int studentCount = rs.getInt("studentCount");
+                int userID = rs.getInt("user_id");
+                int classCount = rs.getInt("class_count");
+                int studentCount = rs.getInt("student_count");
 
                 Tutor tutor = new Tutor(id, userID, classCount, studentCount);
                 tutors.add(tutor);
@@ -60,8 +60,11 @@ public class TutorDAO implements IDAO<Tutor>{
             preparedStatement.setInt(1, tutor.getUserID());
             preparedStatement.setInt(2, tutor.getClassCount());
             preparedStatement.setInt(3, tutor.getStudentCount());
-
-            return preparedStatement.executeUpdate() > 0;
+            int rowAffected = preparedStatement.executeUpdate();
+            if (rowAffected == 0) {
+                throw new SQLException("Failed to add tutor");
+            }
+            return true;
         } catch (SQLException e) {
             printSQLException(e);
             return false;
@@ -79,9 +82,9 @@ public class TutorDAO implements IDAO<Tutor>{
 
             try (ResultSet rs = preparedStatement.executeQuery()) {
                 if (rs.next()) {
-                    int userID = rs.getInt("userID");
-                    int classCount = rs.getInt("classCount");
-                    int studentCount = rs.getInt("studentCount");
+                    int userID = rs.getInt("user_id");
+                    int classCount = rs.getInt("class_count");
+                    int studentCount = rs.getInt("student_count");
 
                     tutor = new Tutor(id, userID, classCount, studentCount);
                 }
@@ -94,12 +97,50 @@ public class TutorDAO implements IDAO<Tutor>{
     }
 
     @Override
-    public boolean update(int id, Tutor object) {
+    public boolean update(Tutor tutor) {
+        try (Connection connection = getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_TUTOR)) {
 
+            preparedStatement.setInt(1, tutor.getId());
+            preparedStatement.setInt(2, tutor.getUserID());
+            preparedStatement.setInt(3, tutor.getClassCount());
+            preparedStatement.setInt(4, tutor.getStudentCount());
+            int rowAffected = preparedStatement.executeUpdate();
+            if (rowAffected == 0) {
+                throw new SQLException("Failed to add tutor");
+            }
+            return true;
+        } catch (SQLException e) {
+            printSQLException(e);
+            return false;
+        }
     }
 
     @Override
     public boolean remove(int id) {
-        return false;
+        try (Connection connection = getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(DELETE_TUTOR)) {
+
+            preparedStatement.setInt(1, id);
+            int rowAffected = preparedStatement.executeUpdate();
+            if (rowAffected == 0) {
+                throw new SQLException("Tutor with id " + id + " was not found");
+            }
+            return true;
+        } catch (SQLException e) {
+            printSQLException(e);
+            return false;
+        }
+    }
+
+    private void printSQLException(SQLException ex) {
+        for (Throwable e : ex) {
+            if (e instanceof SQLException) {
+                e.printStackTrace(System.err);
+                System.err.println("SQLState: " + ((SQLException) e).getSQLState());
+                System.err.println("Error Code: " + ((SQLException) e).getErrorCode());
+                System.err.println("Message: " + e.getMessage());
+            }
+        }
     }
 }

@@ -13,7 +13,7 @@ public interface IDAO<T> {
 
 	T findById(int id);
 
-	boolean update(int id, T object);
+	boolean update(T object);
 
 	boolean remove(int id);
 }
