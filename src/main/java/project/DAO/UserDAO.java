@@ -24,13 +24,13 @@ public class UserDAO implements IUserDAO {
     public UserDAO() {}
 
     @Override
-    public Connection getConnection() {
+    public Connection getConnection() throws SQLException {
         Connection connection = null;
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
 //            DriverManager.registerDriver(new com.mysql.cj.jdbc.Driver());
             connection = DriverManager.getConnection(jdbcURL, jdbcUsername, jdbcPassword);
-        } catch (SQLException | ClassNotFoundException e) {
+        } catch (ClassNotFoundException e) {
             System.out.println(e.getMessage());
             //noinspection CallToPrintStackTrace
             e.printStackTrace();
