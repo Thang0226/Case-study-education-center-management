@@ -164,17 +164,6 @@ begin
 end $
 delimiter ;
 
-
-
-
-
-
-
-
-
-
-
-
 DELIMITER $$
 CREATE PROCEDURE Insert_User(
     IN p_Email VARCHAR(100),

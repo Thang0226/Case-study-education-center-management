@@ -54,9 +54,7 @@ CREATE TABLE Tutor (
                        User_ID INT NOT NULL UNIQUE,
                        FOREIGN KEY (User_ID) REFERENCES User(ID)
 );
-ALTER TABLE Tutor
-    DROP COLUMN Class_Count,
-    DROP COLUMN Student_Count;
+
 
 -- Officer Table
 CREATE TABLE Officer (
