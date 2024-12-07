@@ -39,4 +39,9 @@ public class UserService implements IUserService {
     public void addStudentTransaction(User user, Student student) {
         userDAO.addStudentTransaction(user, student);
     }
+
+    @Override
+    public void addTutorTransaction(User user) {
+        userDAO.addTutorTransaction(user);
+    }
 }

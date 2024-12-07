@@ -26,7 +26,11 @@ public class UserDAO<T> implements IUserDAO {
     private static final String INSERT_USER_SP ="CALL Insert_User(?,?,?,?,?,?,?,?,?)";
     private static final String UPDATE_USER_SP ="CALL Update_User(?,?,?,?,?,?,?,?,?)";
     private static final String DELETE_USER = "DELETE FROM user WHERE id = ?";
+
     private static final String INSERT_STUDENT_SP = "CALL add_student(?,?,?,?)";
+
+    private static final String INSERT_TUTOR= "INSERT INTO tutor Values(null, ?)";
+
 
     public UserDAO() {}
 
@@ -222,7 +226,6 @@ public class UserDAO<T> implements IUserDAO {
             } else {
                 connection.rollback();
             }
-
         } catch (SQLException ex) {
             // roll back the transaction
             try {
@@ -247,6 +250,47 @@ public class UserDAO<T> implements IUserDAO {
                 //noinspection CallToPrintStackTrace
                 e.printStackTrace();
             }
+        }
+    }
+
+    @Override
+    public void addTutorTransaction(User user) {
+        try (Connection connection = getConnection();
+             CallableStatement callableStatement = connection.prepareCall(INSERT_USER_SP);
+             PreparedStatement preparedStatement = connection.prepareStatement(INSERT_TUTOR)) {
+
+            connection.setAutoCommit(false);
+
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            LocalDate localDate = LocalDate.parse(user.getDateOfBirth(), formatter);
+            // Convert to java.sql.Date
+            Date sqlDate = Date.valueOf(localDate);
+            callableStatement.setString(1, user.getEmail());
+            callableStatement.setString(2, user.getPassword());
+            callableStatement.setString(3, user.getPhone());
+            callableStatement.setString(4, user.getFullName());
+            callableStatement.setDate(5, sqlDate);
+            callableStatement.setString(6, user.getAddress());
+            callableStatement.setString(7, user.getIdentity());
+            callableStatement.setInt(8, user.getRoleID());
+            int rowAffected = callableStatement.executeUpdate();
+
+            callableStatement.registerOutParameter(9, Types.INTEGER);
+            int userId = callableStatement.getInt(9);
+
+            if (rowAffected == 1) {
+                if (user.getRoleID() == 1) {
+                    preparedStatement.setInt(1, userId);
+                    preparedStatement.executeUpdate();
+                }
+                connection.commit();
+                connection.setAutoCommit(true);
+            } else {
+                connection.rollback();
+            }
+        } catch (SQLException e) {
+            //noinspection CallToPrintStackTrace
+            e.printStackTrace();
         }
     }
 }
