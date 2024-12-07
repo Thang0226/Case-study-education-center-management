@@ -13,7 +13,7 @@ import java.io.IOException;
 public class UserServlet extends HttpServlet {
     IAdminService adminService = new AdminService();
     IClazzService clazzService = new ClazzService();
-    IExamResultService examResultService = new ExamResultService();
+//    IExamResultService examResultService = new ExamResultService();
     IExamSessionService examSessionService = new ExamSessionService();
     IOfficerService officerService = new OfficerService();
     IRoleService roleService = new RoleService();
