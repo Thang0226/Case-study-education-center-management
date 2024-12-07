@@ -1,5 +1,6 @@
 package project.DAO;
 
+import project.model.Student;
 import project.model.User;
 
 import java.sql.*;
@@ -8,7 +9,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserDAO implements IUserDAO {
+public class UserDAO<T> implements IUserDAO {
     @SuppressWarnings("FieldCanBeLocal")
     private final String jdbcURL = "jdbc:mysql://localhost:3306/center_management";
     @SuppressWarnings("FieldCanBeLocal")
@@ -16,12 +17,16 @@ public class UserDAO implements IUserDAO {
     @SuppressWarnings("FieldCanBeLocal")
     private final String jdbcPassword = "123456";
 
+    IStudentDAO studentDAO = new StudentDAO();
+    ITutorDAO tutorDAO = new TutorDAO();
+
     private static final String SELECT_ALL_USERS = "SELECT * FROM user";
     private static final String SELECT_USER_BY_ID = "SELECT * FROM user WHERE id = ?";
     private static final String SELECT_USER_BY_NAME = "SELECT * FROM user WHERE name = ?";
-    private static final String INSERT_USER_SP ="CALL Insert_User(?,?,?,?,?,?,?,?)";
+    private static final String INSERT_USER_SP ="CALL Insert_User(?,?,?,?,?,?,?,?,?)";
     private static final String UPDATE_USER_SP ="CALL Update_User(?,?,?,?,?,?,?,?,?)";
     private static final String DELETE_USER = "DELETE FROM user WHERE id = ?";
+    private static final String INSERT_STUDENT_SP = "CALL add_student(?,?,?,?)";
 
     public UserDAO() {}
 
@@ -71,33 +76,22 @@ public class UserDAO implements IUserDAO {
     public boolean add(User user) {
         boolean rowUpdated = false;
         try (Connection connection = getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(INSERT_USER_SP)) {
-            String email = user.getEmail();
-            String password = user.getPassword();
-            String phoneNumber = user.getPhone();
-            String fullName = user.getFullName();
-            String dateOfBirth = user.getDateOfBirth();
-            String address = user.getAddress();
-            String identity = user.getIdentity();
-            int roleID = user.getRoleID();
-
+             CallableStatement callableStatement = connection.prepareCall(INSERT_USER_SP)) {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-            LocalDate localDate = LocalDate.parse(dateOfBirth, formatter);
-
+            LocalDate localDate = LocalDate.parse(user.getDateOfBirth(), formatter);
             // Convert to java.sql.Date
             Date sqlDate = Date.valueOf(localDate);
 
-
-            preparedStatement.setString(1, email);
-            preparedStatement.setString(2, password);
-            preparedStatement.setString(3, phoneNumber);
-            preparedStatement.setString(4, fullName);
-            preparedStatement.setDate(5, sqlDate);
-            preparedStatement.setString(6, address);
-            preparedStatement.setString(7, identity);
-            preparedStatement.setInt(8, roleID);
-            System.out.println(preparedStatement);
-            rowUpdated = preparedStatement.executeUpdate() > 0;
+            callableStatement.setString(1, user.getEmail());
+            callableStatement.setString(2, user.getPassword());
+            callableStatement.setString(3, user.getPhone());
+            callableStatement.setString(4, user.getFullName());
+            callableStatement.setDate(5, sqlDate);
+            callableStatement.setString(6, user.getAddress());
+            callableStatement.setString(7, user.getIdentity());
+            callableStatement.setInt(8, user.getRoleID());
+            System.out.println(callableStatement);
+            rowUpdated = callableStatement.executeUpdate() > 0;
         } catch (SQLException e) {
             //noinspection CallToPrintStackTrace
             e.printStackTrace();
@@ -183,4 +177,77 @@ public class UserDAO implements IUserDAO {
         return rowUpdated;
 
     }
+
+
+    @Override
+    public void addStudentTransaction(User user, Student student) {
+        Connection connection = null;
+        CallableStatement callableStatement = null;
+        CallableStatement callableStatementStudent = null;
+        try {
+            connection = getConnection();
+
+            // set auto commit to false
+            connection.setAutoCommit(false);
+
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            LocalDate localDate = LocalDate.parse(user.getDateOfBirth(), formatter);
+            // Convert to java.sql.Date
+            Date sqlDate = Date.valueOf(localDate);
+            callableStatement = connection.prepareCall(INSERT_USER_SP);
+            callableStatement.setString(1, user.getEmail());
+            callableStatement.setString(2, user.getPassword());
+            callableStatement.setString(3, user.getPhone());
+            callableStatement.setString(4, user.getFullName());
+            callableStatement.setDate(5, sqlDate);
+            callableStatement.setString(6, user.getAddress());
+            callableStatement.setString(7, user.getIdentity());
+            callableStatement.setInt(8, user.getRoleID());
+            int rowAffected = callableStatement.executeUpdate();
+
+            callableStatement.registerOutParameter(9, Types.INTEGER);
+            int userId = callableStatement.getInt(9);
+
+            if (rowAffected == 1) {
+                if (user.getRoleID() == 4) {
+                    callableStatementStudent = connection.prepareCall(INSERT_STUDENT_SP);
+                    callableStatementStudent.setInt(1, userId);
+                    callableStatementStudent.setInt(2, student.getTuitionStatusID());
+                    callableStatementStudent.setInt(3, student.getStudentStatusID());
+                    callableStatementStudent.setInt(4, student.getClassID());
+                    callableStatementStudent.executeUpdate();
+                }
+                connection.commit();
+                connection.setAutoCommit(true);
+            } else {
+                connection.rollback();
+            }
+
+        } catch (SQLException ex) {
+            // roll back the transaction
+            try {
+                if (connection != null) {
+                    connection.rollback();
+                }
+            } catch (SQLException e) {
+                System.out.println(e.getMessage());
+                //noinspection CallToPrintStackTrace
+                e.printStackTrace();
+            }
+            System.out.println(ex.getMessage());
+            //noinspection CallToPrintStackTrace
+            ex.printStackTrace();
+        } finally {
+            try {
+                if (callableStatementStudent != null) callableStatementStudent.close();
+                if (callableStatement != null) callableStatement.close();
+                if (connection != null) connection.close();
+            } catch (SQLException e) {
+                System.out.println(e.getMessage());
+                //noinspection CallToPrintStackTrace
+                e.printStackTrace();
+            }
+        }
+    }
 }
+

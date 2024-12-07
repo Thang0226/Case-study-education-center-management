@@ -14,7 +14,7 @@ public class StudentDAO implements IStudentDAO {
 	@Override
 	public Connection getConnection() throws SQLException {
 		try {
-			Class.forName("com.mysql.jdbc.Driver");
+			Class.forName("com.mysql.cj.jdbc.Driver");
 		} catch (ClassNotFoundException e) {
 			System.out.println(e.getMessage());
 		}

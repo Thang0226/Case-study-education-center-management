@@ -82,7 +82,7 @@
                         <tr>
                             <td><label for="role">Role <span style="color: red">*</span>: </label></td>
                             <td>
-                                <select name="roleId" id="role" class="form-select"
+                                <select name="roleId" id="role" class="form-select" onchange="showOnClick()"
                                         aria-label="Default select example" required>
                                     <option selected>Chose role</option>
                                     <c:forEach var="role" items="${roles}">
@@ -91,6 +91,52 @@
                                 </select>
                             </td>
                         </tr>
+                    </table>
+                    <div id="student-information" style="display: none">
+                        <fieldset>
+                            <legend class="text-center mt-2">Student information</legend>
+                            <table class="table table-hover align-middle">
+                                <tr>
+                                    <td>Student tuition status <span style="color: red">*</span>:</td>
+                                    <td>
+                                        <select name="tuitionStatusID" id="tuitionStatusID" class="form-select"
+                                                aria-label="Default select example" required>
+                                            <option selected>Chose status</option>
+                                            <c:forEach var="tuitionStatus" items="${tuitionStatuses}">
+                                                <option value="${tuitionStatus.id}">${tuitionStatus.name}</option>
+                                            </c:forEach>
+                                        </select>
+                                    </td>
+
+                                </tr>
+                                <tr>
+                                    <td>Student status <span style="color: red">*</span>:</td>
+                                    <td>
+                                        <select name="studentStatusID" id="studentStatusID" class="form-select"
+                                                aria-label="Default select example" required>
+                                            <option selected>Chose status</option>
+                                            <c:forEach var="studentStatus" items="${studentStatuses}">
+                                                <option value="${studentStatus.id}">${studentStatus.name}</option>
+                                            </c:forEach>
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Class <span style="color: red">*</span>:</td>
+                                    <td>
+                                        <select name="classID" id="classID" class="form-select"
+                                                aria-label="Default select example" required>
+                                            <option selected>Chose class</option>
+                                            <c:forEach var="clazz" items="${Classes}">
+                                                <option value="${clazz.id}">${clazz.name}</option>
+                                            </c:forEach>
+                                        </select>
+                                    </td>
+                                </tr>
+                            </table>
+                        </fieldset>
+                    </div>
+                    <table class="table table-hover align-middle">
                         <tr>
                             <td>
                                 <button type="submit" class="btn btn-success">Create</button>
@@ -102,7 +148,6 @@
                             </td>
                         </tr>
                     </table>
-
                 </fieldset>
             </form>
             <a href="${pageContext.request.contextPath}/users" class="btn btn-secondary">Back</a>
@@ -111,5 +156,17 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+<script>
+    function showOnClick() {
+        let hiddenTable = document.getElementById("student-information");
+        let roleSelect = document.getElementById("role");
+        let optionValue = roleSelect.value;
+        if (optionValue === "4") {
+            hiddenTable.style.display = 'block';
+        } else {
+            hiddenTable.style.display = 'none';
+        }
+    }
+</script>
 </body>
 </html>

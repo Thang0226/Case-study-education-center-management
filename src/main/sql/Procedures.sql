@@ -112,12 +112,12 @@ begin
 end $
 delimiter ;
 
-
+drop procedure list_tuition_status;
 
 delimiter $
 create procedure list_tuition_status()
 begin
-	select * from student_status;
+	select * from tuition_status;
 end $
 delimiter ;
 
@@ -131,12 +131,14 @@ begin
 end $
 delimiter ;
 
+drop procedure find_tuition_status;
+
 delimiter $
 create procedure find_tuition_status(
     in in_id int
 )
 begin
-	select * from student_status
+	select * from tuition_status
     where id = in_id;
 end $
 delimiter ;
@@ -287,7 +289,7 @@ delimiter ;
 
 
 
-
+drop procedure Insert_User;
 
 DELIMITER $$
 CREATE PROCEDURE Insert_User(
@@ -298,14 +300,17 @@ CREATE PROCEDURE Insert_User(
     IN p_DateOfBirth DATE,
     IN p_Address VARCHAR(255),
     IN p_Identity VARCHAR(50),
-    IN p_Role_ID INT
+    IN p_Role_ID INT,
+    OUT user_ID INT
+
 )
 BEGIN
     INSERT INTO User (
         Email, Password, PhoneNumber, FullName, DateOfBirth, Address, Identity, Role_ID
     ) VALUES (
-                 p_Email, p_Password, p_PhoneNumber, p_FullName, p_DateOfBirth, p_Address, p_Identity, p_Role_ID
-             );
+        p_Email, p_Password, p_PhoneNumber, p_FullName, p_DateOfBirth, p_Address, p_Identity, p_Role_ID
+        );
+    SET user_ID = LAST_INSERT_ID();
 END $$
 
 DELIMITER ;

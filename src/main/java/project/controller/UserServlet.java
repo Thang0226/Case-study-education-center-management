@@ -1,7 +1,6 @@
 package project.controller;
 
-import project.model.Role;
-import project.model.User;
+import project.model.*;
 import project.service.*;
 
 import javax.servlet.RequestDispatcher;
@@ -17,7 +16,7 @@ import java.util.List;
 public class UserServlet extends HttpServlet {
     IAdminService adminService = new AdminService();
     IClazzService clazzService = new ClazzService();
-//    IExamResultService examResultService = new ExamResultService();
+    IExamResultService examResultService = new ExamResultService();
     IExamSessionService examSessionService = new ExamSessionService();
     IOfficerService officerService = new OfficerService();
     IRoleService roleService = new RoleService();
@@ -60,7 +59,18 @@ public class UserServlet extends HttpServlet {
         String identity = req.getParameter("identity");
         int roleId = Integer.parseInt(req.getParameter("roleId"));
         User user = new User(email, password, phone, fullName, dateOfBirth, address, identity, roleId);
-        userService.add(user);
+
+        if (roleId == 2 || roleId == 3) {
+            userService.add(user);
+        }
+        if (roleId == 4) {
+            int tuitionStatusID = Integer.parseInt(req.getParameter("tuitionStatusID"));
+            int studentStatusID = Integer.parseInt(req.getParameter("studentStatusID"));
+            int classID = Integer.parseInt(req.getParameter("classID"));
+            Student student = new Student(tuitionStatusID, studentStatusID, classID);
+            userService.addStudentTransaction(user, student);
+        }
+
         RequestDispatcher dispatcher = req.getRequestDispatcher("user/create.jsp");
         req.setAttribute("message", "New user added");
         try {
@@ -114,9 +124,17 @@ public class UserServlet extends HttpServlet {
         RequestDispatcher dispatcher = req.getRequestDispatcher("user/create.jsp");
         List<User> users = userService.findAll();
         List<Role> roles = roleService.findAll();
+        List<Student> students = studentService.findAll();
+        List<StudentStatus> studentStatuses = studentStatusService.findAll();
+        List<TuitionStatus> tuitionStatuses = tuitionStatusService.findAll();
+        List<Clazz> Classes = clazzService.findAll();
         try{
             req.setAttribute("users", users);
             req.setAttribute("roles", roles);
+            req.setAttribute("students", students);
+            req.setAttribute("studentStatuses", studentStatuses);
+            req.setAttribute("tuitionStatuses", tuitionStatuses);
+            req.setAttribute("Classes", Classes);
             dispatcher.forward(req, resp);
         } catch (ServletException | IOException e) {
             //noinspection CallToPrintStackTrace
