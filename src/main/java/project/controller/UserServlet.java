@@ -60,6 +60,10 @@ public class UserServlet extends HttpServlet {
         int roleId = Integer.parseInt(req.getParameter("roleId"));
         User user = new User(email, password, phone, fullName, dateOfBirth, address, identity, roleId);
 
+        if (roleId == 1) {
+            userService.addTutorTransaction(user);
+        }
+
         if (roleId == 2 || roleId == 3) {
             userService.add(user);
         }
