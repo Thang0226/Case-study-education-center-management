@@ -7,6 +7,21 @@ public class Student {
 	private int studentStatusID;
 	private int classID;
 
+	public Student() {}
+
+	public Student(int tuitionStatusID, int studentStatusID, int classID) {
+		this.tuitionStatusID = tuitionStatusID;
+		this.studentStatusID = studentStatusID;
+		this.classID = classID;
+	}
+
+	public Student(int userID, int tuitionStatusID, int studentStatusID, int classID) {
+		this.userID = userID;
+		this.tuitionStatusID = tuitionStatusID;
+		this.studentStatusID = studentStatusID;
+		this.classID = classID;
+	}
+
 	public Student(int id, int userID, int tuitionStatusID, int studentStatusID, int classID) {
 		this.id = id;
 		this.userID = userID;
