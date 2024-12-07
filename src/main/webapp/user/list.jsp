@@ -52,10 +52,12 @@
             <table class="table table-hover align-middle text-center">
                 <thead>
                 <tr>
-                    <th>Name</th>
-                    <th>Score</th>
-                    <th>Photo</th>
-                    <th>Class</th>
+                    <th>Full Name</th>
+                    <th>Email</th>
+                    <th>Phone</th>
+                    <th>Date Of Birth</th>
+                    <th>Address</th>
+                    <th>Role</th>
                     <th colspan="2">Action</th>
 
                 </tr>
@@ -69,6 +71,17 @@
                                class="link-dark link-offset-2 link-underline-opacity-0 link-underline-opacity-100-hover">
                                     ${user.getFullName()}
                             </a>
+                        </td>
+                        <td>${user.email}</td>
+                        <td>${user.phone}</td>
+                        <td>${user.dateOfBirth}</td>
+                        <td>${user.address}</td>
+                        <td>
+                            <c:forEach var="role" items="${roles}">
+                                <c:if test="${user.roleID == role.id}">
+                                    ${role.name}
+                                </c:if>
+                            </c:forEach>
                         </td>
                         <td>
                             <a href="users?action=edit&id=${user.getId()}" class="btn btn-primary">Edit</a>
