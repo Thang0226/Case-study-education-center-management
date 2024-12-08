@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @WebServlet(name = "OfficerServlet", value = "/officer")
@@ -57,9 +58,31 @@ public class OfficerServlet extends HttpServlet {
 	}
 
 	private void listStudents(HttpServletRequest req, HttpServletResponse resp) {
-		List<StudentInformation> studentInformationList = null;
-		studentInformationList = studentService.findAllStudents();
-		req.setAttribute("students", studentInformationList);
+		List<StudentInformation> studentInformationList = studentService.findAllStudents();
+		List<Clazz> clazzList = clazzService.findAll();
+		List<StudentInformation> studentInforList = new ArrayList<>();
+
+		String className = req.getParameter("clazz");
+		boolean classFound = false;
+		if (className != null) {
+			for (Clazz clazz : clazzList) {
+				if (className.equals(clazz.getName())) {
+					classFound = true;
+					break;
+				}
+			}
+		}
+		if (classFound) {
+			for (StudentInformation infor : studentInformationList) {
+				if (infor.getClassName().equals(className)) {
+					studentInforList.add(infor);
+				}
+			}
+			req.setAttribute("students", studentInforList);
+		} else {
+			req.setAttribute("students", studentInformationList);
+		}
+		req.setAttribute("clazzes", clazzList);
 		RequestDispatcher dispatcher = req.getRequestDispatcher("student/student_list.jsp");
 		try {
 			dispatcher.forward(req, resp);

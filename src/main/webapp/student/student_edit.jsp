@@ -100,10 +100,10 @@
                     </tr>
                 </table>
             </div>
-            <div class="text-center">
-                <input type="submit" value="Update Information" class="btn btn-primary">
-            </div>
         </fieldset>
+        <div class="text-center">
+            <input type="submit" value="Update Information" class="btn btn-primary">
+        </div>
     </form>
 </div>
 <script src="../styles/bootstrap.bundle.min.js"></script>
