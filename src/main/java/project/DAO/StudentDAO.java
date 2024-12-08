@@ -61,10 +61,11 @@ public class StudentDAO implements IStudentDAO {
 				String birthDate = rs.getString("birth_date");
 				String address = rs.getString("address");
 				String phoneNumber = rs.getString("phone_number");
-				String studentStatus = rs.getString("status");
+				String tuitionStatus = rs.getString("tuition_status");
+				String studentStatus = rs.getString("student_status");
 
 				StudentInformation infor = new StudentInformation(className, id, fullName, email, birthDate,
-						address, phoneNumber, studentStatus);
+						address, phoneNumber, tuitionStatus, studentStatus);
 				studentInformationList.add(infor);
 			}
 		} catch (SQLException e) {
@@ -133,10 +134,11 @@ public class StudentDAO implements IStudentDAO {
 				String birthDate = rs.getString("birth_date");
 				String address = rs.getString("address");
 				String phoneNumber = rs.getString("phone_number");
-				String studentStatus = rs.getString("status");
+				String tuitionStatus = rs.getString("tuition_status");
+				String studentStatus = rs.getString("student_status");
 
 				studentInfor = new StudentInformation(className, id, fullName, email, birthDate,
-						address, phoneNumber, studentStatus);
+						address, phoneNumber,tuitionStatus, studentStatus);
 			}
 		} catch (SQLException e) {
 			printSQLException(e);
