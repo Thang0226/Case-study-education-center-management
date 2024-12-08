@@ -10,21 +10,18 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 @WebServlet(name = "UserServlet", urlPatterns = "/users")
 public class UserServlet extends HttpServlet {
-    IAdminService adminService = new AdminService();
     IClazzService clazzService = new ClazzService();
-    IExamResultService examResultService = new ExamResultService();
-    IExamSessionService examSessionService = new ExamSessionService();
-    IOfficerService officerService = new OfficerService();
     IRoleService roleService = new RoleService();
     IStudentService studentService = new StudentService();
     IStudentStatusService studentStatusService = new StudentStatusService();
-    ISubjectService subjectService = new SubjectService();
     ITuitionStatusService tuitionStatusService = new TuitionStatusService();
-    ITutorService tutorService = new TutorService();
     IUserService userService = new UserService();
 
     @Override
@@ -196,7 +193,6 @@ public class UserServlet extends HttpServlet {
                break;
             default:
                 showList(req, resp);
-
         }
     }
 
@@ -206,7 +202,6 @@ public class UserServlet extends HttpServlet {
         req.setAttribute("users", users);
         req.setAttribute("roles", roles);
         RequestDispatcher dispatcher = req.getRequestDispatcher("user/list.jsp");
-
         try{
             dispatcher.forward(req, resp);
         } catch (ServletException | IOException e) {
@@ -245,7 +240,21 @@ public class UserServlet extends HttpServlet {
         List<StudentStatus> studentStatuses = studentStatusService.findAll();
         List<TuitionStatus> tuitionStatuses = tuitionStatusService.findAll();
         List<Clazz> Classes = clazzService.findAll();
+        String formattedDateOfBirth = null;
+        try {
+            // Parse the date assuming the database format (e.g., "yyyy-MM-dd")
+            SimpleDateFormat dbFormat = new SimpleDateFormat("yyyy-MM-dd"); // Adjust if the DB format differs
+            Date parsedDate = dbFormat.parse(user.getDateOfBirth());
 
+            // Format the date into "dd/MM/yyyy"
+            SimpleDateFormat desiredFormat = new SimpleDateFormat("dd/MM/yyyy");
+            formattedDateOfBirth = desiredFormat.format(parsedDate);
+        } catch (ParseException e) {
+            //noinspection CallToPrintStackTrace
+            e.printStackTrace();
+
+        }
+        req.setAttribute("userDoB", formattedDateOfBirth);
         req.setAttribute("user", user);
         req.setAttribute("student", student);
         req.setAttribute("studentStatuses", studentStatuses);

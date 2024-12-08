@@ -156,7 +156,7 @@ public class UserDAO<T> implements IUserDAO {
             preparedStatement.setString(3, user.getPassword());
             preparedStatement.setString(4, user.getPhone());
             preparedStatement.setString(5, user.getFullName());
-            preparedStatement.setDate(6, sqlDate);
+            preparedStatement.setString(6, String.valueOf(sqlDate));
             preparedStatement.setString(7, user.getAddress());
             preparedStatement.setString(8, user.getIdentity());
             preparedStatement.setInt(1, user.getId());

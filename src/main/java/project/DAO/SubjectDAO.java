@@ -8,8 +8,8 @@ import java.util.List;
 
 public class SubjectDAO implements ISubjectDAO {
 
-    private static final String SELECT_ALL_SUBJECTS = "SELECT * FROM subject";
-    private static final String INSERT_SUBJECT = "INSERT INTO subject (name) VALUES (?)";
+    private static final String SELECT_ALL_SUBJECTS = "SELECT * FROM subject ORDER BY ID";
+    private static final String INSERT_SUBJECT = "INSERT INTO subject(name) VALUES (?)";
     private static final String SELECT_SUBJECT_BY_ID = "SELECT * FROM subject WHERE id = ?";
     private static final String UPDATE_SUBJECT = "UPDATE subject SET name = ? WHERE id = ?";
     private static final String DELETE_SUBJECT = "DELETE FROM subject WHERE id = ?";
