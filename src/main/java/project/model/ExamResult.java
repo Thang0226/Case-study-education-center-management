@@ -7,14 +7,17 @@ public class ExamResult {
     private int studentId;
     private BigDecimal theoryScore;
     private BigDecimal practicalScore;
+    private BigDecimal averageScore;
 
     public ExamResult() {}
 
-    public ExamResult(int examSessionId, int studentId, BigDecimal theoryScore, BigDecimal practicalScore) {
+    public ExamResult(int examSessionId, int studentId, BigDecimal theoryScore, BigDecimal practicalScore,
+                      BigDecimal averageScore) {
         this.examSessionId = examSessionId;
         this.studentId = studentId;
         this.theoryScore = theoryScore;
         this.practicalScore = practicalScore;
+        this.averageScore = averageScore;
     }
 
     public int getExamSessionId() {
@@ -49,4 +52,11 @@ public class ExamResult {
         this.practicalScore = practicalScore;
     }
 
+    public BigDecimal getAverageScore() {
+        return averageScore;
+    }
+
+    public void setAverageScore(BigDecimal averageScore) {
+        this.averageScore = averageScore;
+    }
 }
