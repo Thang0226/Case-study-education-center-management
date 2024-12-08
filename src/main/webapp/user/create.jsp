@@ -107,7 +107,6 @@
                                             </c:forEach>
                                         </select>
                                     </td>
-
                                 </tr>
                                 <tr>
                                     <td>Student status <span style="color: red">*</span>:</td>

@@ -368,7 +368,6 @@ CREATE PROCEDURE Update_User(
     IN p_DateOfBirth DATE,
     IN p_Address VARCHAR(255),
     IN p_Identity VARCHAR(50),
-    IN p_Role_ID INT,
     OUT user_ID INT
 )
 BEGIN
@@ -380,8 +379,7 @@ BEGIN
         FullName = p_FullName,
         DateOfBirth = p_DateOfBirth,
         Address = p_Address,
-        Identity = p_Identity,
-        Role_ID = p_Role_ID
+        Identity = p_Identity
     WHERE
         ID = p_ID;
     SET user_ID = LAST_INSERT_ID();
@@ -406,6 +404,25 @@ create procedure delete_tutor_user(in _id int)
 begin
     delete from tutor where User_ID = _id;
     delete from user where ID = _id;
+end $$
+
+DELIMITER ;
+
+DELIMITER $$
+
+create procedure update_student_by_user_id(
+    in _user_id int,
+    IN _tuition_status_id int,
+    IN _student_status_id int,
+    IN _class_id int
+)
+begin
+    update student
+    set
+        tuition_status_id = _tuition_status_id,
+        student_status_id = _student_status_id,
+        class_id = _class_id
+    where User_ID = _user_id;
 end $$
 
 DELIMITER ;
