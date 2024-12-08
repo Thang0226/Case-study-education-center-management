@@ -31,6 +31,11 @@ public class StudentService implements IStudentService {
     }
 
     @Override
+    public StudentInformation findStudentByID(int studentID) {
+        return studentDAO.findStudentByID(studentID);
+    }
+
+    @Override
     public boolean update(Student student) {
         return studentDAO.update(student);
     }

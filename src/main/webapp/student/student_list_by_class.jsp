@@ -50,7 +50,13 @@
                 <tr>
                     <th scope="row">${student.id}</th>
                     <td>
-                        <a href="/students?action=view_student&id=${student.id}">${student.fullName}</a>
+                        <form action="/students" method="POST" style="display:inline;">
+                            <input type="hidden" name="action" value="view_student">
+                            <input type="hidden" name="id" value="${student.id}">
+                            <button type="submit" style="all: unset; color: blue; text-decoration: underline; cursor: pointer;">
+                                    ${student.fullName}
+                            </button>
+                        </form>
                     </td>
                     <td>${student.email}</td>
                     <td>${student.phoneNumber}</td>

@@ -118,6 +118,33 @@ public class StudentDAO implements IStudentDAO {
 	}
 
 	@Override
+	public StudentInformation findStudentByID(int id) {
+		StudentInformation studentInfor = null;
+		try (
+				Connection conn = getConnection();
+				CallableStatement cstmt = conn.prepareCall("{call find_student_information(?)}")
+		) {
+			cstmt.setInt(1, id);
+			ResultSet rs = cstmt.executeQuery();
+			if (rs.next()) {
+				String className = rs.getString("class");
+				String fullName = rs.getString("full_name");
+				String email = rs.getString("email");
+				String birthDate = rs.getString("birth_date");
+				String address = rs.getString("address");
+				String phoneNumber = rs.getString("phone_number");
+				String studentStatus = rs.getString("status");
+
+				studentInfor = new StudentInformation(className, id, fullName, email, birthDate,
+						address, phoneNumber, studentStatus);
+			}
+		} catch (SQLException e) {
+			printSQLException(e);
+		}
+		return studentInfor;
+	}
+
+	@Override
 	public boolean update(Student student) {
 		try (
 				Connection conn = getConnection();
