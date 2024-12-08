@@ -24,7 +24,7 @@ public class UserDAO<T> implements IUserDAO {
     private static final String SELECT_USER_BY_ID = "SELECT * FROM user WHERE id = ?";
     private static final String SELECT_USER_BY_NAME = "SELECT * FROM user WHERE name = ?";
     private static final String INSERT_USER_SP ="CALL Insert_User(?,?,?,?,?,?,?,?,?)";
-    private static final String UPDATE_USER_SP ="CALL Update_User(?,?,?,?,?,?,?,?,?,?)";
+    private static final String UPDATE_USER_SP ="CALL Update_User(?,?,?,?,?,?,?,?,?)";
     private static final String DELETE_USER = "DELETE FROM user WHERE id = ?";
 
     private static final String INSERT_STUDENT_SP = "CALL add_student(?,?,?,?)";
@@ -147,15 +147,19 @@ public class UserDAO<T> implements IUserDAO {
         boolean rowUpdated = false;
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareCall(UPDATE_USER_SP)) {
-            preparedStatement.setString(1, user.getEmail());
-            preparedStatement.setString(2, user.getPassword());
-            preparedStatement.setString(3, user.getPhone());
-            preparedStatement.setString(4, user.getFullName());
-            preparedStatement.setString(5, user.getDateOfBirth());
-            preparedStatement.setString(6, user.getAddress());
-            preparedStatement.setString(7, user.getIdentity());
-            preparedStatement.setInt(8, user.getRoleID());
-            preparedStatement.setInt(9, user.getId());
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            LocalDate localDate = LocalDate.parse(user.getDateOfBirth(), formatter);
+            // Convert to java.sql.Date
+            Date sqlDate = Date.valueOf(localDate);
+
+            preparedStatement.setString(2, user.getEmail());
+            preparedStatement.setString(3, user.getPassword());
+            preparedStatement.setString(4, user.getPhone());
+            preparedStatement.setString(5, user.getFullName());
+            preparedStatement.setDate(6, sqlDate);
+            preparedStatement.setString(7, user.getAddress());
+            preparedStatement.setString(8, user.getIdentity());
+            preparedStatement.setInt(1, user.getId());
             System.out.println(preparedStatement);
             rowUpdated = preparedStatement.executeUpdate() > 0;
         } catch (SQLException e) {

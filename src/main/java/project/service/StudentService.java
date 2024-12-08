@@ -49,4 +49,14 @@ public class StudentService implements IStudentService {
     public boolean remove(int id) {
         return studentDAO.remove(id);
     }
+
+    @Override
+    public Student findStudentByUserId(int userId) {
+        return studentDAO.findStudentByUserId(userId);
+    }
+
+    @Override
+    public void updateStudentByUserID(Student student) {
+        studentDAO.updateStudentByUserID(student);
+    }
 }

@@ -43,7 +43,7 @@ public class UserServlet extends HttpServlet {
                 creatUser(req, resp);
                 break;
             case "edit":
-
+                updateUser(req, resp);
                 break;
             case "delete":
                 deleteUser(req, resp);
@@ -79,11 +79,73 @@ public class UserServlet extends HttpServlet {
             userService.addStudentTransaction(user, student);
         }
 
+        List<Student> students = studentService.findAll();
+        List<StudentStatus> studentStatuses = studentStatusService.findAll();
+        List<TuitionStatus> tuitionStatuses = tuitionStatusService.findAll();
+        List<Clazz> Classes = clazzService.findAll();
+        List<Role> roles = roleService.findAll();
+
+        req.setAttribute("students", students);
+        req.setAttribute("studentStatuses", studentStatuses);
+        req.setAttribute("tuitionStatuses", tuitionStatuses);
+        req.setAttribute("Classes", Classes);
+        req.setAttribute("roles", roles);
+
         RequestDispatcher dispatcher = req.getRequestDispatcher("user/create.jsp");
         req.setAttribute("message", "New user added");
         try {
             dispatcher.forward(req, resp);
-        } catch (ServletException e) {
+
+        } catch (ServletException | IOException e) {
+            //noinspection CallToPrintStackTrace
+            e.printStackTrace();
+        }
+    }
+
+    private void updateUser(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        int id = Integer.parseInt(req.getParameter("id"));
+        String email = req.getParameter("email");
+        String password = req.getParameter("password");
+        String phone = req.getParameter("phone");
+        String fullName = req.getParameter("fullName");
+        String dateOfBirth = req.getParameter("dateOfBirth");
+        String address = req.getParameter("address");
+        String identity = req.getParameter("identity");
+
+        User user = userService.findById(id);
+        user.setEmail(email);
+        user.setPassword(password);
+        user.setPhone(phone);
+        user.setFullName(fullName);
+        user.setDateOfBirth(dateOfBirth);
+        user.setAddress(address);
+        user.setIdentity(identity);
+        userService.update(user);
+
+        if (user.getRoleID() == 4) {
+            int userID = user.getId();
+            int tuitionStatusID = Integer.parseInt(req.getParameter("tuitionStatusID"));
+            int studentStatusID = Integer.parseInt(req.getParameter("studentStatusID"));
+            int classID = Integer.parseInt(req.getParameter("classID"));
+            Student student = new Student(userID, tuitionStatusID, studentStatusID, classID);
+            studentService.updateStudentByUserID(student);
+        }
+
+        Student student = studentService.findStudentByUserId(id);
+        List<StudentStatus> studentStatuses = studentStatusService.findAll();
+        List<TuitionStatus> tuitionStatuses = tuitionStatusService.findAll();
+        List<Clazz> Classes = clazzService.findAll();
+
+        req.setAttribute("student", student);
+        req.setAttribute("studentStatuses", studentStatuses);
+        req.setAttribute("tuitionStatuses", tuitionStatuses);
+        req.setAttribute("Classes", Classes);
+        req.setAttribute("user", user);
+        req.setAttribute("message", "User was updated");
+        RequestDispatcher dispatcher = req.getRequestDispatcher("user/edit.jsp");
+        try {
+            dispatcher.forward(req, resp);
+        } catch (ServletException | IOException e) {
             //noinspection CallToPrintStackTrace
             e.printStackTrace();
         }
@@ -130,7 +192,8 @@ public class UserServlet extends HttpServlet {
                 showCreateForm(req, resp);
                 break;
             case "edit":
-                break;
+                showEditForm(req, resp);
+               break;
             default:
                 showList(req, resp);
 
@@ -153,20 +216,21 @@ public class UserServlet extends HttpServlet {
     }
 
     private void showCreateForm(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        RequestDispatcher dispatcher = req.getRequestDispatcher("user/create.jsp");
         List<User> users = userService.findAll();
         List<Role> roles = roleService.findAll();
         List<Student> students = studentService.findAll();
         List<StudentStatus> studentStatuses = studentStatusService.findAll();
         List<TuitionStatus> tuitionStatuses = tuitionStatusService.findAll();
         List<Clazz> Classes = clazzService.findAll();
+
+        req.setAttribute("users", users);
+        req.setAttribute("roles", roles);
+        req.setAttribute("students", students);
+        req.setAttribute("studentStatuses", studentStatuses);
+        req.setAttribute("tuitionStatuses", tuitionStatuses);
+        req.setAttribute("Classes", Classes);
+        RequestDispatcher dispatcher = req.getRequestDispatcher("user/create.jsp");
         try{
-            req.setAttribute("users", users);
-            req.setAttribute("roles", roles);
-            req.setAttribute("students", students);
-            req.setAttribute("studentStatuses", studentStatuses);
-            req.setAttribute("tuitionStatuses", tuitionStatuses);
-            req.setAttribute("Classes", Classes);
             dispatcher.forward(req, resp);
         } catch (ServletException | IOException e) {
             //noinspection CallToPrintStackTrace
@@ -174,6 +238,26 @@ public class UserServlet extends HttpServlet {
         }
     }
 
+    private void showEditForm(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        int id = Integer.parseInt(req.getParameter("id"));
+        User user = userService.findById(id);
+        Student student = studentService.findStudentByUserId(id);
+        List<StudentStatus> studentStatuses = studentStatusService.findAll();
+        List<TuitionStatus> tuitionStatuses = tuitionStatusService.findAll();
+        List<Clazz> Classes = clazzService.findAll();
 
+        req.setAttribute("user", user);
+        req.setAttribute("student", student);
+        req.setAttribute("studentStatuses", studentStatuses);
+        req.setAttribute("tuitionStatuses", tuitionStatuses);
+        req.setAttribute("Classes", Classes);
+        RequestDispatcher dispatcher = req.getRequestDispatcher("user/edit.jsp");
+        try{
+            dispatcher.forward(req, resp);
+        } catch (ServletException | IOException e) {
+            //noinspection CallToPrintStackTrace
+            e.printStackTrace();
+        }
+    }
 
 }

@@ -11,5 +11,11 @@ public interface IStudentDAO extends IDAO<Student> {
 
 	StudentInformation findStudentByID(int id);
 
+
+	Student findStudentByUserId(int userId);
+
+	void updateStudentByUserID(Student student);
+
 	List<StudentInformation> findAllStudents();
+
 }
