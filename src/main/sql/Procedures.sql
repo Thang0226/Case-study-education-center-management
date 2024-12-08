@@ -283,6 +283,26 @@ delimiter ;
 
 
 
+delimiter $
+drop procedure if exists list_students_by_class $
+create procedure list_students_by_class(
+	in in_class_name varchar(50)
+)
+begin
+	select clazz.name as class, student.id as id, user.FullName as full_name, user.email as email, 
+			user.DateOfBirth as birth_date, user.address, user.phoneNumber as phone_number, s_status.name as status
+    from student join user on student.user_id = user.id
+    join student_status s_status on student.student_status_id = s_status.id
+    join clazz on student.class_id = clazz.id
+    where clazz.name = in_class_name
+    order by student.id;
+end $
+delimiter ;
+
+
+
+
+
 
 
 
