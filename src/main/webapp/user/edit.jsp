@@ -7,6 +7,7 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <html>
 <head>
     <title>Edit user</title>
@@ -83,7 +84,7 @@
                             <td><label for="dateOfBirth">Date of Birth <span style="color: red">*</span>: </label></td>
                             <td>
                                 <input type="text" name="dateOfBirth" id="dateOfBirth" class="form-control" required
-                                       pattern="(0[1-9]|[12][0-9]|3[01])/(0[1-9]|1[0-2])/\d{4}" placeholder="dd/mm/yyyy"
+                                       pattern="(0[1-9]|[12][0-9]|3[01])/(0[1-9]|1[0-2])/\d{4}" placeholder="dd/MM/yyyy"
                                        value="${user.dateOfBirth}">
                             </td>
                         </tr>
