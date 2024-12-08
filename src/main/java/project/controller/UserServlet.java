@@ -45,7 +45,11 @@ public class UserServlet extends HttpServlet {
             case "edit":
 
                 break;
+            case "delete":
+                deleteUser(req, resp);
+                break;
             default:
+                showList(req, resp);
         }
     }
 
@@ -80,6 +84,30 @@ public class UserServlet extends HttpServlet {
         try {
             dispatcher.forward(req, resp);
         } catch (ServletException e) {
+            //noinspection CallToPrintStackTrace
+            e.printStackTrace();
+        }
+    }
+
+    private void deleteUser(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        int id = Integer.parseInt(req.getParameter("id"));
+        User user = userService.findById(id);
+        int roleId = user.getRoleID();
+        if (roleId == 1) {
+            userService.deleteTutor(id);
+        } else if (roleId == 2 || roleId == 3) {
+            userService.remove(id);
+        } else if (roleId == 4) {
+            userService.deleteStudent(id);
+        }
+//        List<User> users = userService.findAll();
+//        req.setAttribute("users", users);
+//        RequestDispatcher dispatcher = req.getRequestDispatcher("user/list.jsp");
+
+        try {
+//            dispatcher.forward(req, resp);
+            resp.sendRedirect("/users");
+        } catch (IOException e) {
             //noinspection CallToPrintStackTrace
             e.printStackTrace();
         }

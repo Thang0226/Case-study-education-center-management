@@ -24,13 +24,14 @@ public class UserDAO<T> implements IUserDAO {
     private static final String SELECT_USER_BY_ID = "SELECT * FROM user WHERE id = ?";
     private static final String SELECT_USER_BY_NAME = "SELECT * FROM user WHERE name = ?";
     private static final String INSERT_USER_SP ="CALL Insert_User(?,?,?,?,?,?,?,?,?)";
-    private static final String UPDATE_USER_SP ="CALL Update_User(?,?,?,?,?,?,?,?,?)";
+    private static final String UPDATE_USER_SP ="CALL Update_User(?,?,?,?,?,?,?,?,?,?)";
     private static final String DELETE_USER = "DELETE FROM user WHERE id = ?";
 
     private static final String INSERT_STUDENT_SP = "CALL add_student(?,?,?,?)";
+    private static final String DELETE_STUDENT_SP = "CALL delete_student_user(?)";
 
     private static final String INSERT_TUTOR= "INSERT INTO tutor Values(null, ?)";
-
+    private static final String DELETE_TUTOR_SP = "CALL delete_tutor_user(?)";
 
     public UserDAO() {}
 
@@ -182,7 +183,6 @@ public class UserDAO<T> implements IUserDAO {
 
     }
 
-
     @Override
     public void addStudentTransaction(User user, Student student) {
         Connection connection = null;
@@ -288,6 +288,32 @@ public class UserDAO<T> implements IUserDAO {
             } else {
                 connection.rollback();
             }
+        } catch (SQLException e) {
+            //noinspection CallToPrintStackTrace
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void deleteStudent(int id) {
+        try (Connection connection = getConnection();
+            CallableStatement callableStatement = connection.prepareCall(DELETE_STUDENT_SP)) {
+            callableStatement.setInt(1, id);
+            callableStatement.executeUpdate();
+            System.out.println(callableStatement);
+        } catch (SQLException e) {
+            //noinspection CallToPrintStackTrace
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void deleteTutor(int id) {
+        try (Connection connection = getConnection();
+             CallableStatement callableStatement = connection.prepareCall(DELETE_TUTOR_SP)) {
+            callableStatement.setInt(1, id);
+            callableStatement.executeUpdate();
+            System.out.println(callableStatement);
         } catch (SQLException e) {
             //noinspection CallToPrintStackTrace
             e.printStackTrace();

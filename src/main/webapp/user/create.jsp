@@ -84,7 +84,7 @@
                             <td>
                                 <select name="roleId" id="role" class="form-select" onchange="showOnClick()"
                                         aria-label="Default select example" required>
-                                    <option selected>Chose role</option>
+                                    <option selected disabled>Chose role</option>
                                     <c:forEach var="role" items="${roles}">
                                         <option value="${role.id}">${role.name}</option>
                                     </c:forEach>
@@ -101,7 +101,7 @@
                                     <td>
                                         <select name="tuitionStatusID" id="tuitionStatusID" class="form-select"
                                                 aria-label="Default select example" required>
-                                            <option selected>Chose status</option>
+                                            <option selected disabled>Chose status</option>
                                             <c:forEach var="tuitionStatus" items="${tuitionStatuses}">
                                                 <option value="${tuitionStatus.id}">${tuitionStatus.name}</option>
                                             </c:forEach>
@@ -114,7 +114,7 @@
                                     <td>
                                         <select name="studentStatusID" id="studentStatusID" class="form-select"
                                                 aria-label="Default select example" required>
-                                            <option selected>Chose status</option>
+                                            <option selected disabled>Chose status</option>
                                             <c:forEach var="studentStatus" items="${studentStatuses}">
                                                 <option value="${studentStatus.id}">${studentStatus.name}</option>
                                             </c:forEach>
@@ -126,7 +126,7 @@
                                     <td>
                                         <select name="classID" id="classID" class="form-select"
                                                 aria-label="Default select example" required>
-                                            <option selected>Chose class</option>
+                                            <option selected disabled>Chose class</option>
                                             <c:forEach var="clazz" items="${Classes}">
                                                 <option value="${clazz.id}">${clazz.name}</option>
                                             </c:forEach>

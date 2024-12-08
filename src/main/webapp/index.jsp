@@ -9,7 +9,7 @@
 </h1>
 <br/>
 
-<a href="/users">go to users management</a>
+<a href="/home">Go to home page</a>
 <br><br>
 <form action="/students" method="POST" style="display:inline;">
     <input type="hidden" name="action" value="list_students_by_class" />
