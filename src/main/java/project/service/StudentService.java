@@ -36,6 +36,11 @@ public class StudentService implements IStudentService {
     }
 
     @Override
+    public List<StudentInformation> findAllStudents() {
+        return studentDAO.findAllStudents();
+    }
+
+    @Override
     public boolean update(Student student) {
         return studentDAO.update(student);
     }

@@ -21,5 +21,11 @@
     <button type="submit">Show students in class</button>
 </form>
 
+<br><br>
+<form action="/officer" method="POST" style="display:inline;">
+    <input type="hidden" name="action" value="list_students" />
+    <button type="submit">List students</button>
+</form>
+
 </body>
 </html>
