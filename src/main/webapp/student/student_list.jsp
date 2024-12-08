@@ -63,6 +63,7 @@
                 </th>
                 <th scope="col" class="col-2">Student Status</th>
                 <th scope="col" class="col-1">Tuition Status</th>
+                <th scope="col" class="col-1">Student Scores</th>
             </tr>
             </thead>
             <tbody class="table-group-divider">
@@ -87,6 +88,18 @@
                         </div>
                     </td>
                     <td>${student.tuitionStatus}</td>
+                    <td>
+                        <form action="/officer" method="POST" style="display:inline;">
+                            <input type="hidden" name="action" value="edit_student_scores">
+                            <input type="hidden" name="id" value="${student.id}">
+                            <button type="submit" class="btn btn-success">Update</button>
+                        </form>
+                        <form action="/officer" method="POST" style="display:inline;">
+                            <input type="hidden" name="action" value="add_student_scores">
+                            <input type="hidden" name="id" value="${student.id}">
+                            <button type="submit" class="btn btn-info">Create</button>
+                        </form>
+                    </td>
                 </tr>
             </c:forEach>
             </tbody>

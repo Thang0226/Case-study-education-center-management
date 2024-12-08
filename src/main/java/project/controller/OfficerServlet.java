@@ -20,6 +20,8 @@ public class OfficerServlet extends HttpServlet {
 	private ClazzService clazzService = new ClazzService();
 	private TuitionStatusService tuitionStatusService = new TuitionStatusService();
 	private StudentStatusService studentStatusService = new StudentStatusService();
+	private ExamResultService examResultService = new ExamResultService();
+	private SubjectService subjectService = new SubjectService();
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -51,6 +53,11 @@ public class OfficerServlet extends HttpServlet {
 				break;
 			case "update_student":
 				updateStudent(req, resp);
+				break;
+			case "edit_student_scores":
+				showEditScoreForm(req, resp);
+				break;
+			case "add_student_scores":
 				break;
 			default:
 				break;
@@ -139,6 +146,27 @@ public class OfficerServlet extends HttpServlet {
 		Clazz clazz = clazzService.findById(student.getClassID());
 		req.setAttribute("clazz", clazz);
 		RequestDispatcher dispatcher = req.getRequestDispatcher("student/student_edit.jsp");
+		try {
+			dispatcher.forward(req, resp);
+		} catch (ServletException | IOException e) {
+			System.out.println(e.getMessage());
+		}
+	}
+
+	private void showEditScoreForm(HttpServletRequest req, HttpServletResponse resp) {
+		int id = Integer.parseInt(req.getParameter("id"));
+		Student student = studentService.findById(id);
+		Clazz clazz = clazzService.findById(student.getClassID());
+		Subject subject = subjectService.findById(clazz.getSubjectID());
+		User user = userService.findById(student.getUserID());
+		List<ExamResult> examResults = examResultService.findStudentExamResults(id);
+
+		req.setAttribute("student", student);
+		req.setAttribute("clazz", clazz);
+		req.setAttribute("subject", subject);
+		req.setAttribute("user", user);
+		req.setAttribute("exam_results", examResults);
+		RequestDispatcher dispatcher = req.getRequestDispatcher("student/student_score_edit.jsp");
 		try {
 			dispatcher.forward(req, resp);
 		} catch (ServletException | IOException e) {
