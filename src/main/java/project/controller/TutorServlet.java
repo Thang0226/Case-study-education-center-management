@@ -1,6 +1,7 @@
 package project.controller;
 
 import project.model.Clazz;
+import project.model.StudentInformation;
 import project.model.Tutor;
 import project.service.*;
 
@@ -26,13 +27,15 @@ public class TutorServlet extends HttpServlet {
 //        tutors.put(4, new Tutor(4, 489));
 //    }
 
-    ITutorService tutorService = new TutorService();
-    IClazzService clazzService = new ClazzService();
-    ISubjectService subjectService = new SubjectService();
+    private final ITutorService tutorService = new TutorService();
+    private final IClazzService clazzService = new ClazzService();
+    private final ISubjectService subjectService = new SubjectService();
+
+    private final IStudentService studentService = new StudentService();
+    private final IStudentStatusService studentStatusService = new StudentStatusService();
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        super.doPost(req, resp);
         System.out.println("Danh sach lop hoc");
         String action = req.getParameter("action");
         if (action == null) {
@@ -49,8 +52,8 @@ public class TutorServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        super.doGet(req, resp);
-
+        System.out.println("Danh sach lop hoc");
+        System.out.println("==========================================");
         String action = req.getParameter("action");
         if (action == null) {
             action = "";
@@ -73,7 +76,6 @@ public class TutorServlet extends HttpServlet {
         List<Clazz> clazzList = clazzService.findAll();
         req.setAttribute("clazzList", clazzList);
         RequestDispatcher dispatcher = req.getRequestDispatcher("/tutor/class.jsp");
-
         try {
             dispatcher.forward(req, resp);
         }

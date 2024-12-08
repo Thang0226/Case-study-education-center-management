@@ -3,10 +3,12 @@ package project.DAO;
 import project.model.ExamResult;
 import project.model.ExamSession;
 
+import java.math.BigDecimal;
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class ExamResultDAO implements IExamResultDAO {
 	private String jdbcURL = "jdbc:mysql://localhost:3306/center_management";
@@ -32,27 +34,30 @@ public class ExamResultDAO implements IExamResultDAO {
 		) {
 			ResultSet rs = cstmt.executeQuery();
 			while (rs.next()) {
-				int id = rs.getInt("id");
-				String name = rs.getString("name");
-				LocalDate examDate = rs.getDate("exam_date").toLocalDate();
-				ExamSession session = new ExamSession(id, name, examDate);
-				sessions.add(session);
+				int examSessionID = rs.getInt("exam_session_id");
+				int studentID = rs.getInt("student_id");
+				BigDecimal theoryScore = rs.getBigDecimal("theory_score");
+				BigDecimal practicalScore = rs.getBigDecimal("practical_score");
+				ExamResult result = new ExamResult(examSessionID, studentID, theoryScore, practicalScore);
+				results.add(result);
 			}
 		} catch (SQLException e) {
 			printSQLException(e);
 		}
-		return sessions;
+		return results;
 	}
 
 	@Override
-	public boolean add(ExamSession session) {
+	public boolean add(ExamResult result) {
 		boolean success = false;
 		try (
 				Connection conn = getConnection();
-				CallableStatement cstmt = conn.prepareCall("{call add_exam_session(?,?)}")
+				CallableStatement cstmt = conn.prepareCall("{call add_exam_result(?,?,?,?)}")
 		) {
-			cstmt.setString(1, session.getName());
-			cstmt.setDate(2, Date.valueOf(session.getExamDate()));
+			cstmt.setInt(1, result.getExamSessionId());
+			cstmt.setInt(2, result.getStudentId());
+			cstmt.setBigDecimal(3, result.getTheoryScore());
+			cstmt.setBigDecimal(4, result.getPracticalScore());
 			int rowAffected = cstmt.executeUpdate();
 			if (rowAffected == 0) {
 				throw new SQLException("Insert failed!");
@@ -65,34 +70,41 @@ public class ExamResultDAO implements IExamResultDAO {
 	}
 
 	@Override
-	public ExamSession findById(int id) {
-		ExamSession session = null;
+	public ExamResult findById(int id) {
+		return null;
+	}
+
+	@Override
+	public ExamResult findExamResult(int sessionID, int studentID) {
+		ExamResult result = null;
 		try (
 				Connection conn = getConnection();
-				CallableStatement cstmt = conn.prepareCall("{call find_exam_session(?)}")
+				CallableStatement cstmt = conn.prepareCall("{call find_exam_result(?,?)}")
 		) {
-			cstmt.setInt(1, id);
+			cstmt.setInt(1, sessionID);
+			cstmt.setInt(2, studentID);
 			ResultSet rs = cstmt.executeQuery();
 			if (rs.next()) {
-				String name = rs.getString("name");
-				LocalDate examDate = rs.getDate("exam_date").toLocalDate();
-				session = new ExamSession(id, name, examDate);
+				BigDecimal theoryScore = rs.getBigDecimal("theory_score");
+				BigDecimal practicalScore = rs.getBigDecimal("practical_score");
+				result = new ExamResult(sessionID, studentID, theoryScore, practicalScore);
 			}
 		} catch (SQLException e) {
 			printSQLException(e);
 		}
-		return session;
+		return result;
 	}
 
 	@Override
-	public boolean update(ExamSession session) {
+	public boolean update(ExamResult result) {
 		try (
 				Connection conn = getConnection();
-				CallableStatement cstmt = conn.prepareCall("{call update_exam_session(?,?,?)}")
+				CallableStatement cstmt = conn.prepareCall("{call update_exam_result(?,?,?,?)}")
 		) {
-			cstmt.setInt(1, session.getId());
-			cstmt.setString(2, session.getName());
-			cstmt.setDate(3, Date.valueOf(session.getExamDate()));
+			cstmt.setInt(1, result.getExamSessionId());
+			cstmt.setInt(2, result.getStudentId());
+			cstmt.setBigDecimal(3, result.getTheoryScore());
+			cstmt.setBigDecimal(4, result.getPracticalScore());
 			int rowAffected = cstmt.executeUpdate();
 			if (rowAffected == 0) {
 				throw new SQLException("Update failed!");
@@ -105,14 +117,20 @@ public class ExamResultDAO implements IExamResultDAO {
 
 	@Override
 	public boolean remove(int id) {
+		return false;
+	}
+
+	@Override
+	public boolean removeExamResult(int sessionID, int studentID) {
 		try (
 				Connection conn = getConnection();
-				CallableStatement cstmt = conn.prepareCall("{call delete_exam_session(?)}")
+				CallableStatement cstmt = conn.prepareCall("{call delete_exam_result(?,?)}")
 		) {
-			cstmt.setInt(1, id);
+			cstmt.setInt(1, sessionID);
+			cstmt.setInt(2, studentID);
 			int rowAffected = cstmt.executeUpdate();
 			if (rowAffected == 0) {
-				throw new SQLException("Exam session with id " + id + " not found");
+				throw new SQLException("Exam session not found!");
 			}
 		} catch (SQLException e) {
 			printSQLException(e);

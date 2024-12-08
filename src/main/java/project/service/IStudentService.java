@@ -10,4 +10,6 @@ public interface IStudentService extends IService<Student> {
 	List<StudentInformation> findStudentByClass(String className);
 
 	StudentInformation findStudentByID(int studentID);
+
+//	List<Student> findStudentsByStatus(int statusId);
 }
