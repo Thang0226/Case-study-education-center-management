@@ -3,6 +3,7 @@ package project.service;
 import project.DAO.IStudentDAO;
 import project.DAO.StudentDAO;
 import project.model.Student;
+import project.model.StudentInformation;
 
 import java.util.List;
 
@@ -12,6 +13,11 @@ public class StudentService implements IStudentService {
     @Override
     public List<Student> findAll() {
         return studentDAO.findAll();
+    }
+
+    @Override
+    public List<StudentInformation> findStudentByClass(String className) {
+        return studentDAO.findStudentByClass(className);
     }
 
     @Override
