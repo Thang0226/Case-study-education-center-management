@@ -54,6 +54,34 @@ public class StudentDAO implements IStudentDAO {
 	}
 
 	@Override
+	public List<StudentInformation> findAllStudents() {
+		List<StudentInformation> informationList = new ArrayList<>();
+		try (
+				Connection conn = getConnection();
+				CallableStatement cstmt = conn.prepareCall("{call find_all_student_information()}")
+		) {
+			ResultSet rs = cstmt.executeQuery();
+			while (rs.next()) {
+				int id = rs.getInt("id");
+				String fullName = rs.getString("full_name");
+				String email = rs.getString("email");
+				String birthDate = rs.getString("birth_date");
+				String address = rs.getString("address");
+				String phoneNumber = rs.getString("phone_number");
+				String className = rs.getString("class");
+				String tuitionStatus = rs.getString("tuition_status");
+				String studentStatus = rs.getString("student_status");
+				StudentInformation infor = new StudentInformation(className, id, fullName, email, birthDate,
+						address, phoneNumber, tuitionStatus, studentStatus);
+				informationList.add(infor);
+			}
+		} catch (SQLException e) {
+			printSQLException(e);
+		}
+		return informationList;
+	}
+
+	@Override
 	public List<StudentInformation> findStudentByClass(String className) {
 		List<StudentInformation> studentInformationList = new ArrayList<>();
 		try (
