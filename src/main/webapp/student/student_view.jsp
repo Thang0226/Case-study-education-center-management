@@ -37,31 +37,31 @@
         </h2>
         <table class="table table-bordered table-light table-striped table-hover">
             <tr>
-                <th>Student ID</th>
+                <th>Student ID:</th>
                 <td>${requestScope.student.id}</td>
             </tr>
             <tr>
-                <th>Full Name</th>
+                <th>Full Name:</th>
                 <td>${requestScope.student.fullName}</td>
             </tr>
             <tr>
-                <th>Email</th>
+                <th>Email:</th>
                 <td>${requestScope.student.email}</td>
             </tr>
             <tr>
-                <th>Date of Birth</th>
+                <th>Date of Birth:</th>
                 <td>${requestScope.student.dateOfBirth}</td>
             </tr>
             <tr>
-                <th>Address</th>
+                <th>Address:</th>
                 <td>${requestScope.student.address}</td>
             </tr>
             <tr>
-                <th>Phone number</th>
+                <th>Phone number:</th>
                 <td>${requestScope.student.phoneNumber}</td>
             </tr>
             <tr>
-                <th>Status</th>
+                <th>Status:</th>
                 <td>${requestScope.student.studentStatus}</td>
             </tr>
         </table>
