@@ -27,7 +27,7 @@
             <div class="collapse navbar-collapse" id="navbarNavDropdown">
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="/home">Home</a>
+                        <a class="nav-link active" aria-current="page" href="home">Home</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="${pageContext.request.contextPath}/users">User Management</a>
@@ -85,7 +85,7 @@
                             <td>
                                 <input type="text" name="dateOfBirth" id="dateOfBirth" class="form-control" required
                                        pattern="(0[1-9]|[12][0-9]|3[01])/(0[1-9]|1[0-2])/\d{4}" placeholder="dd/MM/yyyy"
-                                       value="${user.dateOfBirth}">
+                                       value="${userDoB}">
                             </td>
                         </tr>
                         <tr>

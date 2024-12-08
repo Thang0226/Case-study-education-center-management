@@ -147,11 +147,16 @@ public class UserDAO<T> implements IUserDAO {
         boolean rowUpdated = false;
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareCall(UPDATE_USER_SP)) {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            LocalDate localDate = LocalDate.parse(user.getDateOfBirth(), formatter);
+            // Convert to java.sql.Date
+            Date sqlDate = Date.valueOf(localDate);
+
             preparedStatement.setString(2, user.getEmail());
             preparedStatement.setString(3, user.getPassword());
             preparedStatement.setString(4, user.getPhone());
             preparedStatement.setString(5, user.getFullName());
-            preparedStatement.setString(6, user.getDateOfBirth());
+            preparedStatement.setString(6, String.valueOf(sqlDate));
             preparedStatement.setString(7, user.getAddress());
             preparedStatement.setString(8, user.getIdentity());
             preparedStatement.setInt(1, user.getId());

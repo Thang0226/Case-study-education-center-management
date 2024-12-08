@@ -25,7 +25,7 @@
             <div class="collapse navbar-collapse" id="navbarNavDropdown">
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="/home">Home</a>
+                        <a class="nav-link active" aria-current="page" href="home">Home</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="${pageContext.request.contextPath}/users">User Management</a>
@@ -35,7 +35,8 @@
         </div>
     </nav>
     <div class="row">
-        <a href="/users">Users Management</a>
+        <a href="users">Users Management</a>
+        <a href="subjects">Subject Management</a>
     </div>
 
 </div>
