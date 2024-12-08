@@ -2,12 +2,13 @@ package project.service;
 
 import project.DAO.IUserDAO;
 import project.DAO.UserDAO;
+import project.model.Student;
 import project.model.User;
 
 import java.util.List;
 
 public class UserService implements IUserService {
-    IUserDAO userDAO = new UserDAO();
+    IUserDAO userDAO = new UserDAO<>();
 
     @Override
     public List<User> findAll() {
@@ -32,5 +33,15 @@ public class UserService implements IUserService {
     @Override
     public boolean remove(int id) {
         return userDAO.remove(id);
+    }
+
+    @Override
+    public void addStudentTransaction(User user, Student student) {
+        userDAO.addStudentTransaction(user, student);
+    }
+
+    @Override
+    public void addTutorTransaction(User user) {
+        userDAO.addTutorTransaction(user);
     }
 }

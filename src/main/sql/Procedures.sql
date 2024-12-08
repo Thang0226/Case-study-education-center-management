@@ -112,12 +112,12 @@ begin
 end $
 delimiter ;
 
-
+drop procedure list_tuition_status;
 
 delimiter $
 create procedure list_tuition_status()
 begin
-	select * from student_status;
+	select * from tuition_status;
 end $
 delimiter ;
 
@@ -131,12 +131,14 @@ begin
 end $
 delimiter ;
 
+drop procedure find_tuition_status;
+
 delimiter $
 create procedure find_tuition_status(
     in in_id int
 )
 begin
-	select * from student_status
+	select * from tuition_status
     where id = in_id;
 end $
 delimiter ;
@@ -230,47 +232,70 @@ delimiter ;
 
 delimiter $
 create procedure add_exam_result(
-    in in_name varchar(50),
-    in in_exam_date date
+    in in_session_id int,
+    in in_student_id int,
+    in in_theory_score decimal(5,2),
+    in in_practical_score decimal(5,2)
 )
 begin
-	insert into exam_session values
-    (null, in_name, in_exam_date);
+	insert into exam_result values
+    (in_session_id, in_student_id, in_theory_score, in_practical_score);
 end $
 delimiter ;
 
 delimiter $
 create procedure find_exam_result (
-    in in_id int
+    in in_session_id int,
+    in in_student_id int
 )
 begin
 	select * from exam_session
-    where id = in_id;
+    where exam_session_id = in_session_id and student_id = in_student_id;
 end $
 delimiter ;
 
 delimiter $
 create procedure update_exam_result(
-	in in_id int,
-    in in_name varchar(50),
-    in in_exam_date date
+	in in_exam_session_id int,
+	in in_student_id int,
+    in in_theory_score decimal(5,2),
+    in in_practical_score decimal(5,2)
 )
 begin
-	update exam_session
+	update exam_result
     set
-		name = in_name,
-        exam_date = in_exam_date
-    where id = in_id;
+		theory_score = in_theory_score,
+        practical_score = in_practical_score
+    where exam_session_id = in_exam_session_id and student_id = in_student_id;
 end $
 delimiter ;
 
 delimiter $
 create procedure delete_exam_result(
-    in in_id int
+    in in_exam_session_id int,
+	in in_student_id int
 )
 begin
-	delete from exam_session
-    where id = in_id;
+	delete from exam_result
+    where exam_session_id = in_exam_session_id and student_id = in_student_id;
+end $
+delimiter ;
+
+
+
+delimiter $
+drop procedure if exists list_students_by_class $
+create procedure list_students_by_class(
+	in in_class_name varchar(50)
+)
+begin
+	select clazz.name as class, student.id as id, user.FullName as full_name, user.email as email, 
+			user.DateOfBirth as birth_date, user.address, user.phoneNumber as phone_number, s_status.name as status
+    from student join user on student.user_id = user.id
+    join student_status s_status on student.student_status_id = s_status.id
+    join clazz on student.class_id = clazz.id
+    where clazz.name = in_class_name
+    order by student.id;
 end $
 delimiter ;
 
@@ -283,6 +308,8 @@ delimiter ;
 
 
 
+
+drop procedure Insert_User;
 
 DELIMITER $$
 CREATE PROCEDURE Insert_User(
@@ -293,14 +320,17 @@ CREATE PROCEDURE Insert_User(
     IN p_DateOfBirth DATE,
     IN p_Address VARCHAR(255),
     IN p_Identity VARCHAR(50),
-    IN p_Role_ID INT
+    IN p_Role_ID INT,
+    OUT user_ID INT
+
 )
 BEGIN
     INSERT INTO User (
         Email, Password, PhoneNumber, FullName, DateOfBirth, Address, Identity, Role_ID
     ) VALUES (
-                 p_Email, p_Password, p_PhoneNumber, p_FullName, p_DateOfBirth, p_Address, p_Identity, p_Role_ID
-             );
+        p_Email, p_Password, p_PhoneNumber, p_FullName, p_DateOfBirth, p_Address, p_Identity, p_Role_ID
+        );
+    SET user_ID = LAST_INSERT_ID();
 END $$
 
 DELIMITER ;

@@ -1,6 +1,7 @@
 package project.DAO;
 
 import project.model.Student;
+import project.model.StudentInformation;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -14,7 +15,7 @@ public class StudentDAO implements IStudentDAO {
 	@Override
 	public Connection getConnection() throws SQLException {
 		try {
-			Class.forName("com.mysql.jdbc.Driver");
+			Class.forName("com.mysql.cj.jdbc.Driver");
 		} catch (ClassNotFoundException e) {
 			System.out.println(e.getMessage());
 		}
@@ -42,6 +43,34 @@ public class StudentDAO implements IStudentDAO {
 			printSQLException(e);
 		}
 		return students;
+	}
+
+	@Override
+	public List<StudentInformation> findStudentByClass(String className) {
+		List<StudentInformation> studentInformationList = new ArrayList<>();
+		try (
+				Connection conn = getConnection();
+				CallableStatement cstmt = conn.prepareCall("{call list_students_by_class(?)}")
+		) {
+			cstmt.setString(1, className);
+			ResultSet rs = cstmt.executeQuery();
+			while (rs.next()) {
+				int id = rs.getInt("id");
+				String fullName = rs.getString("full_name");
+				String email = rs.getString("email");
+				String birthDate = rs.getString("birth_date");
+				String address = rs.getString("address");
+				String phoneNumber = rs.getString("phone_number");
+				String studentStatus = rs.getString("status");
+
+				StudentInformation infor = new StudentInformation(className, id, fullName, email, birthDate,
+						address, phoneNumber, studentStatus);
+				studentInformationList.add(infor);
+			}
+		} catch (SQLException e) {
+			printSQLException(e);
+		}
+		return studentInformationList;
 	}
 
 	@Override
@@ -86,6 +115,33 @@ public class StudentDAO implements IStudentDAO {
 			printSQLException(e);
 		}
 		return student;
+	}
+
+	@Override
+	public StudentInformation findStudentByID(int id) {
+		StudentInformation studentInfor = null;
+		try (
+				Connection conn = getConnection();
+				CallableStatement cstmt = conn.prepareCall("{call find_student_information(?)}")
+		) {
+			cstmt.setInt(1, id);
+			ResultSet rs = cstmt.executeQuery();
+			if (rs.next()) {
+				String className = rs.getString("class");
+				String fullName = rs.getString("full_name");
+				String email = rs.getString("email");
+				String birthDate = rs.getString("birth_date");
+				String address = rs.getString("address");
+				String phoneNumber = rs.getString("phone_number");
+				String studentStatus = rs.getString("status");
+
+				studentInfor = new StudentInformation(className, id, fullName, email, birthDate,
+						address, phoneNumber, studentStatus);
+			}
+		} catch (SQLException e) {
+			printSQLException(e);
+		}
+		return studentInfor;
 	}
 
 	@Override
