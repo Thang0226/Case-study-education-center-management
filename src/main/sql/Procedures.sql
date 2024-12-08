@@ -322,6 +322,29 @@ delimiter ;
 
 
 
+delimiter $
+drop procedure if exists find_all_student_information $
+create procedure find_all_student_information()
+begin
+	select clazz.name as class, student.id as id, user.FullName as full_name, user.email as email, 
+			user.DateOfBirth as birth_date, user.address, user.phoneNumber as phone_number, 
+            t_status.name as tuition_status, s_status.name as student_status
+    from student join user on student.user_id = user.id
+    join tuition_status t_status on student.tuition_status_id = t_status.id
+    join student_status s_status on student.student_status_id = s_status.id
+    join clazz on student.class_id = clazz.id
+    order by student.id;
+end $
+delimiter ;
+
+
+
+
+
+
+
+
+
 
 
 
