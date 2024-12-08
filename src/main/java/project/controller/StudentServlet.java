@@ -55,7 +55,6 @@ public class StudentServlet extends HttpServlet {
 				findStudentByID(req, resp);
 				break;
 			default:
-
 				break;
 		}
 	}
