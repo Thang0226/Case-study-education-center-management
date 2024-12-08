@@ -8,10 +8,11 @@ public class StudentInformation {
 	private String dateOfBirth;
 	private String address;
 	private String phoneNumber;
+	private String tuitionStatus;
 	private String studentStatus;
 
 	public StudentInformation(String className, int id, String fullName, String email, String dateOfBirth,
-	                          String address, String phoneNumber, String studentStatus) {
+	                          String address, String phoneNumber, String tuitionStatus, String studentStatus) {
 		this.className = className;
 		this.id = id;
 		this.fullName = fullName;
@@ -19,6 +20,7 @@ public class StudentInformation {
 		this.dateOfBirth = dateOfBirth;
 		this.address = address;
 		this.phoneNumber = phoneNumber;
+		this.tuitionStatus = tuitionStatus;
 		this.studentStatus = studentStatus;
 	}
 
@@ -48,6 +50,10 @@ public class StudentInformation {
 
 	public String getPhoneNumber() {
 		return phoneNumber;
+	}
+
+	public String getTuitionStatus() {
+		return tuitionStatus;
 	}
 
 	public String getStudentStatus() {
