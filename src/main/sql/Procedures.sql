@@ -239,7 +239,8 @@ create procedure add_exam_result(
 )
 begin
 	insert into exam_result values
-    (in_session_id, in_student_id, in_theory_score, in_practical_score);
+    (in_session_id, in_student_id,
+     in_theory_score, in_practical_score);
 end $
 delimiter ;
 
@@ -249,7 +250,7 @@ create procedure find_exam_result (
     in in_student_id int
 )
 begin
-	select * from exam_session
+	select * from exam_result
     where exam_session_id = in_session_id and student_id = in_student_id;
 end $
 delimiter ;
@@ -354,6 +355,8 @@ END $$
 
 DELIMITER ;
 
+drop procedure Update_User;
+
 DELIMITER $$
 
 CREATE PROCEDURE Update_User(
@@ -365,7 +368,8 @@ CREATE PROCEDURE Update_User(
     IN p_DateOfBirth DATE,
     IN p_Address VARCHAR(255),
     IN p_Identity VARCHAR(50),
-    IN p_Role_ID INT
+    IN p_Role_ID INT,
+    OUT user_ID INT
 )
 BEGIN
     UPDATE User
@@ -380,6 +384,28 @@ BEGIN
         Role_ID = p_Role_ID
     WHERE
         ID = p_ID;
+    SET user_ID = LAST_INSERT_ID();
 END$$
+
+DELIMITER ;
+
+
+DELIMITER $$
+
+create procedure delete_student_user(in _id int)
+begin
+    delete from student where User_ID = _id;
+    delete from user where ID = _id;
+end $$
+
+DELIMITER ;
+
+DELIMITER $$
+
+create procedure delete_tutor_user(in _id int)
+begin
+    delete from tutor where User_ID = _id;
+    delete from user where ID = _id;
+end $$
 
 DELIMITER ;

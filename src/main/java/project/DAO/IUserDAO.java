@@ -7,5 +7,9 @@ public interface IUserDAO extends IDAO<User> {
     void addStudentTransaction(User user, Student student);
 
     void addTutorTransaction(User user);
+
+    void deleteStudent(int id);
+
+    void deleteTutor(int id);
 }
 
