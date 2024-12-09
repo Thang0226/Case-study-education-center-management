@@ -78,7 +78,9 @@
                                 </select>
                             </div>
                             <div class="col-3 p-1">
-                                <button type="submit" class="btn btn-secondary ms-0">Filter</button>
+                                <button type="submit" class="btn btn-secondary ms-0" id="class_filter">
+                                    Filter
+                                </button>
                             </div>
                         </div>
                     </form>
@@ -130,5 +132,11 @@
     </div>
 </div>
 <script src="../styles/bootstrap.bundle.min.js"></script>
+<% String needClick = request.getParameter("click");
+    if (needClick.equals("yes")) {%>
+<script>
+    document.getElementById("class_filter").click();
+</script>
+<%}%>
 </body>
 </html>
