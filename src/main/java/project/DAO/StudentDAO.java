@@ -112,27 +112,23 @@ public class StudentDAO implements IStudentDAO {
 	}
 
 	@Override
-	public List<StudentInformation> findStudentByStatus(int statusId) {
-		List<StudentInformation> studentStatusInformationList = new ArrayList<>();
+	public List<StudentInformation> findStudentByStatus(String statusName) {
+		List<StudentInformation> studentInformationList = new ArrayList<>();
 		try (
 				Connection conn = getConnection();
-				CallableStatement cstmt = conn.prepareCall("{call list_students_by_status()}")
+				CallableStatement cstmt = conn.prepareCall("{call list_students_by_status(?)}")
 		) {
-			cstmt.setInt(1, statusId);
+			cstmt.setString(1, statusName);
 			ResultSet rs = cstmt.executeQuery();
-			while (rs.next()) {
-				int id = rs.getInt("id");
-				String name = rs.getString("full_name");
-				String className = rs.getString("class_name");
-//				Student student = new Student(id, name, className);
-
+			while (rs.next()){
+        
 			}
-		} catch (SQLException e) {
+		}
+		catch (SQLException e) {
 			printSQLException(e);
 		}
-		return studentStatusInformationList;
+		return studentInformationList;
 	}
-
 
 	@Override
 	public boolean add(Student student) {
@@ -205,6 +201,7 @@ public class StudentDAO implements IStudentDAO {
 		}
 		return studentInfor;
 	}
+
 
 	@Override
 	public boolean update(Student student) {

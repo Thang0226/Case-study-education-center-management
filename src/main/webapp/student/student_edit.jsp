@@ -59,7 +59,7 @@
                         <th>Student ID:</th>
                         <td>
                             ${requestScope.student.id}
-                            <input type="hidden" name="id" value="${requestScope.student.id}">
+                            <input type="hidden" name="student_id" value="${requestScope.student.id}">
                         </td>
                     </tr>
                     <tr>

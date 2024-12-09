@@ -245,6 +245,7 @@ end $
 delimiter ;
 
 delimiter $
+drop procedure if exists find_exam_result $
 create procedure find_exam_result (
     in in_session_id int,
     in in_student_id int
@@ -254,6 +255,9 @@ begin
     where exam_session_id = in_session_id and student_id = in_student_id;
 end $
 delimiter ;
+
+select * from exam_result
+    where exam_session_id = 1 and student_id = 1;
 
 delimiter $
 create procedure update_exam_result(
