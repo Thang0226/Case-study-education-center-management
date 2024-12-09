@@ -112,8 +112,7 @@ begin
 end $
 delimiter ;
 
-drop procedure list_tuition_status;
-
+drop procedure if exists list_tuition_status;
 delimiter $
 create procedure list_tuition_status()
 begin
@@ -231,6 +230,7 @@ end $
 delimiter ;
 
 delimiter $
+drop procedure if exists add_exam_result $
 create procedure add_exam_result(
     in in_session_id int,
     in in_student_id int,
@@ -238,9 +238,8 @@ create procedure add_exam_result(
     in in_practical_score decimal(5,2)
 )
 begin
-	insert into exam_result values
-    (in_session_id, in_student_id,
-     in_theory_score, in_practical_score);
+	insert into exam_result (Exam_Session_ID, Student_ID, Theory_Score, Practical_Score) values
+    (in_session_id, in_student_id, in_theory_score, in_practical_score);
 end $
 delimiter ;
 
