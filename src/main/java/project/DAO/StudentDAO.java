@@ -111,24 +111,24 @@ public class StudentDAO implements IStudentDAO {
 		return studentInformationList;
 	}
 
-	@Override
-	public List<StudentInformation> findStudentByStatus(String statusName) {
-		List<StudentInformation> studentInformationList = new ArrayList<>();
-		try (
-				Connection conn = getConnection();
-				CallableStatement cstmt = conn.prepareCall("{call list_students_by_status(?)}")
-		) {
-			cstmt.setString(1, statusName);
-			ResultSet rs = cstmt.executeQuery();
-			while (rs.next()){
-        
-			}
-		}
-		catch (SQLException e) {
-			printSQLException(e);
-		}
-		return studentInformationList;
-	}
+//	@Override
+//	public List<StudentInformation> findStudentByStatus(String statusName) {
+//		List<StudentInformation> studentInformationList = new ArrayList<>();
+//		try (
+//				Connection conn = getConnection();
+//				CallableStatement cstmt = conn.prepareCall("{call list_students_by_status(?)}")
+//		) {
+//			cstmt.setString(1, statusName);
+//			ResultSet rs = cstmt.executeQuery();
+//			while (rs.next()){
+//
+//			}
+//		}
+//		catch (SQLException e) {
+//			printSQLException(e);
+//		}
+//		return studentInformationList;
+//	}
 
 	@Override
 	public boolean add(Student student) {
