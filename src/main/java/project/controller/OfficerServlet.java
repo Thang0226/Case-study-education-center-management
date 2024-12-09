@@ -1,6 +1,7 @@
 package project.controller;
 
 import project.model.*;
+import project.model.DTO.StudentInformation;
 import project.service.*;
 
 import javax.servlet.RequestDispatcher;
@@ -62,7 +63,11 @@ public class OfficerServlet extends HttpServlet {
 			case "update_student_scores":
 				updateStudentScores(req, resp);
 				break;
+			case "create_student_scores":
+				showAddScoreForm(req, resp);
+				break;
 			case "add_student_scores":
+				addStudentScores(req, resp);
 				break;
 			default:
 				break;
@@ -104,7 +109,7 @@ public class OfficerServlet extends HttpServlet {
 	}
 
 	private void showEditStudentForm(HttpServletRequest req, HttpServletResponse resp) {
-		int id = Integer.parseInt(req.getParameter("id"));
+		int id = Integer.parseInt(req.getParameter("student_id"));
 		Student student = studentService.findById(id);
 		RequestDispatcher dispatcher;
 		if (student == null) {
@@ -132,15 +137,15 @@ public class OfficerServlet extends HttpServlet {
 	}
 
 	private void updateStudent(HttpServletRequest req, HttpServletResponse resp) {
-		int id = Integer.parseInt(req.getParameter("id"));
+		int id = Integer.parseInt(req.getParameter("student_id"));
 		int studentStatusID = Integer.parseInt(req.getParameter("student_status_id"));
 		Student student = studentService.findById(id);
 		student.setStudentStatusID(studentStatusID);
 		studentService.update(student);
-		req.setAttribute("id", id);
+		req.setAttribute("student_id", id);
 		req.setAttribute("message", "Student information was modified");
 
-		showEditScoreForm(req, resp);
+		showEditStudentForm(req, resp);
 	}
 
 	private void showEditScoreForm(HttpServletRequest req, HttpServletResponse resp) {
@@ -150,13 +155,11 @@ public class OfficerServlet extends HttpServlet {
 		Subject subject = subjectService.findById(clazz.getSubjectID());
 		User user = userService.findById(student.getUserID());
 		List<ExamResult> examResults = examResultService.findStudentExamResults(studentId);
-		List<ExamSession> examSessions = examSessionService.findAll();
 
 		req.setAttribute("student", student);
 		req.setAttribute("clazz", clazz);
 		req.setAttribute("subject", subject);
 		req.setAttribute("user", user);
-		req.setAttribute("sessions", examSessions);
 		req.setAttribute("exam_results", examResults);
 		RequestDispatcher dispatcher = req.getRequestDispatcher("student/student_score_edit.jsp");
 		try {
@@ -177,5 +180,45 @@ public class OfficerServlet extends HttpServlet {
 		req.setAttribute("student_id", studentID);
 		req.setAttribute("message", "Student scores updated");
 		showEditScoreForm(req, resp);
+	}
+
+	private void showAddScoreForm(HttpServletRequest req, HttpServletResponse resp) {
+		int studentId = Integer.parseInt(req.getParameter("student_id"));
+		Student student = studentService.findById(studentId);
+		Clazz clazz = clazzService.findById(student.getClassID());
+		Subject subject = subjectService.findById(clazz.getSubjectID());
+		User user = userService.findById(student.getUserID());
+		List<ExamResult> examResults = examResultService.findStudentExamResults(studentId);
+		List<ExamSession> examSessions = examSessionService.findAll();
+
+		req.setAttribute("subject", subject);
+		req.setAttribute("user", user);
+		req.setAttribute("student", student);
+		req.setAttribute("clazz", clazz);
+		req.setAttribute("sessions", examSessions);
+		req.setAttribute("exam_results", examResults);
+		RequestDispatcher dispatcher = req.getRequestDispatcher("student/student_score_create.jsp");
+		try {
+			dispatcher.forward(req, resp);
+		} catch (ServletException | IOException e) {
+			System.out.println(e.getMessage());
+		}
+	}
+
+	private void addStudentScores(HttpServletRequest req, HttpServletResponse resp) {
+		int studentID = Integer.parseInt(req.getParameter("student_id"));
+		int sessionID = Integer.parseInt(req.getParameter("session_id"));
+		BigDecimal theoryScore = BigDecimal.valueOf(Double.parseDouble(req.getParameter("theory_score")));
+		BigDecimal practicalScore = BigDecimal.valueOf(Double.parseDouble(req.getParameter("practical_score")));
+		ExamResult examResult = examResultService.findExamResult(sessionID, studentID);
+		if (examResult != null) {
+			req.setAttribute("message", "Student scores of the session already exist!");
+		} else {
+			ExamResult newResult = new ExamResult(sessionID, studentID, theoryScore, practicalScore, BigDecimal.ZERO);
+			examResultService.add(newResult);
+			req.setAttribute("message", "Student scores added");
+		}
+		req.setAttribute("student_id", studentID);
+		showAddScoreForm(req, resp);
 	}
 }

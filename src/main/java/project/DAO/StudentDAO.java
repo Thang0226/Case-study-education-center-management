@@ -1,7 +1,7 @@
 package project.DAO;
 
 import project.model.Student;
-import project.model.StudentInformation;
+import project.model.DTO.StudentInformation;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -128,8 +128,6 @@ public class StudentDAO implements IStudentDAO {
 		}
 		return studentInformationList;
 	}
-
-
 
 	@Override
 	public boolean add(Student student) {

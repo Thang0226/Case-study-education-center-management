@@ -2,7 +2,7 @@
   Created by IntelliJ IDEA.
   User: thang
   Date: 09/12/24
-  Time: 08:08
+  Time: 14:29
   To change this template use File | Settings | File Templates.
 --%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -40,13 +40,27 @@
         }
     </style>
     <script>
-        function copyScores(x) {
-            const in_theory_score = document.getElementById("in_theory_score_" + x);
-            const theory_score = document.getElementById("theory_score_" + x);
-            const in_practical_score = document.getElementById("in_practical_score_" + x);
-            const practical_score = document.getElementById("practical_score_" + x);
+        function inputScores() {
+            const in_theory_score = document.getElementById("in_theory_score");
+            const theory_score = document.getElementById("theory_score");
+            const in_practical_score = document.getElementById("in_practical_score");
+            const practical_score = document.getElementById("practical_score");
+            const average_score = document.getElementById("average_score");
+            const in_session_id = document.getElementById("in_session_id");
+            const session_id = document.getElementById("session_id");
+
             theory_score.value = in_theory_score.value;
             practical_score.value = in_practical_score.value;
+
+            // Convert string values to numbers
+            let theoryValue = parseFloat(in_theory_score.value) || 0; // Default to 0 if input is empty or invalid
+            let practicalValue = parseFloat(in_practical_score.value) || 0;
+            // Calculate average
+            let averageValue = (theoryValue + practicalValue) / 2;
+            // Display the average
+            average_score.innerHTML = averageValue.toFixed(2); // Format to 2 decimal places
+
+            session_id.value = in_session_id.value;
         }
     </script>
 </head>
@@ -70,7 +84,7 @@
 
 <!-- Form Section -->
 <div class="container">
-    <h2 class="text-primary">Student Scores</h2>
+    <h2 class="text-primary">Insert New Score</h2>
     <div class="table-responsive">
         <table class="table table-bordered table-light table-striped table-hover form">
             <tr>
@@ -95,47 +109,42 @@
                     <table class="table table-bordered table-light table-striped table-hover data">
                         <thead class="table-light">
                         <tr>
-                            <th scope="col" class="col-1">Session ID</th>
+                            <th scope="col" class="col-1">Exam Session</th>
                             <th scope="col" class="col-2">Theory Score</th>
                             <th scope="col" class="col-2">Practical Score</th>
                             <th scope="col" class="col-2">Average Score</th>
-                            <th scope="col" class="col-1">Update Scores</th>
+                            <th scope="col" class="col-1">Insert Scores</th>
                         </tr>
                         </thead>
                         <tbody class="table-group-divider">
-                        <c:forEach items="${requestScope.exam_results}" var="result">
                             <tr>
-                                <th scope="row">${result.examSessionID}</th>
+                                <th scope="row">
+                                    <select name="in_session_id" id="in_session_id">
+                                        <c:forEach items="${requestScope.sessions}" var="session">
+                                            <option value="${session.id}">${session.name}</option>
+                                        </c:forEach>
+                                    </select>
+                                </th>
                                 <td>
-                                    <input type="text" id="in_theory_score_${result.examSessionID}"
-                                           oninput="copyScores(${result.examSessionID})"
-                                           value="${result.theoryScore}">
+                                    <input type="number" id="in_theory_score" oninput="inputScores()">
                                 </td>
                                 <td>
-                                    <input type="text" id="in_practical_score_${result.examSessionID}"
-                                           oninput="copyScores(${result.examSessionID})"
-                                            value="${result.practicalScore}">
+                                    <input type="number" id="in_practical_score" oninput="inputScores()">
                                 </td>
-                                <td>${result.averageScore}</td>
+                                <td><p id="average_score"></p></td>
                                 <td>
-                                    <form action="/officer" method="POST" style="display:inline;">
-                                        <input type="hidden" name="action" value="update_student_scores"/>
-                                        <input type="hidden" name="student_id" value="${result.studentID}">
-                                        <input type="hidden" name="session_id"
-                                               value="${result.examSessionID}">
-                                        <input type="hidden" id="theory_score_${result.examSessionID}"
-                                               name="theory_score"
-                                               value="${result.theoryScore}">
-                                        <input type="hidden" id="practical_score_${result.examSessionID}"
-                                               name="practical_score"
-                                               value="${result.practicalScore}">
+                                    <form action="officer" method="POST" style="display:inline;">
+                                        <input type="hidden" name="action" value="add_student_scores"/>
+                                        <input type="hidden" name="student_id" value="${requestScope.student.id}">
+                                        <input type="hidden" name="session_id" id="session_id">
+                                        <input type="hidden" id="theory_score" name="theory_score">
+                                        <input type="hidden" id="practical_score" name="practical_score">
                                         <button type="submit" class="btn btn-primary">
-                                            Update
+                                            Insert
                                         </button>
                                     </form>
                                 </td>
                             </tr>
-                        </c:forEach>
                         </tbody>
                     </table>
                 </td>
