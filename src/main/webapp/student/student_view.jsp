@@ -45,6 +45,7 @@
                 <th scope="col" class="col-2">Address</th>
                 <th scope="col" class="col-2">Phone number</th>
                 <th scope="col" class="col-2">Status</th>
+
             </tr>
             </thead>
             <tbody class="table-group-divider">
