@@ -59,7 +59,12 @@
                     <c:forEach var="clazz" items="${classList}">
                         <tr>
                             <td class="text-center">${clazz.classId}</td>
-                            <td>${clazz.className}</td>
+                            <td>
+                                <a href="students?action=list_students_by_class&class_name=${clazz.className}"
+                                   class="link-dark link-offset-2 link-underline-opacity-0 link-underline-opacity-100-hover">
+                                        ${clazz.className}
+                                </a>
+                            </td>
                             <td>${clazz.tutorName}</td>
                             <td>${clazz.subjectName}</td>
                             <td class="text-center">${clazz.studentNumber}</td>
