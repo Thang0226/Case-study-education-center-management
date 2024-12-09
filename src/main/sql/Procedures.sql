@@ -239,7 +239,8 @@ create procedure add_exam_result(
 )
 begin
 	insert into exam_result values
-    (in_session_id, in_student_id, in_theory_score, in_practical_score);
+    (in_session_id, in_student_id,
+     in_theory_score, in_practical_score);
 end $
 delimiter ;
 
@@ -249,7 +250,7 @@ create procedure find_exam_result (
     in in_student_id int
 )
 begin
-	select * from exam_session
+	select * from exam_result
     where exam_session_id = in_session_id and student_id = in_student_id;
 end $
 delimiter ;
@@ -322,6 +323,43 @@ delimiter ;
 
 
 
+delimiter $
+drop procedure if exists find_all_student_information $
+create procedure find_all_student_information()
+begin
+	select clazz.name as class, student.id as id, user.FullName as full_name, user.email as email, 
+			user.DateOfBirth as birth_date, user.address, user.phoneNumber as phone_number, 
+            t_status.name as tuition_status, s_status.name as student_status
+    from student join user on student.user_id = user.id
+    join tuition_status t_status on student.tuition_status_id = t_status.id
+    join student_status s_status on student.student_status_id = s_status.id
+    join clazz on student.class_id = clazz.id
+    order by student.id;
+end $
+delimiter ;
+
+
+
+delimiter $
+drop procedure if exists find_student_exam_result $
+create procedure find_student_exam_result(
+	in in_student_id int
+)
+begin 
+	select exam_session_id, student_id, theory_score, practical_score, average_score
+    from exam_result join student on student.id = exam_result.student_id
+    where student.id = in_student_id;
+end $
+delimiter ;
+
+
+
+
+
+
+
+
+
 
 
 
@@ -354,6 +392,8 @@ END $$
 
 DELIMITER ;
 
+drop procedure Update_User;
+
 DELIMITER $$
 
 CREATE PROCEDURE Update_User(
@@ -365,7 +405,7 @@ CREATE PROCEDURE Update_User(
     IN p_DateOfBirth DATE,
     IN p_Address VARCHAR(255),
     IN p_Identity VARCHAR(50),
-    IN p_Role_ID INT
+    OUT user_ID INT
 )
 BEGIN
     UPDATE User
@@ -376,10 +416,50 @@ BEGIN
         FullName = p_FullName,
         DateOfBirth = p_DateOfBirth,
         Address = p_Address,
-        Identity = p_Identity,
-        Role_ID = p_Role_ID
+        Identity = p_Identity
     WHERE
         ID = p_ID;
+    SET user_ID = LAST_INSERT_ID();
 END$$
+
+DELIMITER ;
+
+
+DELIMITER $$
+
+create procedure delete_student_user(in _id int)
+begin
+    delete from student where User_ID = _id;
+    delete from user where ID = _id;
+end $$
+
+DELIMITER ;
+
+DELIMITER $$
+
+create procedure delete_tutor_user(in _id int)
+begin
+    delete from tutor where User_ID = _id;
+    delete from user where ID = _id;
+end $$
+
+DELIMITER ;
+
+DELIMITER $$
+
+create procedure update_student_by_user_id(
+    in _user_id int,
+    IN _tuition_status_id int,
+    IN _student_status_id int,
+    IN _class_id int
+)
+begin
+    update student
+    set
+        tuition_status_id = _tuition_status_id,
+        student_status_id = _student_status_id,
+        class_id = _class_id
+    where User_ID = _user_id;
+end $$
 
 DELIMITER ;

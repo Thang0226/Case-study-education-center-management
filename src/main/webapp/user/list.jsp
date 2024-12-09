@@ -26,10 +26,10 @@
             <div class="collapse navbar-collapse" id="navbarNavDropdown">
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="http://localhost:8080/">Home</a>
+                        <a class="nav-link active" aria-current="page" href="home">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="${pageContext.request.contextPath}/students">User Management</a>
+                        <a class="nav-link" href="${pageContext.request.contextPath}/users">User Management</a>
                     </li>
                 </ul>
             </div>
@@ -87,7 +87,12 @@
                             <a href="users?action=edit&id=${user.getId()}" class="btn btn-primary">Edit</a>
                         </td>
                         <td>
-                            <a href="users?action=delete&id=${user.getId()}" class="btn btn-danger">Delete</a>
+                            <form method="post" style="margin: 0">
+                                <input type="hidden" name="action" value="delete">
+                                <input type="hidden" name="id" value="${user.getId()}">
+                                <button class="btn btn-danger">Delete</button>
+                            </form>
+<%--                            <a href="users?action=delete&id=${user.getId()}" class="btn btn-danger">Delete</a>--%>
                         </td>
                     </tr>
                 </c:forEach>
@@ -97,6 +102,6 @@
     </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 </body>
 </html>

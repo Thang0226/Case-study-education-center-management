@@ -44,4 +44,14 @@ public class UserService implements IUserService {
     public void addTutorTransaction(User user) {
         userDAO.addTutorTransaction(user);
     }
+
+    @Override
+    public void deleteStudent(int id) {
+        userDAO.deleteStudent(id);
+    }
+
+    @Override
+    public void deleteTutor(int id) {
+        userDAO.deleteTutor(id);
+    }
 }

@@ -28,9 +28,10 @@ public class UserDAO<T> implements IUserDAO {
     private static final String DELETE_USER = "DELETE FROM user WHERE id = ?";
 
     private static final String INSERT_STUDENT_SP = "CALL add_student(?,?,?,?)";
+    private static final String DELETE_STUDENT_SP = "CALL delete_student_user(?)";
 
     private static final String INSERT_TUTOR= "INSERT INTO tutor Values(null, ?)";
-
+    private static final String DELETE_TUTOR_SP = "CALL delete_tutor_user(?)";
 
     public UserDAO() {}
 
@@ -146,15 +147,19 @@ public class UserDAO<T> implements IUserDAO {
         boolean rowUpdated = false;
         try (Connection connection = getConnection();
              PreparedStatement preparedStatement = connection.prepareCall(UPDATE_USER_SP)) {
-            preparedStatement.setString(1, user.getEmail());
-            preparedStatement.setString(2, user.getPassword());
-            preparedStatement.setString(3, user.getPhone());
-            preparedStatement.setString(4, user.getFullName());
-            preparedStatement.setString(5, user.getDateOfBirth());
-            preparedStatement.setString(6, user.getAddress());
-            preparedStatement.setString(7, user.getIdentity());
-            preparedStatement.setInt(8, user.getRoleID());
-            preparedStatement.setInt(9, user.getId());
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            LocalDate localDate = LocalDate.parse(user.getDateOfBirth(), formatter);
+            // Convert to java.sql.Date
+            Date sqlDate = Date.valueOf(localDate);
+
+            preparedStatement.setString(2, user.getEmail());
+            preparedStatement.setString(3, user.getPassword());
+            preparedStatement.setString(4, user.getPhone());
+            preparedStatement.setString(5, user.getFullName());
+            preparedStatement.setString(6, String.valueOf(sqlDate));
+            preparedStatement.setString(7, user.getAddress());
+            preparedStatement.setString(8, user.getIdentity());
+            preparedStatement.setInt(1, user.getId());
             System.out.println(preparedStatement);
             rowUpdated = preparedStatement.executeUpdate() > 0;
         } catch (SQLException e) {
@@ -181,7 +186,6 @@ public class UserDAO<T> implements IUserDAO {
         return rowUpdated;
 
     }
-
 
     @Override
     public void addStudentTransaction(User user, Student student) {
@@ -288,6 +292,32 @@ public class UserDAO<T> implements IUserDAO {
             } else {
                 connection.rollback();
             }
+        } catch (SQLException e) {
+            //noinspection CallToPrintStackTrace
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void deleteStudent(int id) {
+        try (Connection connection = getConnection();
+            CallableStatement callableStatement = connection.prepareCall(DELETE_STUDENT_SP)) {
+            callableStatement.setInt(1, id);
+            callableStatement.executeUpdate();
+            System.out.println(callableStatement);
+        } catch (SQLException e) {
+            //noinspection CallToPrintStackTrace
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void deleteTutor(int id) {
+        try (Connection connection = getConnection();
+             CallableStatement callableStatement = connection.prepareCall(DELETE_TUTOR_SP)) {
+            callableStatement.setInt(1, id);
+            callableStatement.executeUpdate();
+            System.out.println(callableStatement);
         } catch (SQLException e) {
             //noinspection CallToPrintStackTrace
             e.printStackTrace();

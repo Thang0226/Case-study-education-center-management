@@ -41,6 +41,11 @@ public class StudentService implements IStudentService {
     }
 
     @Override
+    public List<StudentInformation> findAllStudents() {
+        return studentDAO.findAllStudents();
+    }
+
+    @Override
     public boolean update(Student student) {
         return studentDAO.update(student);
     }
@@ -48,5 +53,15 @@ public class StudentService implements IStudentService {
     @Override
     public boolean remove(int id) {
         return studentDAO.remove(id);
+    }
+
+    @Override
+    public Student findStudentByUserId(int userId) {
+        return studentDAO.findStudentByUserId(userId);
+    }
+
+    @Override
+    public void updateStudentByUserID(Student student) {
+        studentDAO.updateStudentByUserID(student);
     }
 }

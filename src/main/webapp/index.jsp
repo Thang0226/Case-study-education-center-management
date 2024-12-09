@@ -9,7 +9,7 @@
 </h1>
 <br/>
 
-<a href="/users">go to users management</a>
+<a href="/home">Go to home page</a>
 <br><br>
 <form action="/students" method="POST" style="display:inline;">
     <input type="hidden" name="action" value="list_students_by_class" />
@@ -19,6 +19,12 @@
         <option value="JV103-HCM">JV103-HCM</option>
     </select>
     <button type="submit">Show students in class</button>
+</form>
+
+<br><br>
+<form action="/officer" method="POST" style="display:inline;">
+    <input type="hidden" name="action" value="list_students" />
+    <button type="submit">List students</button>
 </form>
 
 </body>
