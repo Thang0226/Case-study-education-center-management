@@ -92,11 +92,8 @@ public class StudentServlet extends HttpServlet {
 		System.out.println("===========================");
 
 		String statusName = req.getParameter("status_name");
-//		List<StudentInformation> studentInformationList = studentService.findStudentByStatus(status);
-
-//		req.setAttribute("students", studentInformationList);
 		req.setAttribute("status_name", statusName);
-		RequestDispatcher dispatcher = req.getRequestDispatcher("tutor/student_list_by_status.jsp");
+		RequestDispatcher dispatcher = req.getRequestDispatcher("student/student_list_by_class.jsp");
 		try {
 			dispatcher.forward(req, resp);
 		} catch (ServletException | IOException e) {
