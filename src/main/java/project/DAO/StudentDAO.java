@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class StudentDAO implements IStudentDAO {
+
 	private String jdbcURL = "jdbc:mysql://localhost:3306/center_management";
 	private String jdbcUsername = "root";
 	private String jdbcPassword = "123456";
@@ -120,7 +121,7 @@ public class StudentDAO implements IStudentDAO {
 			cstmt.setString(1, statusName);
 			ResultSet rs = cstmt.executeQuery();
 			while (rs.next()){
-
+        
 			}
 		}
 		catch (SQLException e) {

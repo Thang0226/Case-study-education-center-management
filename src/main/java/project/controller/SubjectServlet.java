@@ -1,8 +1,6 @@
 package project.controller;
 
 import project.model.Subject;
-import project.service.ClazzService;
-import project.service.IClazzService;
 import project.service.ISubjectService;
 import project.service.SubjectService;
 
@@ -18,7 +16,6 @@ import java.util.List;
 @WebServlet (name = "ClazzServlet", urlPatterns = "/subjects")
 public class SubjectServlet extends HttpServlet {
     ISubjectService subjectService = new SubjectService();
-
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -39,7 +36,7 @@ public class SubjectServlet extends HttpServlet {
                 deleteSubject(req, resp);
                 break;
             default:
-                showClassList(req, resp);
+                showSubjectList(req, resp);
         }
     }
 
@@ -86,11 +83,11 @@ public class SubjectServlet extends HttpServlet {
             case "create":
                 break;
             default:
-                showClassList(req, resp);
+                showSubjectList(req, resp);
         }
     }
 
-    private void showClassList(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    private void showSubjectList(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         List<Subject> subjects = subjectService.findAll();
         req.setAttribute("subjects", subjects);
         RequestDispatcher dispatcher = req.getRequestDispatcher("subject/list.jsp");
