@@ -1,14 +1,11 @@
 package project.DAO;
 
 import project.model.ExamResult;
-import project.model.ExamSession;
 
 import java.math.BigDecimal;
 import java.sql.*;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 public class ExamResultDAO implements IExamResultDAO {
 	private String jdbcURL = "jdbc:mysql://localhost:3306/center_management";
@@ -55,8 +52,8 @@ public class ExamResultDAO implements IExamResultDAO {
 				Connection conn = getConnection();
 				CallableStatement cstmt = conn.prepareCall("{call add_exam_result(?,?,?,?)}")
 		) {
-			cstmt.setInt(1, result.getExamSessionId());
-			cstmt.setInt(2, result.getStudentId());
+			cstmt.setInt(1, result.getExamSessionID());
+			cstmt.setInt(2, result.getStudentID());
 			cstmt.setBigDecimal(3, result.getTheoryScore());
 			cstmt.setBigDecimal(4, result.getPracticalScore());
 			int rowAffected = cstmt.executeUpdate();
@@ -126,8 +123,8 @@ public class ExamResultDAO implements IExamResultDAO {
 				Connection conn = getConnection();
 				CallableStatement cstmt = conn.prepareCall("{call update_exam_result(?,?,?,?)}")
 		) {
-			cstmt.setInt(1, result.getExamSessionId());
-			cstmt.setInt(2, result.getStudentId());
+			cstmt.setInt(1, result.getExamSessionID());
+			cstmt.setInt(2, result.getStudentID());
 			cstmt.setBigDecimal(3, result.getTheoryScore());
 			cstmt.setBigDecimal(4, result.getPracticalScore());
 			int rowAffected = cstmt.executeUpdate();

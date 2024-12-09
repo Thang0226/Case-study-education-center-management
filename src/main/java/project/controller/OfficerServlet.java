@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +23,7 @@ public class OfficerServlet extends HttpServlet {
 	private StudentStatusService studentStatusService = new StudentStatusService();
 	private ExamResultService examResultService = new ExamResultService();
 	private SubjectService subjectService = new SubjectService();
+	private ExamSessionService examSessionService = new ExamSessionService();
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -56,6 +58,9 @@ public class OfficerServlet extends HttpServlet {
 				break;
 			case "edit_student_scores":
 				showEditScoreForm(req, resp);
+				break;
+			case "update_student_scores":
+				updateStudentScores(req, resp);
 				break;
 			case "add_student_scores":
 				break;
@@ -132,39 +137,26 @@ public class OfficerServlet extends HttpServlet {
 		Student student = studentService.findById(id);
 		student.setStudentStatusID(studentStatusID);
 		studentService.update(student);
-		req.setAttribute("student", student);
+		req.setAttribute("id", id);
 		req.setAttribute("message", "Student information was modified");
 
-		User user = userService.findById(student.getUserID());
-		req.setAttribute("user", user);
-		TuitionStatus tuitionStatus = tuitionStatusService.findById(student.getTuitionStatusID());
-		req.setAttribute("tuition_status", tuitionStatus);
-		List<StudentStatus> studentStatusList = studentStatusService.findAll();
-		req.setAttribute("student_status_list", studentStatusList);
-		StudentStatus studentStatus = studentStatusService.findById(student.getStudentStatusID());
-		req.setAttribute("student_status", studentStatus);
-		Clazz clazz = clazzService.findById(student.getClassID());
-		req.setAttribute("clazz", clazz);
-		RequestDispatcher dispatcher = req.getRequestDispatcher("student/student_edit.jsp");
-		try {
-			dispatcher.forward(req, resp);
-		} catch (ServletException | IOException e) {
-			System.out.println(e.getMessage());
-		}
+		showEditScoreForm(req, resp);
 	}
 
 	private void showEditScoreForm(HttpServletRequest req, HttpServletResponse resp) {
-		int id = Integer.parseInt(req.getParameter("id"));
-		Student student = studentService.findById(id);
+		int studentId = Integer.parseInt(req.getParameter("student_id"));
+		Student student = studentService.findById(studentId);
 		Clazz clazz = clazzService.findById(student.getClassID());
 		Subject subject = subjectService.findById(clazz.getSubjectID());
 		User user = userService.findById(student.getUserID());
-		List<ExamResult> examResults = examResultService.findStudentExamResults(id);
+		List<ExamResult> examResults = examResultService.findStudentExamResults(studentId);
+		List<ExamSession> examSessions = examSessionService.findAll();
 
 		req.setAttribute("student", student);
 		req.setAttribute("clazz", clazz);
 		req.setAttribute("subject", subject);
 		req.setAttribute("user", user);
+		req.setAttribute("sessions", examSessions);
 		req.setAttribute("exam_results", examResults);
 		RequestDispatcher dispatcher = req.getRequestDispatcher("student/student_score_edit.jsp");
 		try {
@@ -172,5 +164,18 @@ public class OfficerServlet extends HttpServlet {
 		} catch (ServletException | IOException e) {
 			System.out.println(e.getMessage());
 		}
+	}
+
+	private void updateStudentScores(HttpServletRequest req, HttpServletResponse resp) {
+		int studentID = Integer.parseInt(req.getParameter("student_id"));
+		int sessionID = Integer.parseInt(req.getParameter("session_id"));
+		BigDecimal theoryScore = BigDecimal.valueOf(Double.parseDouble(req.getParameter("theory_score")));
+		BigDecimal practicalScore = BigDecimal.valueOf(Double.parseDouble(req.getParameter("practical_score")));
+		ExamResult examResult = new ExamResult(sessionID, studentID, theoryScore, practicalScore, BigDecimal.ZERO);
+		examResultService.update(examResult);
+
+		req.setAttribute("student_id", studentID);
+		req.setAttribute("message", "Student scores updated");
+		showEditScoreForm(req, resp);
 	}
 }
