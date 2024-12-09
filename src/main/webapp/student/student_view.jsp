@@ -70,12 +70,19 @@
                 </tr>
             </thead>
             <tbody class="table-group-divider">
+            <c:forEach var="examResult" items="${examResults}">
             <tr>
-                <td>${requestScope.examResult.name}</td>
-                <td>${requestScope.examResult.theoryScore}</td>
-                <td>${requestScope.examResult.practicalScore}</td>
-                <td>${requestScope.examResult.averageScore}</td>
+                <c:forEach var="examSession" items="${examSession}">
+                    <c:if test="${examSession.id == examResult.examSessionID}">
+                        <td>${examSession.name}</td>
+                    </c:if>
+                </c:forEach>
+<%--                <td>${examResult.examSessionID}</td>--%>
+                <td>${examResult.theoryScore}</td>
+                <td>${examResult.practicalScore}</td>
+                <td>${examResult.averageScore}</td>
             </tr>
+            </c:forEach>
             </tbody>
         </table>
     </div>

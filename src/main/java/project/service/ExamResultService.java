@@ -45,7 +45,7 @@ public class ExamResultService implements IExamResultService {
     }
 
     @Override
-    public ExamResult findExamSessionByStudent(int studentID) {
+    public List<ExamResult> findExamSessionByStudent(int studentID) {
         return examResultDAO.findExamSessionByStudent(studentID);
     }
 
