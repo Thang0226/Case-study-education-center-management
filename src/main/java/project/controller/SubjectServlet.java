@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet (name = "ClazzServlet", urlPatterns = "/subjects")
+@WebServlet (name = "SubjectServlet", urlPatterns = "/subjects")
 public class SubjectServlet extends HttpServlet {
     ISubjectService subjectService = new SubjectService();
 
