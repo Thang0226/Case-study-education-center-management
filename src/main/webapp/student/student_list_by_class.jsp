@@ -41,7 +41,6 @@
                 <option value="Dropped out" selected>Dropped out</option>
                 <option value="Suspended">Suspended</option>
                 <option value="Studying">Studying</option>
-                <option value="Studying">Studying</option>
                 <option value="Waiting for class">Waiting for class</option>
             </select>
             <button type="submit">Filter</button>
