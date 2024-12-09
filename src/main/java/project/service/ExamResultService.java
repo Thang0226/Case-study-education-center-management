@@ -36,7 +36,7 @@ public class ExamResultService implements IExamResultService {
 
     @Override
     public ExamResult findExamResult(int sessionID, int studentID) {
-        return examResultDAO.findExamResult(sessionID, studentID);
+        return null;
     }
 
     @Override
@@ -46,6 +46,6 @@ public class ExamResultService implements IExamResultService {
 
     @Override
     public boolean removeExamResult(int sessionID, int studentID) {
-        return examResultDAO.removeExamResult(sessionID, studentID);
+        return false;
     }
 }

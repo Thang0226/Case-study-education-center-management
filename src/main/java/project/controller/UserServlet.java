@@ -18,6 +18,9 @@ import java.util.List;
 @WebServlet(name = "UserServlet", urlPatterns = "/users")
 public class UserServlet extends HttpServlet {
     IClazzService clazzService = new ClazzService();
+//    IExamResultService examResultService = new ExamResultService();
+    IExamSessionService examSessionService = new ExamSessionService();
+    IOfficerService officerService = new OfficerService();
     IRoleService roleService = new RoleService();
     IStudentService studentService = new StudentService();
     IStudentStatusService studentStatusService = new StudentStatusService();

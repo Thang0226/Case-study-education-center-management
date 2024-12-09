@@ -15,6 +15,11 @@ public class StudentService implements IStudentService {
         return studentDAO.findAll();
     }
 
+//    @Override
+//    public List<Student> findStudentsByStatus(int statusId) {
+//        return studentDAO.findStudentsByStatus(statusId);
+//    }
+
     @Override
     public List<StudentInformation> findStudentByClass(String className) {
         return studentDAO.findStudentByClass(className);

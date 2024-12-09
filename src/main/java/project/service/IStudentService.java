@@ -11,6 +11,7 @@ public interface IStudentService extends IService<Student> {
 
 	StudentInformation findStudentByID(int studentID);
 
+//	List<Student> findStudentsByStatus(int statusId);
 
 	Student findStudentByUserId(int userId);
 
