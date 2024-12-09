@@ -1,6 +1,7 @@
 package project.controller;
 
 import project.model.*;
+import project.model.DTO.StudentInformation;
 import project.service.*;
 
 import javax.servlet.RequestDispatcher;
@@ -104,7 +105,7 @@ public class OfficerServlet extends HttpServlet {
 	}
 
 	private void showEditStudentForm(HttpServletRequest req, HttpServletResponse resp) {
-		int id = Integer.parseInt(req.getParameter("id"));
+		int id = Integer.parseInt(req.getParameter("student_id"));
 		Student student = studentService.findById(id);
 		RequestDispatcher dispatcher;
 		if (student == null) {
@@ -132,15 +133,15 @@ public class OfficerServlet extends HttpServlet {
 	}
 
 	private void updateStudent(HttpServletRequest req, HttpServletResponse resp) {
-		int id = Integer.parseInt(req.getParameter("id"));
+		int id = Integer.parseInt(req.getParameter("student_id"));
 		int studentStatusID = Integer.parseInt(req.getParameter("student_status_id"));
 		Student student = studentService.findById(id);
 		student.setStudentStatusID(studentStatusID);
 		studentService.update(student);
-		req.setAttribute("id", id);
+		req.setAttribute("student_id", id);
 		req.setAttribute("message", "Student information was modified");
 
-		showEditScoreForm(req, resp);
+		showEditStudentForm(req, resp);
 	}
 
 	private void showEditScoreForm(HttpServletRequest req, HttpServletResponse resp) {

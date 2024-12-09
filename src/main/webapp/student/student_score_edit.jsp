@@ -29,11 +29,11 @@
         }
     </style>
     <script>
-        function copyScores() {
-            const in_theory_score = document.getElementById("in_theory_score");
-            const theory_score = document.getElementById("theory_score");
-            const in_practical_score = document.getElementById("in_practical_score");
-            const practical_score = document.getElementById("practical_score");
+        function copyScores(x) {
+            const in_theory_score = document.getElementById("in_theory_score_" + x);
+            const theory_score = document.getElementById("theory_score_" + x);
+            const in_practical_score = document.getElementById("in_practical_score_" + x);
+            const practical_score = document.getElementById("practical_score_" + x);
             theory_score.value = in_theory_score.value;
             practical_score.value = in_practical_score.value;
         }
@@ -100,11 +100,13 @@
                             <tr>
                                 <th scope="row">${result.examSessionID}</th>
                                 <td>
-                                    <input type="text" id="in_theory_score" oninput="copyScores()"
+                                    <input type="text" id="in_theory_score_${result.examSessionID}"
+                                           oninput="copyScores(${result.examSessionID})"
                                            value="${result.theoryScore}">
                                 </td>
                                 <td>
-                                    <input type="text" id="in_practical_score" oninput="copyScores()"
+                                    <input type="text" id="in_practical_score_${result.examSessionID}"
+                                           oninput="copyScores(${result.examSessionID})"
                                             value="${result.practicalScore}">
                                 </td>
                                 <td>${result.averageScore}</td>
@@ -114,8 +116,12 @@
                                         <input type="hidden" name="student_id" value="${result.studentID}">
                                         <input type="hidden" name="session_id"
                                                value="${result.examSessionID}">
-                                        <input type="hidden" id="theory_score" name="theory_score">
-                                        <input type="hidden" id="practical_score" name="practical_score">
+                                        <input type="hidden" id="theory_score_${result.examSessionID}"
+                                               name="theory_score"
+                                               value="${result.theoryScore}">
+                                        <input type="hidden" id="practical_score_${result.examSessionID}"
+                                               name="practical_score"
+                                               value="${result.practicalScore}">
                                         <button type="submit" class="btn btn-primary">
                                             Update
                                         </button>

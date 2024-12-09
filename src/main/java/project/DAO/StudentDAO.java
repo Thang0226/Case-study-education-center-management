@@ -1,7 +1,7 @@
 package project.DAO;
 
 import project.model.Student;
-import project.model.StudentInformation;
+import project.model.DTO.StudentInformation;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -110,14 +110,14 @@ public class StudentDAO implements IStudentDAO {
 		return studentInformationList;
 	}
 
-//	@Override
-//	public List<StudentInformation> findStudentsByStatus(int statusId) {
+	@Override
+	public List<StudentInformation> findStudentByStatus(String statusName) {
 //		List<StudentInformation> studentStatusInformationList = new ArrayList<>();
 //		try (
 //				Connection conn = getConnection();
-//				CallableStatement cstmt = conn.prepareCall("{call list_students_by_status()}")
+//				CallableStatement cstmt = conn.prepareCall("{call list_students_by_status(?)}")
 //		) {
-//			cstmt.setInt(1, statusId);
+//			cstmt.setString(1, statusName);
 //			ResultSet rs = cstmt.executeQuery();
 //			while (rs.next()) {
 //				int id = rs.getInt("id");
@@ -130,7 +130,8 @@ public class StudentDAO implements IStudentDAO {
 //			printSQLException(e);
 //		}
 //		return studentStatusInformationList;
-//	}
+		return null;
+	}
 
 
 	@Override

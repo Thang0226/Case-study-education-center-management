@@ -1,8 +1,9 @@
 package project.service;
 
 import project.DAO.IStudentDAO;
+import project.DAO.StudentDAO;
 import project.model.Student;
-import project.model.StudentInformation;
+import project.model.DTO.StudentInformation;
 
 import java.util.List;
 

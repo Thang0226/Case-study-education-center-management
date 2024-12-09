@@ -81,7 +81,7 @@
                             <div class="col-4">
                                 <form action="/officer" method="POST" style="display:inline;">
                                     <input type="hidden" name="action" value="edit_student">
-                                    <input type="hidden" name="id" value="${student.id}">
+                                    <input type="hidden" name="student_id" value="${student.id}">
                                     <button type="submit" class="btn btn-primary">Edit</button>
                                 </form>
                             </div>
@@ -94,6 +94,7 @@
                             <input type="hidden" name="student_id" value="${student.id}">
                             <button type="submit" class="btn btn-success">Update</button>
                         </form>
+                        <hr class="my-1">
                         <form action="/officer" method="POST" style="display:inline;">
                             <input type="hidden" name="action" value="add_student_scores">
                             <input type="hidden" name="student_id" value="${student.id}">
