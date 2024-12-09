@@ -9,8 +9,7 @@
 </h1>
 <br/>
 
-<a href="home">Go to home page</a>
-
+<a href="login.jsp">Login Form</a>
 
 </body>
 </html>

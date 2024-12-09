@@ -32,7 +32,29 @@
 
 <body>
 
-<div class="container" style="margin-top:100px;">
+<div class="container">
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <img src="https://static.topcv.vn/company_logos/0ZT9refQobeAkpzsYWBdyaki10IlbFB4_1655288503____f48c9fc932b36c4eec44ec23d223fa18.png"
+                     alt="logo" class="img-fluid" style="max-height: 50px">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
+                    aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="home">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="${pageContext.request.contextPath}/users">User Management</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
     <div class="table-responsive">
         <h2 class="text-center mb-3">
             List of Students
@@ -56,7 +78,9 @@
                                 </select>
                             </div>
                             <div class="col-3 p-1">
-                                <button type="submit" class="btn btn-secondary ms-0">Filter</button>
+                                <button type="submit" class="btn btn-secondary ms-0" id="class_filter">
+                                    Filter
+                                </button>
                             </div>
                         </div>
                     </form>
@@ -108,5 +132,11 @@
     </div>
 </div>
 <script src="../styles/bootstrap.bundle.min.js"></script>
+<% String needClick = request.getParameter("click");
+    if (needClick.equals("yes")) {%>
+<script>
+    document.getElementById("class_filter").click();
+</script>
+<%}%>
 </body>
 </html>
