@@ -11,5 +11,5 @@ public interface IExamResultService extends IService<ExamResult> {
 
 	List<ExamResult> findStudentExamResults(int studentID);
 
-	ExamResult findExamSessionByStudent(int studentID);
+	List<ExamResult> findExamSessionByStudent(int studentID);
 }

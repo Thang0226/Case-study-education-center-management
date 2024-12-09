@@ -11,5 +11,5 @@ public interface IExamResultDAO extends IDAO<ExamResult> {
 	boolean removeExamResult(int sessionID, int studentID);
 
 	List<ExamResult> findStudentExamResults(int studentID);
-	ExamResult findExamSessionByStudent(int studentID);
+	List<ExamResult> findExamSessionByStudent(int studentID);
 }

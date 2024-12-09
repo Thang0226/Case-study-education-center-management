@@ -11,7 +11,7 @@ public class ExamResultDAO implements IExamResultDAO {
 	private String jdbcURL = "jdbc:mysql://localhost:3306/center_management";
 	private String jdbcUsername = "root";
 	private String jdbcPassword = "123456";
-
+	private final String EXAM_BY_STUDENT = "select er.exam_session_id, er.theory_score, er.practical_score, er.average_score from exam_result er where student_id=?";
 	@Override
 	public Connection getConnection() throws SQLException {
 		try {
@@ -118,27 +118,28 @@ public class ExamResultDAO implements IExamResultDAO {
 	}
 
 	@Override
-	public ExamResult findExamSessionByStudent(int studentID){
-		ExamResult result = null;
+	public List<ExamResult> findExamSessionByStudent(int studentID){
+		List<ExamResult> results = new ArrayList<>();
 		try(
 				Connection connection = getConnection();
-				CallableStatement cstmt = connection.prepareCall("{call find_exam_session_by_student(?)}")
+//				CallableStatement cstmt = connection.prepareCall("{call find_exam_session_by_student(?)}")
+				PreparedStatement pstmt = connection.prepareStatement(EXAM_BY_STUDENT);
 				){
-			cstmt.setInt(1, studentID);
-			ResultSet rs = cstmt.executeQuery();
+			pstmt.setInt(1, studentID);
+			ResultSet rs = pstmt.executeQuery();
 			while (rs.next()) {
-				int examSessionID = rs.getInt("exam_session_id");
+				int examSessionID = rs.getInt("Exam_Session_ID");
 				BigDecimal theoryScore = rs.getBigDecimal("theory_score");
 				BigDecimal practicalScore = rs.getBigDecimal("practical_score");
 				BigDecimal averageScore = rs.getBigDecimal("average_score");
-				result = new ExamResult(examSessionID, theoryScore, practicalScore, averageScore);
+				results.add(new ExamResult(examSessionID, theoryScore, practicalScore, averageScore));
 			}
 
 		}
 		catch(SQLException e) {
 			printSQLException(e);
 		}
-		return result;
+		return results;
 	}
 
 	@Override

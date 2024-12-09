@@ -82,9 +82,18 @@ public class StudentServlet extends HttpServlet {
 
 	private void findStudentByID(HttpServletRequest req, HttpServletResponse resp) {
 		StudentInformation studentInfor = null;
+		List<ExamResult> examResult = null;
+		List<ExamSession> examSession = examSessionService.findAll();
 		int id = Integer.parseInt(req.getParameter("id"));
+
 		studentInfor = studentService.findStudentByID(id);
+		examResult = examResultService.findExamSessionByStudent(id);
+
+
 		req.setAttribute("student", studentInfor);
+		req.setAttribute("examResults", examResult);
+		req.setAttribute("examSession", examSession);
+
 		RequestDispatcher dispatcher = req.getRequestDispatcher("student/student_view.jsp");
 		try {
 			dispatcher.forward(req, resp);
