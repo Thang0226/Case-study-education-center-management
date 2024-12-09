@@ -1,7 +1,7 @@
 package project.DAO;
 
 import project.model.Student;
-import project.model.StudentInformation;
+import project.model.DTO.StudentInformation;
 
 import java.util.List;
 
@@ -11,7 +11,7 @@ public interface IStudentDAO extends IDAO<Student> {
 
 	StudentInformation findStudentByID(int id);
 
-	List<StudentInformation> findStudentByStatus(String statusName);
+	List<StudentInformation> findStudentByStatus(int statusId);
 
 
 	Student findStudentByUserId(int userId);

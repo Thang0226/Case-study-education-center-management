@@ -1,7 +1,9 @@
 package project.DAO;
 
 import project.model.Clazz;
+import project.model.DTO.StudentAvgScoreDTO;
 
+import java.math.BigDecimal;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +14,8 @@ public class ClazzDAO implements IClazzDAO{
     private static final String SELECT_CLASS_BY_ID = "SELECT * FROM clazz WHERE id = ?";
     private static final String UPDATE_CLASS = "UPDATE clazz SET name = ?, tutor_id = ?, subject_id = ? WHERE id = ?";
     private static final String DELETE_CLASS = "DELETE FROM clazz WHERE id = ?";
+
+    private static final String CLASS_LIST_WITH_STUDENT_AVG_SCORE = "call class_with_student_count_and_avg_score()";
 //    Optional SQL (cuon xuong duoi cung xem method lien quan):
 //    private static final String SELECT_CLASSES_BY_TUTOR = "SELECT * FROM clazz WHERE tutor_id = ?";
 //    private static final String SELECT_CLASSES_BY_SUBJECT = "SELECT * FROM clazz WHERE subject_id = ?";
@@ -142,6 +146,27 @@ public class ClazzDAO implements IClazzDAO{
             printSQLException(e);
             return false;
         }
+    }
+
+    @Override
+    public List<StudentAvgScoreDTO> getClassListWithStudentAvgScoreDTO() {
+        List<StudentAvgScoreDTO> studentAvgScoreDTOs = new ArrayList<>();
+        try (Connection connection = getConnection();
+             CallableStatement callableStatement = connection.prepareCall(CLASS_LIST_WITH_STUDENT_AVG_SCORE);
+             ResultSet rs = callableStatement.executeQuery()) {
+            while (rs.next()) {
+                int classId = rs.getInt("classid");
+                String className = rs.getString("class_name");
+                String tutorName = rs.getString("tutor_name");
+                String subjectName = rs.getString("subject_name");
+                int studentNumber = rs.getInt("number_of_student");
+                BigDecimal avgScore = rs.getBigDecimal("avg_score");
+                studentAvgScoreDTOs.add(new StudentAvgScoreDTO(classId, className, tutorName, subjectName, studentNumber, avgScore));
+            }
+        } catch (SQLException e) {
+            printSQLException(e);
+        }
+        return studentAvgScoreDTOs;
     }
 
     private void printSQLException(SQLException ex) {
