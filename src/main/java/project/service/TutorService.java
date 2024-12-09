@@ -4,6 +4,7 @@ import project.DAO.ITutorDAO;
 import project.DAO.TutorDAO;
 import project.model.Tutor;
 
+import java.util.HashMap;
 import java.util.List;
 
 public class TutorService implements ITutorService {
@@ -32,5 +33,10 @@ public class TutorService implements ITutorService {
     @Override
     public boolean remove(int id) {
         return tutorDAO.remove(id);
+    }
+
+    @Override
+    public HashMap<Integer, Integer> getStudentNumbersByTutor() {
+        return tutorDAO.getStudentNumbersByTutor();
     }
 }
