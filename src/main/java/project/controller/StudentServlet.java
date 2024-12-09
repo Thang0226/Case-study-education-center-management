@@ -108,29 +108,6 @@ public class StudentServlet extends HttpServlet {
 				studentInformationListByStatus.add(studentInformation);
 			}
 		}
-
-//		boolean statusFound = false;
-//		if (statusName != null) {
-//			for (StudentStatus studentStatus : studentStatusList) {
-//				if(statusName.equals(studentStatus.getName())){
-//					statusFound = true;
-//					System.out.println(studentStatus.getName());
-//					break;
-//				}
-//			}
-//		}
-//
-//		if (statusFound) {
-//			for (StudentInformation info : studentInformationList) {
-//				if(info.getStudentStatus().equals(statusName)){
-//					studentInformationListByStatus.add(info);
-//				}
-//			}
-//			req.setAttribute("studentInformationList", studentInformationListByStatus);
-//		}
-//		else{
-//			req.setAttribute("studentInformationList", studentInformationList);
-//		}
 		req.setAttribute("studentStatusList", studentStatusList);
 		req.setAttribute("students", studentInformationListByStatus);
 
