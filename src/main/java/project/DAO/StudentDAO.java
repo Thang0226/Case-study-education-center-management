@@ -109,6 +109,7 @@ public class StudentDAO implements IStudentDAO {
 		}
 		return studentInformationList;
 	}
+
 	@Override
 	public List<StudentInformation> findStudentByStatus(String statusName) {
 		List<StudentInformation> studentInformationList = new ArrayList<>();
@@ -127,6 +128,7 @@ public class StudentDAO implements IStudentDAO {
 		}
 		return studentInformationList;
 	}
+
 
 
 	@Override
@@ -200,7 +202,6 @@ public class StudentDAO implements IStudentDAO {
 		}
 		return studentInfor;
 	}
-
 
 
 	@Override

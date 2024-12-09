@@ -346,9 +346,10 @@ create procedure find_student_exam_result(
 	in in_student_id int
 )
 begin 
-	select exam_session_id, student_id, theory_score, practical_score, average_score
+	select student_id, exam_session_id, theory_score, practical_score, average_score
     from exam_result join student on student.id = exam_result.student_id
-    where student.id = in_student_id;
+    where student.id = in_student_id
+    order by exam_session_id;
 end $
 delimiter ;
 

@@ -3,8 +3,8 @@ package project.model;
 import java.math.BigDecimal;
 
 public class ExamResult {
-    private int examSessionId;
-    private int studentId;
+    private int examSessionID;
+    private int studentID;
     private BigDecimal theoryScore;
     private BigDecimal practicalScore;
     private BigDecimal averageScore;
@@ -13,27 +13,27 @@ public class ExamResult {
 
     public ExamResult(int examSessionId, int studentId, BigDecimal theoryScore, BigDecimal practicalScore,
                       BigDecimal averageScore) {
-        this.examSessionId = examSessionId;
-        this.studentId = studentId;
+        this.examSessionID = examSessionId;
+        this.studentID = studentId;
         this.theoryScore = theoryScore;
         this.practicalScore = practicalScore;
         this.averageScore = averageScore;
     }
 
-    public int getExamSessionId() {
-        return examSessionId;
+    public int getExamSessionID() {
+        return examSessionID;
     }
 
-    public void setExamSessionId(int examSessionId) {
-        this.examSessionId = examSessionId;
+    public void setExamSessionID(int examSessionID) {
+        this.examSessionID = examSessionID;
     }
 
-    public int getStudentId() {
-        return studentId;
+    public int getStudentID() {
+        return studentID;
     }
 
-    public void setStudentId(int studentId) {
-        this.studentId = studentId;
+    public void setStudentID(int studentID) {
+        this.studentID = studentID;
     }
 
     public BigDecimal getTheoryScore() {
