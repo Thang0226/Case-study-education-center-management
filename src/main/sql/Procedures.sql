@@ -245,6 +245,7 @@ end $
 delimiter ;
 
 delimiter $
+drop procedure if exists find_exam_result $
 create procedure find_exam_result (
     in in_session_id int,
     in in_student_id int
@@ -254,6 +255,9 @@ begin
     where exam_session_id = in_session_id and student_id = in_student_id;
 end $
 delimiter ;
+
+select * from exam_result
+    where exam_session_id = 1 and student_id = 1;
 
 delimiter $
 create procedure update_exam_result(
@@ -468,12 +472,32 @@ DELIMITER ;
 DELIMITER $$
 
 create procedure count_student_by_teacher()
-
 begin
     select c.Tutor_ID, count(s.User_ID) from clazz c
     join tutor t on c.Tutor_ID = t.id
     join student s on s.Class_ID = c.id where Student_Status_ID = 3
     group by c.Tutor_ID;
+end $$
+
+DELIMITER ;
+
+DELIMITER $$
+
+create procedure class_with_student_count_and_avg_score()
+begin
+    select c.id classid,
+           c.name class_name,
+           u.FullName tutor_name,
+           sj.name subject_name,
+           COUNT(DISTINCT s.User_ID) number_of_student,
+           AVG(er.Average_Score) avg_score
+    from clazz c
+    join student s on c.ID = s.Class_ID
+    join tutor t on c.Tutor_ID = t.ID
+    join user u on t.User_ID = u.ID
+    join subject sj on sj.id = c.Subject_ID
+    LEFT join exam_result er on s.ID = er.Student_ID
+    group by c.id, c.name, u.FullName, sj.name;
 end $$
 
 DELIMITER ;
