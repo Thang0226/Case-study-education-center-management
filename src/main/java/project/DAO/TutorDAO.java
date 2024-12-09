@@ -4,6 +4,7 @@ import project.model.Tutor;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class TutorDAO implements ITutorDAO{
@@ -13,6 +14,7 @@ public class TutorDAO implements ITutorDAO{
     private static final String SELECT_TUTOR_BY_ID = "SELECT * FROM tutor WHERE id = ?";
     private static final String UPDATE_TUTOR = "UPDATE tutor SET user_id = ? WHERE id = ?";
     private static final String DELETE_TUTOR = "DELETE FROM tutor WHERE id = ?";
+    private static final String COUNT_STUDENTS_BY_TUTOR_SP = "call count_student_by_teacher()";
 
     @Override
     public Connection getConnection() throws SQLException {
@@ -124,6 +126,23 @@ public class TutorDAO implements ITutorDAO{
             printSQLException(e);
             return false;
         }
+    }
+
+    @Override
+    public HashMap<Integer, Integer> getStudentNumbersByTutor() {
+        HashMap<Integer, Integer> map = new HashMap<>();
+        try (Connection connection = getConnection();
+             CallableStatement callableStatement = connection.prepareCall(COUNT_STUDENTS_BY_TUTOR_SP);
+             ResultSet rs = callableStatement.executeQuery()) {
+            while (rs.next()) {
+                int tutorId = rs.getInt(1);
+                int studentCount = rs.getInt(2);
+                map.put(tutorId, studentCount);
+            }
+        } catch (SQLException e) {
+            printSQLException(e);
+        }
+        return map;
     }
 
     private void printSQLException(SQLException ex) {

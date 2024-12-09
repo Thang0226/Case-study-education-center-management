@@ -1,8 +1,6 @@
 package project.controller;
 
-import project.model.Clazz;
-import project.model.StudentInformation;
-import project.model.Tutor;
+import project.model.*;
 import project.service.*;
 
 import javax.servlet.RequestDispatcher;
@@ -19,14 +17,7 @@ import java.util.Map;
 
 @WebServlet(name = "TutorServlet", urlPatterns = "/tutors")
 public class TutorServlet extends HttpServlet {
-//    static {
-//        Map<Integer, Tutor> tutors = new HashMap<>();
-//        tutors.put(1, new Tutor(1, 123));
-//        tutors.put(2, new Tutor(2, 456));
-//        tutors.put(3, new Tutor(3, 789));
-//        tutors.put(4, new Tutor(4, 489));
-//    }
-
+    IUserService userService = new UserService();
     private final ITutorService tutorService = new TutorService();
     private final IClazzService clazzService = new ClazzService();
     private final ISubjectService subjectService = new SubjectService();
@@ -73,8 +64,17 @@ public class TutorServlet extends HttpServlet {
 
     }
     private void listClasses(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        List<User> users = userService.findAll();
         List<Clazz> clazzList = clazzService.findAll();
+        List<Subject> subjectList = subjectService.findAll();
+        List<Tutor> tutors = tutorService.findAll();
+        HashMap<Integer, Integer> map = tutorService.getStudentNumbersByTutor();
+
+        req.setAttribute("users", users);
         req.setAttribute("clazzList", clazzList);
+        req.setAttribute("subjects", subjectList);
+        req.setAttribute("tutors", tutors);
+        req.setAttribute("map", map);
         RequestDispatcher dispatcher = req.getRequestDispatcher("/tutor/class.jsp");
         try {
             dispatcher.forward(req, resp);

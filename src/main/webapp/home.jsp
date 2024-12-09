@@ -37,6 +37,7 @@
     <div class="row">
         <a href="users">Users Management</a>
         <a href="subjects">Subject Management</a>
+        <a href="tutors">Tutor List</a>
     </div>
 
 </div>
