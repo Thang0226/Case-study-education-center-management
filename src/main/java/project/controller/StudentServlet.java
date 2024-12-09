@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @WebServlet(name = "StudentServlet", urlPatterns = "/students")
@@ -22,6 +23,7 @@ public class StudentServlet extends HttpServlet {
 	private final ITuitionStatusService tuitionStatusService = new TuitionStatusService();
 	private final IExamResultService examResultService = new ExamResultService();
 	private final IExamSessionService examSessionService = new ExamSessionService();
+
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -64,8 +66,12 @@ public class StudentServlet extends HttpServlet {
 		List<StudentInformation> studentInformationList = null;
 		String className = req.getParameter("class_name");
 		studentInformationList = studentService.findStudentByClass(className);
+		List<StudentStatus> studentStatusList = studentStatusService.findAll();
+
 		req.setAttribute("students", studentInformationList);
 		req.setAttribute("class_name", className);
+		req.setAttribute("studentStatusList", studentStatusList);
+
 		RequestDispatcher dispatcher = req.getRequestDispatcher("student/student_list_by_class.jsp");
 		try {
 			dispatcher.forward(req, resp);
@@ -88,11 +94,46 @@ public class StudentServlet extends HttpServlet {
 	}
 
 	private void listStudentsByStatus(HttpServletRequest req, HttpServletResponse resp) {
-		System.out.println("List students by status");
-		System.out.println("===========================");
 
+		List<StudentInformation> studentInformationList = studentService.findAllStudents();
+		List<StudentStatus> studentStatusList = studentStatusService.findAll();
+		List<StudentInformation> studentInformationListByStatus = new ArrayList<>();
+
+		// khi select
 		String statusName = req.getParameter("status_name");
-		req.setAttribute("status_name", statusName);
+
+		for(StudentInformation studentInformation : studentInformationList) {
+			// trong student information xem th nao co student status = status_name -> add -> show list
+			if(studentInformation.getStudentStatus().equals(statusName)) {
+				studentInformationListByStatus.add(studentInformation);
+			}
+		}
+
+//		boolean statusFound = false;
+//		if (statusName != null) {
+//			for (StudentStatus studentStatus : studentStatusList) {
+//				if(statusName.equals(studentStatus.getName())){
+//					statusFound = true;
+//					System.out.println(studentStatus.getName());
+//					break;
+//				}
+//			}
+//		}
+//
+//		if (statusFound) {
+//			for (StudentInformation info : studentInformationList) {
+//				if(info.getStudentStatus().equals(statusName)){
+//					studentInformationListByStatus.add(info);
+//				}
+//			}
+//			req.setAttribute("studentInformationList", studentInformationListByStatus);
+//		}
+//		else{
+//			req.setAttribute("studentInformationList", studentInformationList);
+//		}
+		req.setAttribute("studentStatusList", studentStatusList);
+		req.setAttribute("students", studentInformationListByStatus);
+
 		RequestDispatcher dispatcher = req.getRequestDispatcher("student/student_list_by_class.jsp");
 		try {
 			dispatcher.forward(req, resp);
