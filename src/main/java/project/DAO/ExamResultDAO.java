@@ -122,7 +122,6 @@ public class ExamResultDAO implements IExamResultDAO {
 		List<ExamResult> results = new ArrayList<>();
 		try(
 				Connection connection = getConnection();
-//				CallableStatement cstmt = connection.prepareCall("{call find_exam_session_by_student(?)}")
 				PreparedStatement pstmt = connection.prepareStatement(EXAM_BY_STUDENT);
 				){
 			pstmt.setInt(1, studentID);
