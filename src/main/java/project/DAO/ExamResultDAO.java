@@ -38,7 +38,8 @@ public class ExamResultDAO implements IExamResultDAO {
 				int studentID = rs.getInt("student_id");
 				BigDecimal theoryScore = rs.getBigDecimal("theory_score");
 				BigDecimal practicalScore = rs.getBigDecimal("practical_score");
-				ExamResult result = new ExamResult(examSessionID, studentID, theoryScore, practicalScore);
+				BigDecimal averageScore = rs.getBigDecimal("average_score");
+				ExamResult result = new ExamResult(examSessionID, studentID, theoryScore, practicalScore, averageScore);
 				results.add(result);
 			}
 		} catch (SQLException e) {
@@ -87,12 +88,36 @@ public class ExamResultDAO implements IExamResultDAO {
 			if (rs.next()) {
 				BigDecimal theoryScore = rs.getBigDecimal("theory_score");
 				BigDecimal practicalScore = rs.getBigDecimal("practical_score");
-				result = new ExamResult(sessionID, studentID, theoryScore, practicalScore);
+				BigDecimal averageScore = rs.getBigDecimal("average_score");
+				result = new ExamResult(sessionID, studentID, theoryScore, practicalScore, averageScore);
 			}
 		} catch (SQLException e) {
 			printSQLException(e);
 		}
 		return result;
+	}
+
+	@Override
+	public List<ExamResult> findStudentExamResults(int studentID) {
+		List<ExamResult> resultList = new ArrayList<>();
+		try (
+				Connection conn = getConnection();
+				CallableStatement cstmt = conn.prepareCall("{call find_student_exam_result(?)}")
+		) {
+			cstmt.setInt(1, studentID);
+			ResultSet rs = cstmt.executeQuery();
+			while (rs.next()) {
+				int examSessionID = rs.getInt("exam_session_id");
+				BigDecimal theoryScore = rs.getBigDecimal("theory_score");
+				BigDecimal practicalScore = rs.getBigDecimal("practical_score");
+				BigDecimal averageScore = rs.getBigDecimal("average_score");
+				ExamResult result = new ExamResult(examSessionID, studentID, theoryScore, practicalScore, averageScore);
+				resultList.add(result);
+			}
+		} catch (SQLException e) {
+			printSQLException(e);
+		}
+		return resultList;
 	}
 
 	@Override

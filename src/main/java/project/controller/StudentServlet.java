@@ -31,7 +31,7 @@ public class StudentServlet extends HttpServlet {
 		}
 		switch (action) {
 			case "list_students_by_class":
-//				listStudentsByClass(req, resp);
+				listStudentsByClass(req, resp);
 				break;
 			default:
 
@@ -51,6 +51,9 @@ public class StudentServlet extends HttpServlet {
 				break;
 			case "view_student":
 				findStudentByID(req, resp);
+				break;
+			case "list_students_by_status":
+				listStudentsByStatus(req, resp);
 				break;
 			default:
 				break;
@@ -77,6 +80,23 @@ public class StudentServlet extends HttpServlet {
 		studentInfor = studentService.findStudentByID(id);
 		req.setAttribute("student", studentInfor);
 		RequestDispatcher dispatcher = req.getRequestDispatcher("student/student_view.jsp");
+		try {
+			dispatcher.forward(req, resp);
+		} catch (ServletException | IOException e) {
+			System.out.println(e.getMessage());
+		}
+	}
+
+	private void listStudentsByStatus(HttpServletRequest req, HttpServletResponse resp) {
+		System.out.println("List students by status");
+		System.out.println("===========================");
+
+		String statusName = req.getParameter("status_name");
+//		List<StudentInformation> studentInformationList = studentService.findStudentByStatus(status);
+
+//		req.setAttribute("students", studentInformationList);
+		req.setAttribute("status_name", statusName);
+		RequestDispatcher dispatcher = req.getRequestDispatcher("tutor/student_list_by_status.jsp");
 		try {
 			dispatcher.forward(req, resp);
 		} catch (ServletException | IOException e) {

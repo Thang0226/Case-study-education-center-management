@@ -35,6 +35,17 @@
         <h2 class="text-center">
             List of Students in class ${requestScope.class_name}
         </h2>
+        <form action="/students" method="POST" style="display:inline;">
+            <input type="hidden" name="action" value="list_students_by_status" />
+            <select name="status_name" id="status_name">
+                <option value="Dropped out" selected>Dropped out</option>
+                <option value="Suspended">Suspended</option>
+                <option value="Studying">Studying</option>
+                <option value="Studying">Studying</option>
+                <option value="Waiting for class">Waiting for class</option>
+            </select>
+            <button type="submit">Filter</button>
+        </form>
         <table class="table table-bordered table-light table-striped table-hover">
             <thead class="table-light">
             <tr>

@@ -34,7 +34,7 @@
 
 <div class="container" style="margin-top:100px;">
     <div class="table-responsive">
-        <h2 class="text-center">
+        <h2 class="text-center mb-3">
             List of Students
         </h2>
         <table class="table table-bordered table-light table-striped table-hover">
@@ -43,10 +43,27 @@
                 <th scope="col" class="col-1">Student ID</th>
                 <th scope="col" class="col-2">Full Name</th>
                 <th scope="col" class="col-2">Email</th>
-                <th scope="col" class="col-2">Phone number</th>
-                <th scope="col" class="col-2">Class</th>
+                <th scope="col" class="col-2">
+                    <form action="/officer" method="POST">
+                        <input type="hidden" name="action" value="list_students"/>
+                        <div class="row align-items-center my-3">
+                            <div class="col-8 p-1 ms-2">
+                                <select name="clazz" id="clazz" class="form-select me-2">
+                                    <option value="" selected>Class</option>
+                                    <c:forEach items="${requestScope.clazzes}" var="clazz">
+                                        <option value="${clazz.name}">${clazz.name}</option>
+                                    </c:forEach>
+                                </select>
+                            </div>
+                            <div class="col-3 p-1">
+                                <button type="submit" class="btn btn-secondary ms-0">Filter</button>
+                            </div>
+                        </div>
+                    </form>
+                </th>
                 <th scope="col" class="col-2">Student Status</th>
                 <th scope="col" class="col-1">Tuition Status</th>
+                <th scope="col" class="col-1">Student Scores</th>
             </tr>
             </thead>
             <tbody class="table-group-divider">
@@ -55,7 +72,6 @@
                     <th scope="row">${student.id}</th>
                     <td>${student.fullName}</td>
                     <td>${student.email}</td>
-                    <td>${student.phoneNumber}</td>
                     <td>${student.className}</td>
                     <td>
                         <div class="row">
@@ -72,6 +88,18 @@
                         </div>
                     </td>
                     <td>${student.tuitionStatus}</td>
+                    <td>
+                        <form action="/officer" method="POST" style="display:inline;">
+                            <input type="hidden" name="action" value="edit_student_scores">
+                            <input type="hidden" name="id" value="${student.id}">
+                            <button type="submit" class="btn btn-success">Update</button>
+                        </form>
+                        <form action="/officer" method="POST" style="display:inline;">
+                            <input type="hidden" name="action" value="add_student_scores">
+                            <input type="hidden" name="id" value="${student.id}">
+                            <button type="submit" class="btn btn-info">Create</button>
+                        </form>
+                    </td>
                 </tr>
             </c:forEach>
             </tbody>
