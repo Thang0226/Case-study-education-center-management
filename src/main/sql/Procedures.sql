@@ -449,3 +449,16 @@ begin
 end $$
 
 DELIMITER ;
+
+DELIMITER $$
+
+create procedure count_student_by_teacher()
+
+begin
+    select c.Tutor_ID, count(s.User_ID) from clazz c
+    join tutor t on c.Tutor_ID = t.id
+    join student s on s.Class_ID = c.id where Student_Status_ID = 3
+    group by c.Tutor_ID;
+end $$
+
+DELIMITER ;
