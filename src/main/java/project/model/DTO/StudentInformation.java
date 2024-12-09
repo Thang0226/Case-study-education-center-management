@@ -1,4 +1,4 @@
-package project.model;
+package project.model.DTO;
 
 public class StudentInformation {
 	private String className;

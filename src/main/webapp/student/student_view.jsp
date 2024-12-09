@@ -37,16 +37,16 @@
         </h2>
         <table class="table table-bordered table-light table-striped table-hover">
             <thead class="table-light">
-            <tr>
-                <th scope="col" class="col-1">Student ID</th>
-                <th scope="col" class="col-3">Full Name</th>
-                <th scope="col" class="col-2">Email</th>
-                <th scope="col" class="col-2">Date of Birth</th>
-                <th scope="col" class="col-2">Address</th>
-                <th scope="col" class="col-2">Phone number</th>
-                <th scope="col" class="col-2">Status</th>
+                <tr>
+                    <th scope="col" class="col-1">Student ID</th>
+                    <th scope="col" class="col-3">Full Name</th>
+                    <th scope="col" class="col-2">Email</th>
+                    <th scope="col" class="col-2">Date of Birth</th>
+                    <th scope="col" class="col-2">Address</th>
+                    <th scope="col" class="col-2">Phone number</th>
+                    <th scope="col" class="col-2">Status</th>
 
-            </tr>
+                </tr>
             </thead>
             <tbody class="table-group-divider">
                 <tr>
@@ -58,6 +58,24 @@
                     <td>${requestScope.student.phoneNumber}</td>
                     <td>${requestScope.student.studentStatus}</td>
                 </tr>
+            </tbody>
+        </table>
+        <table class="table table-bordered table-light table-striped table-hover">
+            <thead class="table-light">
+                <tr>
+                    <th scope="col" class="col-3">Exam Session Name</th>
+                    <th scope="col" class="col-2">Theory Score</th>
+                    <th scope="col" class="col-2">Practice Score</th>
+                    <th scope="col" class="col-2">Average Score</th>
+                </tr>
+            </thead>
+            <tbody class="table-group-divider">
+            <tr>
+                <td>${requestScope.examResult.name}</td>
+                <td>${requestScope.examResult.theoryScore}</td>
+                <td>${requestScope.examResult.practicalScore}</td>
+                <td>${requestScope.examResult.averageScore}</td>
+            </tr>
             </tbody>
         </table>
     </div>

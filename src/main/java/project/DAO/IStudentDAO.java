@@ -1,7 +1,7 @@
 package project.DAO;
 
 import project.model.Student;
-import project.model.StudentInformation;
+import project.model.DTO.StudentInformation;
 
 import java.util.List;
 

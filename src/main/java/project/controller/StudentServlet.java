@@ -1,7 +1,7 @@
 package project.controller;
 
-import project.DAO.*;
 import project.model.*;
+import project.model.DTO.StudentInformation;
 import project.service.*;
 
 import javax.servlet.RequestDispatcher;
@@ -82,9 +82,15 @@ public class StudentServlet extends HttpServlet {
 
 	private void findStudentByID(HttpServletRequest req, HttpServletResponse resp) {
 		StudentInformation studentInfor = null;
+		ExamResult examResult = null;
 		int id = Integer.parseInt(req.getParameter("id"));
+
 		studentInfor = studentService.findStudentByID(id);
+		examResult = examResultService.findExamSessionByStudent(id);
+
 		req.setAttribute("student", studentInfor);
+		req.setAttribute("examResult", examResult);
+
 		RequestDispatcher dispatcher = req.getRequestDispatcher("student/student_view.jsp");
 		try {
 			dispatcher.forward(req, resp);

@@ -45,6 +45,11 @@ public class ExamResultService implements IExamResultService {
     }
 
     @Override
+    public ExamResult findExamSessionByStudent(int studentID) {
+        return examResultDAO.findExamSessionByStudent(studentID);
+    }
+
+    @Override
     public boolean removeExamResult(int sessionID, int studentID) {
         return false;
     }
