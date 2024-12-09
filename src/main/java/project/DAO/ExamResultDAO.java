@@ -118,6 +118,30 @@ public class ExamResultDAO implements IExamResultDAO {
 	}
 
 	@Override
+	public ExamResult findExamSessionByStudent(int studentID){
+		ExamResult result = null;
+		try(
+				Connection connection = getConnection();
+				CallableStatement cstmt = connection.prepareCall("{call find_exam_session_by_student(?)}")
+				){
+			cstmt.setInt(1, studentID);
+			ResultSet rs = cstmt.executeQuery();
+			while (rs.next()) {
+				int examSessionID = rs.getInt("exam_session_id");
+				BigDecimal theoryScore = rs.getBigDecimal("theory_score");
+				BigDecimal practicalScore = rs.getBigDecimal("practical_score");
+				BigDecimal averageScore = rs.getBigDecimal("average_score");
+				result = new ExamResult(examSessionID, theoryScore, practicalScore, averageScore);
+			}
+
+		}
+		catch(SQLException e) {
+			printSQLException(e);
+		}
+		return result;
+	}
+
+	@Override
 	public boolean update(ExamResult result) {
 		try (
 				Connection conn = getConnection();

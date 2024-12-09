@@ -11,6 +11,13 @@ public class ExamResult {
 
     public ExamResult() {}
 
+    public ExamResult(int examSessionID, BigDecimal theoryScore, BigDecimal practicalScore, BigDecimal averageScore) {
+        this.examSessionID = examSessionID;
+        this.theoryScore = theoryScore;
+        this.practicalScore = practicalScore;
+        this.averageScore = averageScore;
+    }
+
     public ExamResult(int examSessionId, int studentId, BigDecimal theoryScore, BigDecimal practicalScore,
                       BigDecimal averageScore) {
         this.examSessionID = examSessionId;
