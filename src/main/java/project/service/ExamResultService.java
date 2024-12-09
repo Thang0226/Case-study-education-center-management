@@ -36,7 +36,7 @@ public class ExamResultService implements IExamResultService {
 
     @Override
     public ExamResult findExamResult(int sessionID, int studentID) {
-        return null;
+        return examResultDAO.findExamResult(sessionID, studentID);
     }
 
     @Override
