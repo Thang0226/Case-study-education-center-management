@@ -67,7 +67,7 @@ public class TutorServlet extends HttpServlet {
     private void listClasses(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         List<Tutor> tutorList;
         String tutorIDString = req.getParameter("tutor_id");
-        if (tutorIDString.isEmpty()) {
+        if (tutorIDString == null || tutorIDString.isEmpty()) {
             tutorList = tutorService.findAll();
         } else {
             int tutorID = Integer.parseInt(tutorIDString);
