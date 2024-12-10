@@ -17,9 +17,11 @@
             text-align: center;
             vertical-align: middle;
         }
+
         td a {
             color: black;
         }
+
         button a {
             color: white;
             text-decoration: none;
@@ -30,7 +32,29 @@
 
 <body>
 
-<div class="container" style="margin-top:100px;">
+<div class="container">
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <img src="https://static.topcv.vn/company_logos/0ZT9refQobeAkpzsYWBdyaki10IlbFB4_1655288503____f48c9fc932b36c4eec44ec23d223fa18.png"
+                     alt="logo" class="img-fluid" style="max-height: 50px">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
+                    aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="home">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="${pageContext.request.contextPath}/users">User Management</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
     <div class="table-responsive">
         <h2 class="text-center">
             List of Students in class ${requestScope.class_name}
@@ -44,8 +68,10 @@
                 <th scope="col" class="col-2">Phone number</th>
                 <th scope="col" class="col-2">
                     <form action="/students" method="POST" style="display:inline;">
+
                         <input type="hidden" name="action" value="list_students_by_status" />
                         <input type="hidden" name="class_name" value="${requestScope.class_name}" />
+
                         <select name="status_name" id="status_name">
                             <option value="" selected disabled>Status</option>
                             <c:forEach items="${requestScope.studentStatusList}" var="status">
@@ -65,7 +91,8 @@
                         <form action="/students" method="POST" style="display:inline;">
                             <input type="hidden" name="action" value="view_student">
                             <input type="hidden" name="id" value="${student.id}">
-                            <button type="submit" style="all: unset; color: blue; text-decoration: underline; cursor: pointer;">
+                            <button type="submit"
+                                    style="all: unset; color: blue; text-decoration: underline; cursor: pointer;">
                                     ${student.fullName}
                             </button>
                         </form>
