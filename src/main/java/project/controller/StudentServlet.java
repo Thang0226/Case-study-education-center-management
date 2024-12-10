@@ -44,6 +44,7 @@ public class StudentServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		String action = req.getParameter("action");
+
 		if (action == null) {
 			action = "";
 		}
@@ -64,9 +65,12 @@ public class StudentServlet extends HttpServlet {
 
 	private void listStudentsByClass(HttpServletRequest req, HttpServletResponse resp) {
 		List<StudentInformation> studentInformationList = null;
+
 		String className = req.getParameter("class_name");
+
 		studentInformationList = studentService.findStudentByClass(className);
 		List<StudentStatus> studentStatusList = studentStatusService.findAll();
+
 
 		req.setAttribute("students", studentInformationList);
 		req.setAttribute("class_name", className);
@@ -103,22 +107,39 @@ public class StudentServlet extends HttpServlet {
 	}
 
 	private void listStudentsByStatus(HttpServletRequest req, HttpServletResponse resp) {
-
-		List<StudentInformation> studentInformationList = studentService.findAllStudents();
-		List<StudentStatus> studentStatusList = studentStatusService.findAll();
-		List<StudentInformation> studentInformationListByStatus = new ArrayList<>();
-
-		// khi select
 		String statusName = req.getParameter("status_name");
+		String className = req.getParameter("class_name");
 
-		for(StudentInformation studentInformation : studentInformationList) {
-			// trong student information xem th nao co student status = status_name -> add -> show list
-			if(studentInformation.getStudentStatus().equals(statusName)) {
-				studentInformationListByStatus.add(studentInformation);
+		List<StudentInformation> studentInformationList = studentService.findStudentByClass(className);
+		List<StudentStatus> studentStatusList = studentStatusService.findAll();
+		List<Clazz> clazzList = clazzService.findAll();
+
+		List<StudentInformation> studentByStatus = new ArrayList<>();
+
+		// Duyet trong StudentStatus
+		boolean status = false;
+		if (statusName != null) {
+			for(StudentStatus studentStatus : studentStatusList) {
+				if(studentStatus.getName().equals(statusName)) {
+					status = true;
+					break;
+				}
 			}
 		}
+		// Duyet trong StudentInformation if true
+		if(status) {
+			for(StudentInformation studentInformation : studentInformationList) {
+				if(studentInformation.getStudentStatus().equals(statusName) && studentInformation.getClassName().equals(className)) {
+					studentByStatus.add(studentInformation);
+				}
+			}
+			req.setAttribute("students", studentByStatus);
+		}
+		else {
+			req.setAttribute("students", studentInformationList);
+		}
 		req.setAttribute("studentStatusList", studentStatusList);
-		req.setAttribute("students", studentInformationListByStatus);
+		req.setAttribute("class_name", className);
 
 		RequestDispatcher dispatcher = req.getRequestDispatcher("student/student_list_by_class.jsp");
 		try {

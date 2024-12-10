@@ -68,9 +68,12 @@
                 <th scope="col" class="col-2">Phone number</th>
                 <th scope="col" class="col-2">
                     <form action="/students" method="POST" style="display:inline;">
-                        <input type="hidden" name="action" value="list_students_by_status"/>
+
+                        <input type="hidden" name="action" value="list_students_by_status" />
+                        <input type="hidden" name="class_name" value="${requestScope.class_name}" />
+
                         <select name="status_name" id="status_name">
-                            <option value="" selected disabled>Class</option>
+                            <option value="" selected disabled>Status</option>
                             <c:forEach items="${requestScope.studentStatusList}" var="status">
                                 <option value="${status.name}">${status.name}</option>
                             </c:forEach>
@@ -98,6 +101,7 @@
                     <td>${student.phoneNumber}</td>
                     <td>${student.studentStatus}</td>
                 </tr>
+
             </c:forEach>
             </tbody>
         </table>
