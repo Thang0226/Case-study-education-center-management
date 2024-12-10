@@ -11,7 +11,8 @@ public class ExamResultDAO implements IExamResultDAO {
 	private String jdbcURL = "jdbc:mysql://localhost:3306/center_management";
 	private String jdbcUsername = "root";
 	private String jdbcPassword = "123456";
-	private final String EXAM_BY_STUDENT = "select er.exam_session_id, er.theory_score, er.practical_score, er.average_score from exam_result er where student_id=?";
+	private final String EXAM_BY_STUDENT = "select er.exam_session_id, er.theory_score, er.practical_score, " +
+			"er.average_score from exam_result er where student_id=?";
 	@Override
 	public Connection getConnection() throws SQLException {
 		try {

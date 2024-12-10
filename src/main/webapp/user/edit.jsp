@@ -33,6 +33,9 @@
                         <a class="nav-link" href="${pageContext.request.contextPath}/users">User Management</a>
                     </li>
                 </ul>
+                <form action="../login.jsp" method="POST" class="ms-auto my-auto">
+                    <button type="submit" class="btn btn-secondary">Log Out</button>
+                </form>
             </div>
         </div>
     </nav>
@@ -101,6 +104,15 @@
                                 <input type="text" name="identity" id="identity" class="form-control" required
                                        value="${user.identity}">
                             </td>
+                        </tr>
+                        <tr>
+                            <td><label for="identity">Role:</label></td>
+                            <td>
+                                <c:forEach var="role" items="${roles}">
+                                    ${user.roleID == role.id ? role.name : ''}
+                                </c:forEach>
+                            </td>
+
                         </tr>
                         <c:if test="${user.roleID == 4}">
                             <tr>

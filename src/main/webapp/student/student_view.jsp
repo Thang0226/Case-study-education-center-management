@@ -12,6 +12,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student List</title>
     <link rel="stylesheet" href="../styles/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         table th, table td {
             text-align: center;
@@ -46,18 +47,21 @@
             <div class="collapse navbar-collapse" id="navbarNavDropdown">
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="home">Home</a>
+                        <a class="nav-link active" aria-current="page" href="#">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="${pageContext.request.contextPath}/users">User Management</a>
+                        <a class="nav-link" href="#">User Management</a>
                     </li>
                 </ul>
+                <form action="../login.jsp" method="POST" class="ms-auto my-auto">
+                    <button type="submit" class="btn btn-secondary">Log Out</button>
+                </form>
             </div>
         </div>
     </nav>
     <div class="table-responsive">
         <h2 class="text-center">
-            Class ${requestScope.student.className}
+            Profile
         </h2>
         <table class="table table-bordered table-light table-striped table-hover">
             <thead class="table-light">
@@ -101,7 +105,6 @@
                         <td>${examSession.name}</td>
                     </c:if>
                 </c:forEach>
-<%--                <td>${examResult.examSessionID}</td>--%>
                 <td>${examResult.theoryScore}</td>
                 <td>${examResult.practicalScore}</td>
                 <td>${examResult.averageScore}</td>
@@ -110,7 +113,74 @@
             </tbody>
         </table>
     </div>
+
+    <div class="col-6 mx-auto">
+        <h3 class="text-center">Biểu đồ điểm trung bình của học viên</h3>
+        <canvas id="scoreChart" width="600" height="500"></canvas>
+    </div>
+
 </div>
 <script src="../styles/bootstrap.bundle.min.js"></script>
+<script>
+    const ctx = document.getElementById('scoreChart').getContext('2d');
+    const scoreChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: [
+                <c:forEach var="examResult" items="${examResults}">
+                    <c:forEach var="examSession" items="${examSession}">
+                        <c:if test="${examSession.id == examResult.examSessionID}">
+                        '${examSession.name}',
+                        </c:if>
+                    </c:forEach>
+                </c:forEach>
+
+            ],
+            datasets: [
+                {
+                    label: 'Điểm trung bình (Bar)',
+                    type: 'bar', // Đây là dataset dạng cột
+                    data: [
+                        <c:forEach var="examResult" items="${examResults}">
+                        <c:if test="${examResult.averageScore >= 50 && examResult.averageScore <= 100}">
+                        ${examResult.averageScore},
+                        </c:if>
+                        </c:forEach>
+                    ],
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                },
+                {
+                    label: 'Điểm trung bình (Line)',
+                    type: 'line', // Đây là dataset dạng đường
+                    data: [
+                        <c:forEach var="examResult" items="${examResults}">
+                        <c:if test="${examResult.averageScore >= 50 && examResult.averageScore <= 100}">
+                        ${examResult.averageScore},
+                        </c:if>
+                        </c:forEach>
+                    ],
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                    tension: 0.4, // Tạo độ cong cho đường
+                    fill: false, // Không tô màu dưới đường
+                    pointBackgroundColor: 'rgba(255, 99, 132, 1)',
+                    pointBorderColor: 'rgba(255, 99, 132, 1)'
+                }
+            ]
+        },
+        options: {
+            barThickness:30,
+            scales: {
+                y: {
+                    beginAtZero: false,
+                    min: 70,
+                    max:100,
+                }
+            }
+        }
+    });
+</script>
 </body>
 </html>

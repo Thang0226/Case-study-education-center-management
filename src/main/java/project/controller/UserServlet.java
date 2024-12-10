@@ -243,6 +243,7 @@ public class UserServlet extends HttpServlet {
         List<StudentStatus> studentStatuses = studentStatusService.findAll();
         List<TuitionStatus> tuitionStatuses = tuitionStatusService.findAll();
         List<Clazz> Classes = clazzService.findAll();
+        List<Role> roles = roleService.findAll();
         String formattedDateOfBirth = null;
         try {
             // Parse the date assuming the database format (e.g., "yyyy-MM-dd")
@@ -255,8 +256,8 @@ public class UserServlet extends HttpServlet {
         } catch (ParseException e) {
             //noinspection CallToPrintStackTrace
             e.printStackTrace();
-
         }
+        req.setAttribute("roles", roles);
         req.setAttribute("userDoB", formattedDateOfBirth);
         req.setAttribute("user", user);
         req.setAttribute("student", student);

@@ -44,12 +44,15 @@
             <div class="collapse navbar-collapse" id="navbarNavDropdown">
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="home">Home</a>
+                        <a class="nav-link active" aria-current="page" href="#">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="${pageContext.request.contextPath}/users">User Management</a>
+                        <a class="nav-link" href="#">User Management</a>
                     </li>
                 </ul>
+                <form action="../login.jsp" method="POST" class="ms-auto my-auto">
+                    <button type="submit" class="btn btn-secondary">Log Out</button>
+                </form>
             </div>
         </div>
     </nav>
