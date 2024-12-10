@@ -93,7 +93,7 @@
                     </c:forEach>
                 </td>
                 <td>
-                    <form action="students" method="POST" style="display:inline;">
+                    <form action="students" method="GET" style="display:inline;">
                         <input type="hidden" name="action" value="list_students_by_class">
                         <c:forEach var="clazz" items="${requestScope.clazzList}">
                             <c:if test="${clazz.tutorID == tutor.id}">

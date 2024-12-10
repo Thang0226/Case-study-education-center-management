@@ -73,7 +73,7 @@ public class StudentServlet extends HttpServlet {
 
 		studentInformationList = studentService.findStudentByClass(className);
 		List<StudentStatus> studentStatusList = studentStatusService.findAll();
-
+		System.out.println(studentInformationList);
 
 		req.setAttribute("students", studentInformationList);
 		req.setAttribute("class_name", className);
