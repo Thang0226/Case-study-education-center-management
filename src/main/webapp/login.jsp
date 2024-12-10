@@ -28,7 +28,7 @@
             <%}}%>
             <div class="card">
                 <div class="card-header text-center">
-                    <h3>Login</h3>
+                    <h3>Education Center Management System</h3>
                 </div>
                 <div class="card-body">
                     <form action="home" method="POST">
