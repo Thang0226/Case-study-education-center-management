@@ -81,7 +81,7 @@ public class HomeServlet extends HttpServlet {
         if (isUser) {
             switch (loginUser.getRoleID()) {
                 case 1:     // tutor
-
+                    resp.sendRedirect("tutors");
                     break;
                 case 2:     // officer
                     resp.sendRedirect("student/student_list.jsp?click=yes");

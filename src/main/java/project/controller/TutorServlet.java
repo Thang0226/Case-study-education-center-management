@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -64,6 +65,16 @@ public class TutorServlet extends HttpServlet {
 
     }
     private void listClasses(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        List<Tutor> tutorList;
+        String tutorIDString = req.getParameter("tutor_id");
+        if (tutorIDString.isEmpty()) {
+            tutorList = tutorService.findAll();
+        } else {
+            int tutorID = Integer.parseInt(tutorIDString);
+            Tutor tutor = tutorService.findById(tutorID);
+            tutorList = new ArrayList<>();
+            tutorList.add(tutor);
+        }
         List<User> users = userService.findAll();
         List<Clazz> clazzList = clazzService.findAll();
         List<Subject> subjectList = subjectService.findAll();
@@ -75,6 +86,7 @@ public class TutorServlet extends HttpServlet {
         req.setAttribute("subjects", subjectList);
         req.setAttribute("tutors", tutors);
         req.setAttribute("map", map);
+        req.setAttribute("tutorList", tutorList);
         RequestDispatcher dispatcher = req.getRequestDispatcher("/tutor/class.jsp");
         try {
             dispatcher.forward(req, resp);
