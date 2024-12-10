@@ -60,13 +60,13 @@
     </nav>
     <div class="table-responsive">
         <h2 class="text-center">
-            Profile
+            Student Profile
         </h2>
         <table class="table table-bordered table-light table-striped table-hover">
             <thead class="table-light">
             <tr>
                 <th scope="col" class="col-1">Student ID</th>
-                <th scope="col" class="col-3">Full Name</th>
+                <th scope="col" class="col-2">Full Name</th>
                 <th scope="col" class="col-2">Email</th>
                 <th scope="col" class="col-2">Date of Birth</th>
                 <th scope="col" class="col-2">Address</th>
