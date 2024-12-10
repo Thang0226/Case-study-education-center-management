@@ -79,7 +79,7 @@ public class HomeServlet extends HttpServlet {
         if (isUser) {
             switch (loginUser.getRoleID()) {
                 case 1:     // tutor
-
+                    resp.sendRedirect("tutors");
                     break;
                 case 2:     // officer
                     resp.sendRedirect("student/student_list.jsp?click=yes");
@@ -87,8 +87,7 @@ public class HomeServlet extends HttpServlet {
                 case 3:     // admin
 
                     break;
-                case 4:     // student
-
+                case 4:
                     break;
                 default:
                     resp.sendRedirect("login.jsp?error=invalid"); // Redirect back with error
