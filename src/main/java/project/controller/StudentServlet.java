@@ -35,6 +35,9 @@ public class StudentServlet extends HttpServlet {
 			case "list_students_by_class":
 				listStudentsByClass(req, resp);
 				break;
+			case "view_student":
+				findStudentByID(req, resp);
+				break;
 			default:
 
 				break;
