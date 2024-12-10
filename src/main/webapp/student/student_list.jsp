@@ -136,10 +136,11 @@
 </div>
 <script src="../styles/bootstrap.bundle.min.js"></script>
 <% String needClick = request.getParameter("click");
-    if (needClick.equals("yes")) {%>
+    if (needClick != null) {
+        if (needClick.equals("yes")) {%>
 <script>
     document.getElementById("class_filter").click();
 </script>
-<%}%>
+<%}}%>
 </body>
 </html>
