@@ -85,7 +85,7 @@ public class HomeServlet extends HttpServlet {
                     resp.sendRedirect("student/student_list.jsp?click=yes");
                     break;
                 case 3:     // admin
-
+                    resp.sendRedirect("home.jsp?click=yes");
                     break;
                 case 4:     // student
 

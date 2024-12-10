@@ -33,6 +33,9 @@
                         <a class="nav-link" href="${pageContext.request.contextPath}/users">User Management</a>
                     </li>
                 </ul>
+                <form action="../login.jsp" method="POST" class="ms-auto my-auto">
+                    <button type="submit" class="btn btn-secondary">Log Out</button>
+                </form>
             </div>
         </div>
     </nav>
