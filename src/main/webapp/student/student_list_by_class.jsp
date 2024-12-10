@@ -70,7 +70,7 @@
                 <th scope="col" class="col-2">Email</th>
                 <th scope="col" class="col-2">Phone number</th>
                 <th scope="col" class="col-2">
-                    <form action="/students" method="POST" style="display:inline;">
+                    <form action="students" method="POST" style="display:inline;">
 
                         <input type="hidden" name="action" value="list_students_by_status" />
                         <input type="hidden" name="class_name" value="${requestScope.class_name}" />
@@ -91,11 +91,11 @@
                 <tr>
                     <th scope="row">${student.id}</th>
                     <td>
-                        <form action="/students" method="POST" style="display:inline;">
+                        <form action="students" method="POST" style="display:inline;">
                             <input type="hidden" name="action" value="view_student">
                             <input type="hidden" name="id" value="${student.id}">
                             <button type="submit"
-                                    style="all: unset; color: blue; text-decoration: underline; cursor: pointer;">
+                                    style="all: unset; color: black; text-decoration: none; cursor: pointer;">
                                     ${student.fullName}
                             </button>
                         </form>

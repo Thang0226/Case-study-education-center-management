@@ -52,16 +52,16 @@
             </button>
         </form>
         <div class="col-sm-12 col-md-12 col-lg-12">
-            <table class="table table-hover align-middle text-center">
+            <table class="table table-hover align-middle">
                 <thead>
                 <tr>
                     <th>Full Name</th>
                     <th>Email</th>
-                    <th>Phone</th>
-                    <th>Date Of Birth</th>
+                    <th class="text-center">Phone</th>
+                    <th class="text-center">Date Of Birth</th>
                     <th>Address</th>
                     <th>Role</th>
-                    <th colspan="2">Action</th>
+                    <th colspan="2" class="text-center">Action</th>
 
                 </tr>
                 </thead>
@@ -76,8 +76,8 @@
                             </a>
                         </td>
                         <td>${user.email}</td>
-                        <td>${user.phone}</td>
-                        <td>${user.dateOfBirth}</td>
+                        <td class="text-center">${user.phone}</td>
+                        <td class="text-center">${user.dateOfBirth}</td>
                         <td>${user.address}</td>
                         <td>
                             <c:forEach var="role" items="${roles}">
@@ -86,16 +86,15 @@
                                 </c:if>
                             </c:forEach>
                         </td>
-                        <td>
+                        <td class="text-center">
                             <a href="users?action=edit&id=${user.getId()}" class="btn btn-primary">Edit</a>
                         </td>
-                        <td>
+                        <td class="text-center">
                             <form method="post" style="margin: 0">
                                 <input type="hidden" name="action" value="delete">
                                 <input type="hidden" name="id" value="${user.getId()}">
                                 <button class="btn btn-danger">Delete</button>
                             </form>
-<%--                            <a href="users?action=delete&id=${user.getId()}" class="btn btn-danger">Delete</a>--%>
                         </td>
                     </tr>
                 </c:forEach>
