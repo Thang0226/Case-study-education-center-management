@@ -102,6 +102,15 @@
                                        value="${user.identity}">
                             </td>
                         </tr>
+                        <tr>
+                            <td><label for="identity">Role:</label></td>
+                            <td>
+                                <c:forEach var="role" items="${roles}">
+                                    ${user.roleID == role.id ? role.name : ''}
+                                </c:forEach>
+                            </td>
+
+                        </tr>
                         <c:if test="${user.roleID == 4}">
                             <tr>
                                 <td>Student tuition status <span style="color: red">*</span>:</td>

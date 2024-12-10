@@ -77,7 +77,6 @@
                         <td>${examSession.name}</td>
                     </c:if>
                 </c:forEach>
-<%--                <td>${examResult.examSessionID}</td>--%>
                 <td>${examResult.theoryScore}</td>
                 <td>${examResult.practicalScore}</td>
                 <td>${examResult.averageScore}</td>
