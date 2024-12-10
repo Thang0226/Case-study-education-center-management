@@ -12,6 +12,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student List</title>
     <link rel="stylesheet" href="../styles/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         table th, table td {
             text-align: center;
@@ -112,7 +113,74 @@
             </tbody>
         </table>
     </div>
+
+    <div class="col-6 mx-auto">
+        <h3 class="text-center">Biểu đồ điểm trung bình của học viên</h3>
+        <canvas id="scoreChart" width="600" height="500"></canvas>
+    </div>
+
 </div>
 <script src="../styles/bootstrap.bundle.min.js"></script>
+<script>
+    const ctx = document.getElementById('scoreChart').getContext('2d');
+    const scoreChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: [
+                <c:forEach var="examResult" items="${examResults}">
+                    <c:forEach var="examSession" items="${examSession}">
+                        <c:if test="${examSession.id == examResult.examSessionID}">
+                        '${examSession.name}',
+                        </c:if>
+                    </c:forEach>
+                </c:forEach>
+
+            ],
+            datasets: [
+                {
+                    label: 'Điểm trung bình (Bar)',
+                    type: 'bar', // Đây là dataset dạng cột
+                    data: [
+                        <c:forEach var="examResult" items="${examResults}">
+                        <c:if test="${examResult.averageScore >= 50 && examResult.averageScore <= 100}">
+                        ${examResult.averageScore},
+                        </c:if>
+                        </c:forEach>
+                    ],
+                    backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                },
+                {
+                    label: 'Điểm trung bình (Line)',
+                    type: 'line', // Đây là dataset dạng đường
+                    data: [
+                        <c:forEach var="examResult" items="${examResults}">
+                        <c:if test="${examResult.averageScore >= 50 && examResult.averageScore <= 100}">
+                        ${examResult.averageScore},
+                        </c:if>
+                        </c:forEach>
+                    ],
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                    tension: 0.4, // Tạo độ cong cho đường
+                    fill: false, // Không tô màu dưới đường
+                    pointBackgroundColor: 'rgba(255, 99, 132, 1)',
+                    pointBorderColor: 'rgba(255, 99, 132, 1)'
+                }
+            ]
+        },
+        options: {
+            barThickness:30,
+            scales: {
+                y: {
+                    beginAtZero: false,
+                    min: 70,
+                    max:100,
+                }
+            }
+        }
+    });
+</script>
 </body>
 </html>
