@@ -9,8 +9,17 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <html>
-<head><link rel="stylesheet" href="../styles/bootstrap.min.css">
+<head>
+    <link rel="stylesheet" href="../styles/bootstrap.min.css">
     <title>Tutor list</title>
+    <style>
+        table {
+            border-collapse: collapse;
+        }
+        table th, td {
+            vertical-align: middle;
+        }
+    </style>
 </head>
 <body>
 <div class="container">
@@ -20,7 +29,8 @@
                 <img src="https://static.topcv.vn/company_logos/0ZT9refQobeAkpzsYWBdyaki10IlbFB4_1655288503____f48c9fc932b36c4eec44ec23d223fa18.png"
                      alt="logo" class="img-fluid" style="max-height: 50px">
             </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
+                    aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNavDropdown">
@@ -43,16 +53,40 @@
     <table class="table table-hover">
         <tr>
             <th>ID</th>
-            <th>Tutor Name</th>
-            <th>Class Name</th>
+            <th>
+                <form action="tutors" method="POST" style="display: inline">
+                    <div class="row align-items-center my-3">
+                        <div class="col-8 p-1 ms-2">
+                            <select name="tutor_id" id="tutor_id" class="form-select me-2">
+                                <option value="" selected>Tutor Name</option>
+                                <c:forEach items="${requestScope.tutors}" var="tutor">
+                                    <option value="${tutor.id}">
+                                        <c:forEach var="user" items="${requestScope.users}">
+                                            <c:if test="${tutor.userID == user.id}">
+                                                ${user.fullName}
+                                            </c:if>
+                                        </c:forEach>
+                                    </option>
+                                </c:forEach>
+                            </select>
+                        </div>
+                        <div class="col-3 p-1">
+                            <button type="submit" class="btn btn-secondary ms-0" id="class_filter">
+                                Filter
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </th>
+            <th>Class Names</th>
             <th>Subject Name</th>
-            <th>Number of student teaching</th>
+            <th>Number of students teaching</th>
         </tr>
-        <c:forEach var="tutor" items="${tutors}">
+        <c:forEach var="tutor" items="${requestScope.tutorList}">
             <tr>
                 <td>${tutor.getId()}</td>
                 <td>
-                    <c:forEach var="user" items="${users}">
+                    <c:forEach var="user" items="${requestScope.users}">
                         <c:if test="${tutor.userID == user.id}">
                             ${user.fullName}
                         </c:if>
@@ -61,22 +95,24 @@
                 <td>
                     <form action="students" method="GET" style="display:inline;">
                         <input type="hidden" name="action" value="list_students_by_class">
-                        <input type="hidden" name="class_name" value="${clazz.name}" >
-                        <button type="submit" style="all: unset; color: blue; text-decoration: underline; cursor: pointer;">
-                            <c:forEach var="clazz" items="${clazzList}">
-                                <c:if test="${clazz.tutorID == tutor.id}">
-                                    ${clazz.getName()}
-                                </c:if>
-                            </c:forEach>
-                        </button>
+                        <c:forEach var="clazz" items="${requestScope.clazzList}">
+                            <c:if test="${clazz.tutorID == tutor.id}">
+                                <button type="submit"
+                                        style="all: unset; color: blue; text-decoration: underline; cursor: pointer;">
+                                        ${clazz.getName()}
+                                    <input type="hidden" name="class_name" value="${clazz.name}">
+                                </button>
+                            </c:if>
+                        </c:forEach>
+
                     </form>
                 </td>
                 <td>
-                    <c:forEach var="subjet" items="${subjects}">
+                    <c:forEach var="subject" items="${subjects}">
                         <c:forEach var="clazz" items="${clazzList}">
                             <c:if test="${clazz.tutorID == tutor.id}">
-                                <c:if test="${clazz.subjectID == subjet.id}">
-                                    ${subjet.name}
+                                <c:if test="${clazz.subjectID == subject.id}">
+                                    ${subject.name}
                                 </c:if>
                             </c:if>
                         </c:forEach>
@@ -93,6 +129,6 @@
         </c:forEach>
     </table>
 </div>
-    <script src="../styles/bootstrap.bundle.min.js"></script>
+<script src="../styles/bootstrap.bundle.min.js"></script>
 </body>
 </html>
