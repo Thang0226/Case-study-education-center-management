@@ -1,7 +1,6 @@
 package project.controller;
 
 import project.model.*;
-import project.model.DTO.StudentInformation;
 import project.service.*;
 
 import javax.servlet.RequestDispatcher;
