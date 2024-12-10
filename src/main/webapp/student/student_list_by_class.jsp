@@ -87,7 +87,7 @@
             </tr>
             </thead>
             <tbody class="table-group-divider">
-            <c:forEach items="${requestScope.students}" var="student">
+            <c:forEach items="${students}" var="student">
                 <tr>
                     <th scope="row">${student.id}</th>
                     <td>
