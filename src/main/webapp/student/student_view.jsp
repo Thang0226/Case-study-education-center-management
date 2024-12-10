@@ -60,7 +60,7 @@
     </nav>
     <div class="table-responsive">
         <h2 class="text-center">
-            Class ${requestScope.student.className}
+            Profile
         </h2>
         <table class="table table-bordered table-light table-striped table-hover">
             <thead class="table-light">

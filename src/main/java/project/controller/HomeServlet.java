@@ -1,7 +1,8 @@
 package project.controller;
 
-import project.model.User;
-import project.service.UserService;
+import project.model.*;
+import project.model.DTO.StudentInformation;
+import project.service.*;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -15,6 +16,7 @@ import java.util.List;
 @WebServlet (name = "HomeServlet", urlPatterns = "/home")
 public class HomeServlet extends HttpServlet {
     private UserService userService = new UserService();
+    private IStudentService studentService = new StudentService();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -85,10 +87,11 @@ public class HomeServlet extends HttpServlet {
                     resp.sendRedirect("student/student_list.jsp?click=yes");
                     break;
                 case 3:     // admin
-                    resp.sendRedirect("home.jsp?click=yes");
+                    resp.sendRedirect("home?click=yes");
                     break;
                 case 4:     // student
-
+                    Student student = studentService.findStudentByUserId(loginUser.getId());
+                    resp.sendRedirect("students?action=view_student&id=" + student.getId());
                     break;
                 default:
                     resp.sendRedirect("login.jsp?error=invalid"); // Redirect back with error
